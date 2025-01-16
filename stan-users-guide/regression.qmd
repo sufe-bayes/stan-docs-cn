@@ -7,7 +7,10 @@ pagetitle: Regression Models
 # 回归模型
 
 本节译者：于曙光、王才兴、王超
-本章校审：张梓源
+
+一次校审：张梓源
+
+二次校审：邱怡轩（DeepSeek V3 辅助）
 
 Stan supports regression models from simple linear regressions to
 multilevel generalized linear models.
@@ -221,7 +224,9 @@ R^\ast$ where $Q^\ast = Q * \sqrt{n - 1}$ and $R^\ast =
 \beta$, then we have $\eta = Q^\ast \theta$ and $\beta = R^{\ast^{-1}}
 \theta$. In that case, the previous Stan program becomes
 
-函数 `qr_thin_Q` 和 `qr_thin_R` 实现了薄QR分解，薄QR分解比使用 `qr_Q` 和 `qr_R` 得到的完整QR分解更可取，因为后者更容易耗尽内存（请参阅Stan函数参考手册，了解有关 `qr_thin_Q` 和 `qr_thin_R` 函数的更多信息）。在实践中，最好将其写成 $x = Q^\ast R^\ast$，其中 $Q^\ast = Q * \sqrt{n - 1}$，$R^\ast = \frac{1}{\sqrt{n - 1}} R$。因此，我们可以将其等价地写成 $\eta = x\beta = QR\beta = Q^\ast R^\ast\beta$。如果我们令 $\theta = R^\ast\beta$，那么我们有 $\eta = Q^\ast\theta$ 和 $\beta = R^{\ast^{-1}}\theta$。在这种情况下，前面的 Stan 程序变为：
+函数 `qr_thin_Q` 和 `qr_thin_R` 实现了薄QR分解，它相比使用 `qr_Q` 和 `qr_R` 得到的完整QR分解更可取，因为后者更容易耗尽内存（有关 `qr_thin_Q` 和 `qr_thin_R` 函数的更多信息，请参阅Stan函数参考手册）。
+
+函数 `qr_thin_Q` 和 `qr_thin_R` 实现了薄QR分解，薄QR分解比使用 `qr_Q` 和 `qr_R` 得到的完整QR分解更可取，因为后者更容易耗尽内存（请参阅Stan函数参考手册，了解有关 `qr_thin_Q` 和 `qr_thin_R` 函数的更多信息）。在实际应用中，最好将其表示为 $x = Q^\ast R^\ast$，其中 $Q^\ast = Q * \sqrt{n - 1}$，$R^\ast = \frac{1}{\sqrt{n - 1}} R$。因此，我们可以将其等价地写成 $\eta = x\beta = QR\beta = Q^\ast R^\ast\beta$。如果我们令 $\theta = R^\ast\beta$，那么我们有 $\eta = Q^\ast\theta$ 和 $\beta = R^{\ast^{-1}}\theta$。在这种情况下，前面的 Stan 程序变为：
 
 ```stan
 data {
@@ -326,7 +331,7 @@ informative prior that scales with the outcome will do.
 
 ## Robust noise models
 
-## 鲁棒噪声模型
+## 稳健噪声模型
 
 The standard approach to linear regression is to model the noise
 term $\epsilon$ as having a normal distribution.  From Stan's
@@ -335,7 +340,7 @@ noise.  For instance, robust regression can be accommodated by giving
 the noise term a Student-$t$ distribution.  To code this in Stan, the
 distribution distribution is changed to the following.
 
-线性回归的标准方法是将噪声项 $\epsilon$ 建模为服从正态分布。从 Stan 的角度来看，正态分布的噪声没有什么特别之处。例如，鲁棒回归中可以让噪声项服从学生 $t$ 分布。为了在 Stan 中编码这个模型，需要将采样分布更改为以下形式。
+线性回归的标准方法是将噪声项 $\epsilon$ 建模为服从正态分布。从 Stan 的角度来看，正态分布的噪声没有什么特别之处。例如，稳健回归中可以让噪声项服从学生 $t$ 分布。为了在 Stan 中编码这个模型，需要将采样分布更改为以下形式。
 
 ```stan
 data {
@@ -690,7 +695,7 @@ used for ability or difficulty parameters (but not both) in an IRT
 model (see the [item-response model
 section](#item-response-models.section) for details).
 
-这样的参数向量可以用于识别多分类逻辑回归回归的参数向量（详见[多分类逻辑回归部分](#multi-logit.section)），或者项目反应模型中的能力或难度参数（但不能同时识别，详见[项目反应模型部分](#item-response-models.section)）。
+这样的参数向量可以用于识别多分类逻辑回归回归的参数向量（详见[多分类逻辑回归部分](#multi-logit.section)），或者项目响应模型中的能力或难度参数（但不能同时识别，详见[项目响应模型部分](#item-response-models.section)）。
 
 
 ### Built-in sum-to-zero vector {-}
@@ -1096,7 +1101,7 @@ for a reasonably large value of $A$, such as $A = 10$.
 
 ## Item-response theory models {#item-response-models.section}
 
-## 项目反应理论模型 {#item-response-models.section--cn}
+## 项目响应理论模型 {#item-response-models.section--cn}
 
 
 Item-response theory (IRT) models the situation in which a number of
@@ -1108,7 +1113,7 @@ correctly; see @GelmanHill:2007 [pps. 314--320] for a textbook
 introduction to hierarchical IRT models and @Curtis:2010 for
 encodings of a range of IRT models in BUGS.
 
-项目反应理论（Item-Response Theory，IRT）模型用于描述多个学生对一组测试题目中一个或多个问题的回答情况。该模型基于学生的能力、题目的难度等参数，在更复杂的模型中还会考虑题目的区分度和猜测正确的概率。有关分层 IRT 模型的教材介绍，请参考 @GelmanHill:2007 [pps. 314--320]，而关于在 BUGS 中编码各种 IRT 模型的内容，请参考 @Curtis:2010。
+项目响应理论（Item-Response Theory，IRT）模型用于描述多个学生对一组测试题目中一个或多个问题的回答情况。该模型基于学生的能力、题目的难度等参数，在更复杂的模型中还会考虑题目的区分度和猜测正确的概率。有关分层 IRT 模型的教材介绍，请参考 @GelmanHill:2007 [pps. 314--320]，而关于在 BUGS 中编码各种 IRT 模型的内容，请参考 @Curtis:2010。
 
 
 ### Data declaration with missingness {-}
@@ -1147,12 +1152,12 @@ Stan for more flexibility.
 
 ### 1PL (Rasch) model {-}
 
-### 一参数 logistic（Rasch）模型 {-}
+### 单参数 logistic（Rasch）模型 {-}
 
 The 1PL item-response model, also known as the Rasch model, has one
 parameter (1P) for questions and uses the logistic link function (L).
 
-1PL 项目反应模型（一参数 logistic 模型，也称为 Rasch 模型）是一种经典的项目反应理论模型，它假设每个问题只有一个参数，并使用 logistic 链接函数（L）。
+单参数 logistic（1PL）项目响应模型，也称为 Rasch 模型，它假设每个问题只有一个参数（1P），并使用 logistic 链接函数（L）。
 
 
 The model parameters are declared as follows.
@@ -1173,8 +1178,7 @@ The parameter `alpha[J]` is the ability coefficient for student
 an intercept term `delta`, which represents the average student's
 response to the average question.^[@GelmanHill:2007 treat the $\delta$ term equivalently as the location parameter in the distribution of student abilities.]
 
-参数 `alpha[J]` 表示学生 `j` 的能力系数，`beta[k]` 表示问题 `k` 的难度系数。
-这里采用的非标准参数化还包括截距项 `delta`，用于表示平均水平学生对平均难度问题的响应。^[@GelmanHill:2007 将 $\delta$ 视为学生能力分布的位置参数。]
+参数 `alpha[J]` 表示学生 `j` 的能力系数，`beta[k]` 表示问题 `k` 的难度系数。这里采用的非标准参数化还包括截距项 `delta`，用于表示平均水平学生对平均难度问题的响应。^[@GelmanHill:2007 将 $\delta$ 视为学生能力分布的位置参数。]
 
 The model itself is as follows.
 
