@@ -76,7 +76,7 @@ There are `N` observations and for each observation, $n \in N$,  we have predict
 distributed noise term with scale `sigma`.  This model has
 improper priors for the two regression coefficients.
 
-共有 `N` 个观测值，对于每个观测值 $n \in N$，都包含一个自变量 `x[n]` 和对应的因变量 `y[n]`。截距参数为 `alpha`，斜率参数为 `beta`。该模型假设噪声项服从标准差为 `sigma` 的正态分布。该模型对于两个回归系数采用了不合适的先验分布。
+这里共有 `N` 个观测值，对于每个观测值 $n \in N$，都包含一个自变量 `x[n]` 和对应的因变量 `y[n]`。截距参数为 `alpha`，斜率参数为 `beta`。该模型假设噪声项服从标准差为 `sigma` 的正态分布。该模型对于两个回归系数采用了非正规先验分布。
 
 ### Matrix notation and vectorization {- #vectorization.section}
 
@@ -102,14 +102,14 @@ for (n in 1:N) {
 
 In addition to being more concise, the vectorized form is much faster.^[Unlike in Python and R, which are interpreted, Stan is translated to C++ and compiled, so loops and assignment statements are fast.  Vectorized code is faster in Stan because (a) the expression tree used to compute derivatives can be simplified, leading to fewer virtual function calls, and (b) computations that would be repeated in the looping version, such as `log(sigma)` in the above model, will be computed once and reused.]
 
-除了使表达式更加简洁外，向量化形式还能显著提高运行效率。^[与Python和R不同，Stan是被转换为C++并进行编译的，因此循环和赋值语句速度较快。在 Stan 中，向量化代码更快的原因是：(1) 用于计算导数的表达式树可以简化，从而减少虚函数调用；(2) 在循环版本中会重复进行的计算，例如上述模型中的'log(sigma)'，将只计算一次并被重复使用。]
+除了使表达式更加简洁外，向量化形式还能显著提高运行效率。^[与 Python 和 R 不同，Stan 是被转换为 C++ 并进行编译的，因此循环和赋值语句速度较快。在 Stan 中，向量化代码更快的原因是：(1) 用于计算导数的表达式树可以简化，从而减少虚函数调用；(2) 在循环版本中会重复进行的计算，例如上述模型中的 `log(sigma)`，将只计算一次并被重复使用。]
 
 In general, Stan allows the arguments to distributions such as
 `normal` to be vectors.  If any of the other arguments are vectors or
 arrays, they have to be the same size.  If any of the other arguments
 is a scalar, it is reused for each vector entry.
 
-在 Stan 中，像 `normal`（正态分布）这样的分布函数通常允许使用向量作为参数。如果其他参数中有向量或数组，则它们必须具有相同的大小。如果其他参数是标量，则会为每个向量条目重复使用该标量。有关概率函数向量化的更多信息，请参阅[向量化部分](#vectorization.section)。
+在 Stan 中，像 `normal`（正态分布）这样的分布函数通常允许使用向量作为参数。如果其他参数中有向量或数组，则它们必须具有相同的大小。如果其他参数是标量，则会为每个向量条目重复使用该标量。
 
 The other reason this works is that Stan's arithmetic operators are
 overloaded to perform matrix arithmetic on matrices.  In this case,
@@ -143,7 +143,7 @@ in the model block, the effect is an improper prior on non-negative
 real numbers.  Although a more informative prior may be added, improper
 priors are acceptable as long as they lead to proper posteriors.
 
-在 `sigma` 的声明中，通过 `lower=0` 的约束条件将其取值范围限制为非负实数。在模型块中没有设定先验分布，就相当于对非负实数设定了不合适的先验分布。尽管可以添加一个更具信息量的先验分布，但只要产生合适的后验分布，使用不合适的先验分布也是可以接受的。
+在 `sigma` 的声明中，通过 `lower=0` 的约束条件将其取值范围限制为非负实数。在模型块中没有设定先验分布，就相当于对非负实数设定了非正规先验分布。尽管可以添加一个更具信息量的先验分布，但只要能产生正规的后验分布，使用非正规先验分布也是可以接受的。
 
 In the model above, `x` is an $N \times K$ matrix of predictors
 and `beta` a $K$-vector of coefficients, so `x * beta` is an
@@ -153,7 +153,7 @@ the entire model may be written using matrix arithmetic as shown.  It
 would be possible to include a column of ones in the data matrix `x` to
 remove the `alpha` parameter.
 
-在上述模型中 `x` 是一个 $N \times K$ 的自变量矩阵或数据矩阵，`beta` 是一个 $K$ 维的系数向量，因此 `x * beta` 是一个 $N$ 维的预测值向量，每个元素对应于 $N$ 个数据项中的一个。这些预测值与 $N$ 维向量 `y` 中的观测结果对应，因此整个模型可以使用矩阵运算来表示。如果希望消除 `alpha` 参数，可以在数据矩阵 `x` 中添加一列全为1的向量。
+在上述模型中，`x` 是一个 $N \times K$ 的自变量矩阵或数据矩阵，`beta` 是一个 $K$ 维的系数向量，因此 `x * beta` 是一个 $N$ 维的预测值向量，每个元素对应于 $N$ 个数据项中的一个。这些预测值与 $N$ 维向量 `y` 中的观测结果对应，因此整个模型可以使用矩阵运算来表示。如果希望消除 `alpha` 参数，可以在数据矩阵 `x` 中添加一列全为1的向量。
 
 The distribution statement in the model above is just a more efficient,
 vector-based approach to coding the model with a loop, as in the
@@ -211,7 +211,7 @@ $x$ can be decomposed using the thin QR decomposition into an
 orthogonal matrix $Q$ and an upper-triangular matrix $R$, i.e. $x = Q
 R$.
 
-在前面的例子中，线性预测器可以写作 $\eta = x \beta$，其中，$\eta$ 是一个 $N$ 维的预测向量，$x$ 是一个 $N \times K$ 的矩阵，$\beta$ 是一个 $K$ 维的系数向量。当 $N \geq K$ 时，我们可以对任意设计矩阵 $x$ 进行薄QR分解（thin QR decomposition），将其分解为一个正交矩阵 $Q$ 和一个上三角矩阵 $R$，即 $x = Q R$。
+在前面的例子中，线性预测器可以写作 $\eta = x \beta$，其中 $\eta$ 是一个 $N$ 维的预测向量，$x$ 是一个 $N \times K$ 的矩阵，$\beta$ 是一个 $K$ 维的系数向量。当 $N \geq K$ 时，我们可以对任意设计矩阵 $x$ 进行薄QR分解（thin QR decomposition），将其分解为一个正交矩阵 $Q$ 和一个上三角矩阵 $R$，即 $x = Q R$。
 
 The functions `qr_thin_Q` and `qr_thin_R` implement the thin QR decomposition,
 which is to be preferred to the fat QR decomposition that would be obtained
@@ -224,9 +224,7 @@ R^\ast$ where $Q^\ast = Q * \sqrt{n - 1}$ and $R^\ast =
 \beta$, then we have $\eta = Q^\ast \theta$ and $\beta = R^{\ast^{-1}}
 \theta$. In that case, the previous Stan program becomes
 
-函数 `qr_thin_Q` 和 `qr_thin_R` 实现了薄QR分解，它相比使用 `qr_Q` 和 `qr_R` 得到的完整QR分解更可取，因为后者更容易耗尽内存（有关 `qr_thin_Q` 和 `qr_thin_R` 函数的更多信息，请参阅Stan函数参考手册）。
-
-函数 `qr_thin_Q` 和 `qr_thin_R` 实现了薄QR分解，薄QR分解比使用 `qr_Q` 和 `qr_R` 得到的完整QR分解更可取，因为后者更容易耗尽内存（请参阅Stan函数参考手册，了解有关 `qr_thin_Q` 和 `qr_thin_R` 函数的更多信息）。在实际应用中，最好将其表示为 $x = Q^\ast R^\ast$，其中 $Q^\ast = Q * \sqrt{n - 1}$，$R^\ast = \frac{1}{\sqrt{n - 1}} R$。因此，我们可以将其等价地写成 $\eta = x\beta = QR\beta = Q^\ast R^\ast\beta$。如果我们令 $\theta = R^\ast\beta$，那么我们有 $\eta = Q^\ast\theta$ 和 $\beta = R^{\ast^{-1}}\theta$。在这种情况下，前面的 Stan 程序变为：
+函数 `qr_thin_Q` 和 `qr_thin_R` 实现了薄QR分解，它相比使用 `qr_Q` 和 `qr_R` 得到的完整QR分解更可取，因为后者更容易耗尽内存（有关 `qr_thin_Q` 和 `qr_thin_R` 函数的更多信息，请参阅 Stan 函数参考手册）。在实际应用中，最好将其表示为 $x = Q^\ast R^\ast$，其中 $Q^\ast = Q * \sqrt{n - 1}$，$R^\ast = \frac{1}{\sqrt{n - 1}} R$。因此，我们可以将其等价地写成 $\eta = x\beta = QR\beta = Q^\ast R^\ast\beta$。如果我们令 $\theta = R^\ast\beta$，那么我们有 $\eta = Q^\ast\theta$ 和 $\beta = R^{\ast^{-1}}\theta$。在这种情况下，前面的 Stan 程序变为：
 
 ```stan
 data {
@@ -325,7 +323,7 @@ usually does not matter much what prior is used on on the
 reparameterized regression coefficients and almost any weakly
 informative prior that scales with the outcome will do.
 
-然而，如在[QR 重参数化章节](#QR-reparameterization.section)所述，如果你对回归系数的*位置*参数先验信息不足，那么最好对模型进行重参数化，使得回归系数成为输出量。在这种情况下，通常对重参数化后的回归系数使用何种先验并不重要，几乎任何随着结果变化的弱信息先验都可以使用。
+然而，如在 [QR 重参数化章节](#QR-reparameterization.section)所述，如果你对回归系数的*位置参数*先验信息不足，那么最好对模型进行重参数化，使得回归系数成为输出量。在这种情况下，通常对重参数化后的回归系数使用何种先验并不重要，几乎任何随着结果变化的弱信息先验都可以使用。
 
 
 
@@ -359,7 +357,7 @@ The degrees of freedom constant `nu` is specified as data.
 
 ## Logistic and probit regression {#logistic-probit-regression.section}
 
-## 逻辑回归和概率回归 {#logistic-probit-regression.section--cn}
+## Logistic 回归和 Probit 回归 {#logistic-probit-regression.section--cn}
 
 For binary outcomes, either of the closely related logistic or probit
 regression models may be used.  These generalized linear models vary
@@ -368,12 +366,12 @@ $(-\infty,\infty)$ to probability values in $(0,1)$.  Their respective
 link functions, the logistic function and the standard normal cumulative distribution
 function, are both sigmoid functions (i.e., they are both *S*-shaped).
 
-对于二元结果，可以使用紧密相关的逻辑回归（logistic regression）模型或概率回归（probit regression）模型之一。这些广义线性模型仅在它们用于将线性预测从 $(-\infty,\infty)$ 映射到 $(0,1)$ 的链接函数上有所不同。它们各自的链接函数，即逻辑函数和标准正态累积分布函数，都是S型函数（即这些函数的形状都与字母*S*相同）。
+对于二元结果，可以使用紧密相关的 Logistic 回归模型或 Probit 回归模型之一。这些广义线性模型仅在它们用于将线性预测从 $(-\infty,\infty)$ 映射到 $(0,1)$ 的链接函数上有所不同。它们各自的链接函数，即 Logistic 函数和标准正态累积分布函数，都是 S 型函数（即这些函数的形状都与字母 *S* 相同）。
 
 A logistic regression model with one predictor and an intercept is coded as
 follows.
 
-具有一个自变量和截距项的逻辑回归模型可以按以下方式进行编码。
+具有一个自变量和截距项的 Logistic 回归模型可以按以下方式进行编码。
 
 ```stan
 data {
@@ -393,12 +391,12 @@ model {
 The noise parameter is built into the Bernoulli formulation here
 rather than specified directly.
 
-噪声参数在这里内置于伯努利公式中，而不是直接给定。
+噪声参数在这里内置于伯努利分布中，而不是直接给定。
 
 Logistic regression is a kind of generalized linear model with binary
 outcomes and the log odds (logit) link function, defined by
 
-逻辑回归是一种具有二元结果和对数几率（逻辑）链接函数的广义线性模型，定义如下：
+Logistic 回归是一种具有二元结果和对数几率（逻辑）链接函数的广义线性模型，定义如下：
 
 $$
 \operatorname{logit}(v) = \log \left( \frac{v}{1-v} \right).
@@ -451,7 +449,7 @@ Other link functions may be used in the same way.  For example, probit
 regression uses the cumulative normal distribution function, which is
 typically written as
 
-其他链接函数可以以相同的方式使用。例如，概率回归使用的是累积正态分布函数，通常表示为：
+其他链接函数可以以相同的方式使用。例如，Probit 回归使用的是累积正态分布函数，通常表示为：
 
 $$
 \Phi(x) = \int_{-\infty}^x \textsf{normal}\left(y \mid 0,1 \right) \,\textrm{d}y.
@@ -462,7 +460,7 @@ in Stan as the function `Phi`.  The probit regression model
 may be coded in Stan by replacing the logistic model's distribution
 statement with the following.
 
-在 Stan 中，标准正态的累积分布函数 $\Phi$ 通过函数 `Phi` 来实现。要在 Stan 中实现概率回归模型，只需用以下语句替换逻辑回归模型的采样语句即可。
+在 Stan 中，标准正态的累积分布函数 $\Phi$ 通过函数 `Phi` 来实现。要在 Stan 中实现概率回归模型，只需用以下语句替换 Logistic 回归模型的采样语句即可。
 
 ```stan
 y[n] ~ bernoulli(Phi(alpha + beta * x[n]));
@@ -474,7 +472,7 @@ function $\Phi$ is implemented in Stan as the function
 The approximate probit regression model may
 be coded with the following.
 
-在 Stan 中，对累积标准正态分布函数 $\Phi$ 的快速近似实现为函数 `Phi_approx`。^[Phi_approx 函数是逆逻辑函数的重新缩放版本，因此尽管尺度大致与 $\Phi$ 相同，但尾部并不匹配。]可以使用以下代码编写近似概率回归模型。
+在 Stan 中，对累积标准正态分布函数 $\Phi$ 的快速近似实现为函数 `Phi_approx`。^[`Phi_approx` 函数是逆逻辑函数的重新缩放版本，因此尽管尺度大致与 $\Phi$ 相同，但尾部并不匹配。]可以使用以下代码编写近似 Probit 回归模型。
 
 ```stan
 y[n] ~ bernoulli(Phi_approx(alpha + beta * x[n]));
@@ -482,7 +480,7 @@ y[n] ~ bernoulli(Phi_approx(alpha + beta * x[n]));
 
 ## Multi-logit regression {#multi-logit.section}
 
-## 多类别逻辑回归 {#multi-logit.section--cn}
+## 多类别 Logistic 回归 {#multi-logit.section--cn}
 
 Multiple outcome forms of logistic regression can be coded directly in
 Stan.  For instance, suppose there are $K$ possible outcomes for each
@@ -490,7 +488,7 @@ output variable $y_n$.  Also suppose that there is a $D$-dimensional
 vector $x_n$ of predictors for $y_n$.  The multi-logit model with
 $\textsf{normal}(0,5)$ priors on the coefficients is coded as follows.
 
-在 Stan 中可以直接编码多输出形式的逻辑回归。例如，假设对于每个输出变量 $y_n$有 $K$ 个可能的结果。同时假设对于每个 $y_n$ 都有一个维度为 $D$ 的预测变量向量 $x_n$ 。系数的先验分布为 $\textsf{normal}(0,5)$ 的多输出形式的逻辑模型的编码如下。
+在 Stan 中可以直接编码多输出形式的 Logistic 回归。例如，假设对于每个输出变量 $y_n$ 有 $K$ 个可能的结果。同时假设对于每个 $y_n$ 都有一个维度为 $D$ 的预测变量向量 $x_n$ 。系数的先验分布为 $\textsf{normal}(0,5)$ 的多输出形式的 Logistic 模型的编码如下。
 
 
 ```stan
@@ -592,7 +590,7 @@ parameter values satisfying their constraints.  Constraints on
 transformed data, transformed parameters, and generated quantities are
 also optional.
 
-数据声明的约束是可选的。另一方面，在参数（parameters）块中声明的约束是不可选的，它们是必需的，以确保所有参数的支撑集满足约束条件。在变换后数据、变换后参数和生成量部分，约束也是可选的。
+数据声明的约束是可选的。另一方面，在参数（`parameters`）块中声明的约束是不可选的，它们是必需的，以确保所有参数的支撑集满足约束条件。在变换后数据、变换后参数和生成量部分，约束也是可选的。
 
 ### Identifiability {-}
 
@@ -790,7 +788,7 @@ high curvature to the target density and impede sampling.
 
 ## Ordered logistic and probit regression {#ordered-logistic.section}
 
-## 有序logistic回归和probit回归 {#ordered-logistic.section--cn}
+## 有序 Logistic 回归和 Probit 回归 {#ordered-logistic.section--cn}
 
 Ordered regression for an outcome $y_n \in \{ 1, \dotsc, k \}$ with
 predictors $x_n \in \mathbb{R}^D$ is determined by a single coefficient
@@ -805,7 +803,7 @@ and ordered probit models.
 
 ### Ordered logistic regression {-}
 
-### 有序 logistic 回归 {-}
+### 有序 Logistic 回归 {-}
 
 The ordered logistic model can be coded in Stan using the
 `ordered` data type for the cutpoints and the built-in
@@ -849,7 +847,7 @@ the probability is needed only up to a proportion.
 
 #### Ordered probit {-}
 
-#### 有序 probit 回归 {-}
+#### 有序 Probit 回归 {-}
 
 An ordered probit model could be coded in exactly the same way by
 swapping the cumulative logistic (`inv_logit`) for the cumulative
@@ -890,11 +888,11 @@ on the softmax transform is more efficient and more numerically
 stable.  A small efficiency gain could be achieved by computing the
 values `Phi(eta - c[k])` once and storing them for re-use.
 
-尽管基于 softmax 变换的内置编码更高效且数值上更稳定，逻辑回归模型也可以通过将 `Phi` 替换为 `inv_logit` 这种方式进行编码。通过一次性计算值 `Phi(eta - c[k])` 并将其存储以供重复使用，可以获得一定的效率提升。
+尽管基于 softmax 变换的内置编码更高效且数值上更稳定，Logistic 回归模型也可以通过将 `Phi` 替换为 `inv_logit` 这种方式进行编码。通过一次性计算值 `Phi(eta - c[k])` 并将其存储以供重复使用，可以获得一定的效率提升。
 
 ## Hierarchical regression
 
-## 分层 logistic 回归
+## 分层回归
 
 The simplest multilevel model is a hierarchical model in which the
 data are grouped into $L$ distinct categories (or levels).  An extreme
@@ -906,7 +904,7 @@ other levels.  A hierarchical model is an intermediate solution where
 the degree of pooling is determined by the data and a prior on the
 amount of pooling.
 
-最简单的多层次模型是分层模型，它将数据划分为 $L$ 个不同的类别（或层级）。一种极端的方法是完全汇集所有数据并估计一个共同的回归系数向量 $\beta$。另一种极端的方法是不进行汇集，为每个层级 $l$ 分别进行估计并分配其系数向量 $\beta_l$，。分层模型是一种折中方案，其汇集程度由数据和汇集程度的先验分布共同决定。
+最简单的多层次模型是分层模型，它将数据划分为 $L$ 个不同的类别（或层级）。一种极端的方法是完全汇集所有数据并估计一个共同的回归系数向量 $\beta$。另一种极端的方法是不进行汇集，为每个层级 $l$ 分别进行估计并分配其系数向量 $\beta_l$。分层模型是一种折中方案，其汇集程度由数据和汇集程度的先验分布共同决定。
 
 Suppose each binary outcome $y_n \in \{ 0, 1 \}$ has an associated
 level, $ll_n \in \{ 1, \dotsc, L \}$.  Each outcome will also have
@@ -924,7 +922,7 @@ dissimilar, weaker pooling will be reflected in higher hierarchical variance.
 The following model encodes a hierarchical logistic regression model
 with a hierarchical prior on the regression coefficients.
 
-以下模型编码了一个具有分层先验的分层 logistic 回归模型。
+以下模型编码了一个具有分层先验的分层 Logistic 回归模型。
 
 
 ```stan
@@ -962,7 +960,7 @@ informative or at least weakly informative priors for all parameters;
 see the [regression priors section](#regression-priors.section) for
 recommendations on priors for regression coefficients and scales.
 
-由于标准差参数 `sigma` 在声明中设定了下界为零，因此它隐式地获得了 $(0, \infty)$ 上的均匀先验分布。Stan 允许使用不正确的先验分布，只要后验分布是正确的。然而，通常情况下，为所有参数提供信息量较大或至少是弱信息的先验分布是有帮助的；有关回归系数和尺度的先验分布建议，请参阅[回归先验章节](#regression-priors.section)。
+由于标准差参数 `sigma` 在声明中设定了下界为零，因此它隐式地获得了 $(0, \infty)$ 上的均匀先验分布。Stan 允许使用非正规先验分布，只要后验分布是正规的。然而，通常情况下，为所有参数提供信息量较大或至少是弱信息的先验分布是有帮助的；有关回归系数和尺度的先验分布建议，请参阅[回归先验章节](#regression-priors.section)。
 
 #### Optimizing the model {-}
 
@@ -1078,10 +1076,13 @@ y_n     & \sim \textsf{normal}(x_n \beta, \sigma) \\
 
 In this case, as $\tau \rightarrow 0$ and $\beta_k \rightarrow 0$, the
 posterior density
+
+在这种情况下，当 $\tau \rightarrow 0$ 且 $\beta_k \rightarrow 0$ 时，后验密度
+
 $$ p(\beta,\tau,\sigma|y,x) \propto p(y|x,\beta,\tau,\sigma) $$
 grows without bound.  See the [plot of Neal's funnel density](#funnel.figure), which has similar behavior.
 
-在这种情况下，当 $\tau \rightarrow 0$ 且 $\beta_k \rightarrow 0$ 时，后验密度 $$ p(\beta,\tau,\sigma|y,x) \propto p(y|x,\beta,\tau,\sigma) $$ 将无限增大。参考 [Neal's funnel 密度的图表](#funnel.figure)，其表现类似。
+将无限增大。参考 [Neal 的漏斗状密度的图表](#funnel.figure)，其表现类似。
 
 There is obviously no MLE estimate for $\beta,\tau,\sigma$ in such a
 case, and therefore the model must be modified if posterior modes are
@@ -1152,12 +1153,12 @@ Stan for more flexibility.
 
 ### 1PL (Rasch) model {-}
 
-### 单参数 logistic（Rasch）模型 {-}
+### 单参数 Logistic（Rasch）模型 {-}
 
 The 1PL item-response model, also known as the Rasch model, has one
 parameter (1P) for questions and uses the logistic link function (L).
 
-单参数 logistic（1PL）项目响应模型，也称为 Rasch 模型，它假设每个问题只有一个参数（1P），并使用 logistic 链接函数（L）。
+单参数 Logistic（1PL）项目响应模型，也称为 Rasch 模型，它假设每个问题只有一个参数（1P），并使用 Logistic 链接函数（L）。
 
 
 The model parameters are declared as follows.
@@ -1240,7 +1241,7 @@ as described in the next section.
 
 ### Multilevel 2PL model {-}
 
-### 多层两参数 logistic 模型 {-}
+### 多层两参数 Logistic 模型 {-}
 
 The simple 1PL model described in the previous section is generalized
 in this section with the addition of a discrimination parameter to
@@ -1389,7 +1390,7 @@ float in terms of both scale and location.  See the [collinearity
 section](problematic-posteriors.qmd#collinearity.section) for a simple example of the problems
 this poses for estimation.
 
-（分层）先验的一个应用是识别一组参数的尺度和/或位置。例如，在前面讨论的 IRT 模型中，存在尺度和位置的不可识别问题。如果使用均匀先验，后验将在尺度和位置上浮动。请参考[共线性章节](#collinearity.section)中对此估计问题的简单示例。
+（分层）先验的一个应用是识别一组参数的尺度和/或位置。例如，在前面讨论的 IRT 模型中，存在尺度和位置的不可识别问题。如果使用均匀先验，后验将在尺度和位置上浮动。请参考[共线性章节](problematic-posteriors.qmd#collinearity.section)中对此估计问题的简单示例。
 
 The non-identifiability is resolved by providing a standard normal (i.e.,
 $\textsf{normal}(0,1)$) prior on one group of coefficients, such as
@@ -1431,14 +1432,14 @@ infinity.  This divergence can be controlled by providing a prior for
 the coefficient, which will "shrink" the estimate back toward zero
 and thus identify the model in the posterior.
 
-在逻辑回归中，如果一个预测变量在输出为1的情况下为正，而在输出为0的情况下为负，则该预测变量的最大似然估计会发散到无穷大。通过为该系数提供先验可以控制这种发散，使估计值向零收缩，从而在后验中识别模型。
+在 Logistic 回归中，如果一个预测变量在输出为1的情况下为正，而在输出为0的情况下为负，则该预测变量的最大似然估计会发散到无穷大。通过为该系数提供先验可以控制这种发散，使估计值向零收缩，从而在后验中识别模型。
 
 Similar problems arise for sampling with improper flat priors.  The
 sampler will try to draw  large values.  By providing a prior,
 the posterior will be concentrated around finite values, leading to
 well-behaved sampling.
 
-类似的问题也出现在使用不合适的均匀先验进行抽样时。采样器会试图抽取大的数值。通过提供先验，后验将集中在有限的值周围，从而实现良好的采样效果。
+类似的问题也出现在使用非正规的均匀先验进行抽样时。采样器会试图抽取大的数值。通过提供先验，后验将集中在有限的值周围，从而实现良好的采样效果。
 
 
 
@@ -2070,7 +2071,7 @@ This section considers two cases, seemingly unrelated regressions for
 continuous multivariate quantities and multivariate probit regression
 for boolean multivariate quantities.
 
-本节考虑两种情况：连续多变量数量的看似不相关回归（seemingly unrelated regressions）和布尔多变量数量的多元 probit 回归。
+本节考虑两种情况：连续多变量数量的看似不相关回归（seemingly unrelated regressions）和布尔多变量数量的多元 Probit 回归。
 
 ### Seemingly unrelated regressions {-}
 
@@ -2185,7 +2186,7 @@ block.
 
 ### Multivariate probit regression {-}
 
-### 多元 probit 回归 {-}
+### 多元 Probit 回归 {-}
 
 The multivariate probit model generates sequences of boolean variables
 by applying a step function to the output of a seemingly unrelated
@@ -2225,7 +2226,7 @@ regressions, letting the scale vary causes the model (which is defined
 only by a cutpoint at 0, not a scale) to be unidentified (see
 @Greene:2011).
 
-与看似无关回归情况不同，此处的协方差矩阵 $\Sigma$ 具有单位标准差（即它是一个相关矩阵）。与普通的 probit 和 logistic 回归一样，若允许标准差变化，则模型（仅由0处的切点定义，而非标准差）将无法确定（参见 @Greene:2011）。
+与看似无关回归情况不同，此处的协方差矩阵 $\Sigma$ 具有单位标准差（即它是一个相关矩阵）。与普通的 Probit 和 Logistic 回归一样，若允许标准差变化，则模型（仅由0处的切点定义，而非标准差）将无法确定（参见 @Greene:2011）。
 
 Multivariate probit regression can be coded in Stan using the trick
 introduced by @AlbertChib:1993, where the underlying continuous
@@ -2235,7 +2236,7 @@ parts, based on whether the corresponding value of $y$ is 0 or 1.
 Otherwise, the model is identical to the seemingly unrelated
 regression model in the previous section.
 
-利用 @AlbertChib:1993 引入的技巧，可以在 Stan 中编码多元 probit 回归，其中基础连续值向量 $y_n$ 被编码为截断参数。在 Stan 中编码该模型的关键是将潜变量向量 $z$ 分为两部分，依据相应的 $y$ 值是0还是1。除此之外，该模型与前一节中的看似无关回归模型一致。
+利用 @AlbertChib:1993 引入的技巧，可以在 Stan 中编码多元 Probit 回归，其中基础连续值向量 $y_n$ 被编码为截断参数。在 Stan 中编码该模型的关键是将潜变量向量 $z$ 分为两部分，依据相应的 $y$ 值是0还是1。除此之外，该模型与前一节中的看似无关回归模型一致。
 
 First, we introduce a sum function for two-dimensional arrays of
 integers;  this is going to help us calculate how many total 1 values
@@ -2430,7 +2431,7 @@ intercept $\alpha$, slope $\beta$, and error scale $\sigma$, along with
 improper uniform priors, the posterior over the parameters given $x$
 and $y$ is
 
-在使用线性回归预测未观测结果时，给定预测变量 $x_1, \dotsc, x_N$ 和观测结果 $y_1, \dotsc, y_N$，假设标准线性回归模型具有截距 $\alpha$、斜率 $\beta$ 和误差尺度 $\sigma$，以及不合适的均匀先验分布，给定 $x$ 和 $y$ 的参数后验分布为
+在使用线性回归预测未观测结果时，给定预测变量 $x_1, \dotsc, x_N$ 和观测结果 $y_1, \dotsc, y_N$，假设标准线性回归模型具有截距 $\alpha$、斜率 $\beta$ 和误差尺度 $\sigma$，以及非正规的均匀先验分布，给定 $x$ 和 $y$ 的参数后验分布为
 
 $$
 p\left(\alpha, \beta, \sigma \mid x, y \right)
