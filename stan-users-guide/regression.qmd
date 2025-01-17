@@ -8,7 +8,7 @@ pagetitle: Regression Models
 
 本节译者：于曙光、王才兴、王超
 
-一次校审：张梓源
+初次校审：张梓源
 
 二次校审：邱怡轩（DeepSeek V3 辅助）
 

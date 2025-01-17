@@ -7,7 +7,10 @@ pagetitle: Time-Series Models
 # 时间序列模型 {#time-series.chapter--cn}
 
 本节译者：林余昌、洪世哲
-本节校审：李君竹
+
+初次校审：李君竹
+
+二次校审：邱怡轩（DeepSeek V3 辅助）
 
 Times series data come arranged in temporal order.  This chapter
 presents two kinds of time series models, regression-like models such
@@ -28,7 +31,7 @@ spatial) data.
 A first-order autoregressive model (AR(1)) with normal noise takes
 each point $y_n$ in a sequence $y$ to be generated according to
 
-带有正态噪声的一阶自回归模型（AR(1)）将序列 $y$ 中的每一个点 $y_n$ 按照以下规则生成：
+带有正态噪声的一阶自回归模型（AR(1)）假设序列 $y$ 中的每个点 $y_n$ 都遵循以下生成规则：
 $$
 y_n \sim \textsf{normal}(\alpha + \beta y_{n-1}, \sigma).
 $$
@@ -46,7 +49,7 @@ With improper flat priors on the regression coefficients $\alpha$ and
 $\beta$ and on the positively-constrained noise scale ($\sigma$), the
 Stan program for the AR(1) model is as follows.^[The intercept in this model is $\alpha / (1 - \beta)$.  An alternative parameterization in terms of an intercept $\gamma$ suggested Mark Scheuerell on GitHub is $y_n \sim \textsf{normal}\left(\gamma + \beta \cdot (y_{n-1} - \gamma), \sigma\right)$.]
 
-对于回归系数 $\alpha$ 和 $\beta$ 以及噪声尺度 $\sigma$（$\sigma$>0），给予不当（improper）扁平先验，AR(1) 模型的 Stan 程序如下。^[这个模型中的截距是 $\alpha / (1 - \beta)$。Mark Scheuerell 在 GitHub 上建议用截距 $\gamma$ 表示的另一种参数化方式是 $y_n \sim \textsf{normal}\left(\gamma + \beta \cdot (y_{n-1} - \gamma), \sigma\right)$。]
+对于回归系数 $\alpha$ 和 $\beta$ 以及噪声尺度 $\sigma$（$\sigma$>0），非正规的均匀先验，AR(1) 模型的 Stan 程序如下。^[这个模型中的截距是 $\alpha / (1 - \beta)$。Mark Scheuerell 在 GitHub 上建议用截距 $\gamma$ 表示的另一种参数化方式是 $y_n \sim \textsf{normal}\left(\gamma + \beta \cdot (y_{n-1} - \gamma), \sigma\right)$。]
 
 ```stan
 data {
@@ -73,7 +76,7 @@ if information is available on the scale of the changes in `y`
 over time, or a weakly informative prior to help guide inference if
 rough knowledge of the scale of `y` is available.
 
-这里没有对第一个观察到的数据点`y[1]`进行建模，因为没有观测到`y[1]`之前的数据；相反，它作为条件作用于`y[2]`。这个模型还使用了一个对于`sigma`的非合理先验，但如果有关于`y`随时间变化的尺度的信息可用，那么添加一个含信息的先验是可行的，或者如果有关于`y`尺度的粗略知识可用，可以添加一个弱信息性的先验来帮助指导推断。
+这里没有对第一个观测数据点 `y[1]` 进行建模，因为缺乏 `y[1]` 之前的数据；相反，它作为条件作用于 `y[2]`。该模型还对 `sigma` 使用了不恰当的平坦先验，但如果有关于 `y` 随时间变化的尺度的信息可用，那么添加一个含信息的先验是可行的，或者如果有关于 `y` 尺度的粗略知识可用，可以添加一个弱信息性的先验来帮助指导推断。
 
 #### Slicing for efficiency {-}
 
@@ -83,7 +86,7 @@ Although perhaps a bit more difficult to read, a much more efficient
 way to write the above model is by slicing the vectors, with the model
 above being replaced with the one-liner
 
-一个更高效的模型的表达方式是通过向量的切片，但这可能会造成理解上的困难。对于上述的代码可以改写为如下一行代码来表示：
+通过向量切片可以实现更高效的模型表达，尽管这可能增加理解难度。对于上述的代码可以改写为如下一行代码来表示：
 
 ```stan
 model {
@@ -112,7 +115,7 @@ multiple series of observations are available.
 To enforce the estimation of a stationary AR(1) process, the slope
 coefficient `beta` may be constrained with bounds as follows.
 
-为了保证估计得到一个平稳的 AR(1) 过程，斜率系数 `beta` 可能会受到以下约束。
+为了确保估计得到的 AR(1) 过程是平稳的，可以对斜率系数 `beta` 施加以下约束。
 
 ```stan
 real<lower=-1, upper=1> beta;
@@ -123,7 +126,7 @@ stationary model it is best to know this.
 Stationary parameter estimates can be encouraged with a prior favoring
 values of `beta` near zero.
 
-在实践中，这样的约束不建议使用。当不能通过一个平稳的 AR 模型来很好地拟合数据的时候，我们最好能知道这一点。不过在实践中可以通过设置 `beta` 先验质量集中在零的分布来鼓励稳定参数的估计。
+在实践中，这样的约束不建议使用。当数据无法被平稳的 AR 模型很好地拟合时，了解这一点非常重要。不过在实践中可以通过设置 `beta` 先验质量集中在零的分布来鼓励稳定参数的估计。
 
 ### AR(2) models {-}
 
@@ -190,7 +193,7 @@ mean term fixed.  Models could be defined where both the
 mean and scale vary over time; the econometrics literature presents a
 wide range of time-series modeling choices.
 
-计量经济学和金融时间序列模型通常假设存在异方差性：它们允许定义序列的噪声项的尺度随时间变化。最简单的这种模型是自回归条件异方差（ARCH）模型 [@Engle:1982]。AR(1) 模型在噪声项尺度参数固定不随时间变化的假设下，刻画了序列条件均值随时间变化。ARCH(1) 模型放宽了噪声项尺度参数固定不变的假设，使得它能随时间变化，但条件均值部分不随着时间变化。当然我们可以定义条件均值和尺度都随时间变化的模型；计量经济学文献提出了一系列广泛的时间序列建模选择。
+计量经济学和金融时间序列模型通常考虑异方差性：它们允许定义序列的噪声项的尺度随时间变化。最简单的这种模型是自回归条件异方差（ARCH）模型 [@Engle:1982]。AR(1) 模型在噪声项尺度参数固定不随时间变化的假设下，刻画了序列条件均值随时间变化。ARCH(1) 模型放松了对噪声项尺度参数恒定的假设，允许其随时间变化，但条件均值部分不随着时间变化。当然我们可以定义条件均值和尺度都随时间变化的模型；计量经济学文献提出了一系列广泛的时间序列建模选择。
 
 The ARCH(1) model is typically presented as the following sequence of
 equations, where $r_t$ is the observed return at time point $t$
@@ -619,7 +622,7 @@ white-noise shock (i.e., multiplicative error) on the asset return at
 time $t$, whereas $\delta_t$ represents the shock on volatility at
 time $t$.
 
-随机波动率模型将资产（如购买证券的期权）的回报的波动性（即方差）视为在离散时间下遵循潜在的随机过程[@KimShephardChib:1998]。数据由在 $T$ 个等间隔时间点上的底层资产的均值校正（即，中心化）回报 $y_t$ 组成。Kim 等人用以下的类回归方程来构建典型的随机波动性模型，其中有一个潜在参数 $h_t$ 用于表示对数波动性，以及参数 $\mu$ 表示平均对数波动性，$\phi$ 表示波动性项的持续性。变量 $\epsilon_t$ 表示在时间 $t$ 处的资产回报的白噪声冲击（即乘法误差），而 $\delta_t$ 表示在时间 $t$ 的波动性冲击。
+随机波动率模型将资产（如购买证券的期权）的回报的波动性（即方差）视为在离散时间下遵循潜在的随机过程 [@KimShephardChib:1998]。数据由在 $T$ 个等间隔时间点上的底层资产的均值校正（即，中心化）回报 $y_t$ 组成。Kim 等人用以下的类回归方程来构建典型的随机波动性模型，其中有一个潜在参数 $h_t$ 用于表示对数波动性，以及参数 $\mu$ 表示平均对数波动性，$\phi$ 表示波动性项的持续性。变量 $\epsilon_t$ 表示在时间 $t$ 处的资产回报的白噪声冲击（即乘法误差），而 $\delta_t$ 表示在时间 $t$ 的波动性冲击。
 \begin{align*}
 y_t        &=    \epsilon_t \exp(h_t / 2) \\
 h_{t+1}    &=    \mu + \phi (h_t - \mu) + \delta_t \sigma \\
@@ -689,7 +692,7 @@ and $\sigma = 0.25$ leads to 95% posterior intervals for $\mu$ of
 $(-1.23, -0.54)$, for $\phi$ of $(0.82, 0.98)$, and for $\sigma$ of
 $(0.16, 0.38)$.
 
-这样的随机波动性模型的后验通常具有很大的后验方差。例如，用 $\mu = -1.02$、$\phi = 0.95$  和$\sigma = 0.25$ 模拟500个数据点，得到 $\mu$ 的95%后验区间为 $(-1.23, -0.54)$，$\phi$ 的为 $(0.82, 0.98)$，$\sigma$ 的 为$(0.16, 0.38)$。
+像这样的随机波动率模型的后验通常具有较大的后验方差。例如，用 $\mu = -1.02$、$\phi = 0.95$  和$\sigma = 0.25$ 模拟500个数据点，得到 $\mu$ 的95%后验区间为 $(-1.23, -0.54)$，$\phi$ 的为 $(0.82, 0.98)$，$\sigma$ 的 为$(0.16, 0.38)$。
 
 The samples using NUTS show a high degree of autocorrelation among the
 samples, both for this model and the stochastic volatility model
@@ -698,8 +701,7 @@ Using a non-diagonal mass
 matrix provides faster convergence and more effective samples than a
 diagonal mass matrix, but will not scale to large values of $T$.
 
-使用 NUTS 的样本显示样本之间存在高度的自相关，这对于这个模型和在[@Hoffman-Gelman:2014]中评估的随机波动性模型都是如此。
-使用非对角质量矩阵比使用对角质量矩阵提供更快的收敛和更有效的样本，但不会扩大到 $T$ 的大值。
+使用 NUTS 的样本显示样本之间存在高度的自相关，这对于这个模型和在 [@Hoffman-Gelman:2014]中评估的随机波动性模型都是如此。使用非对角质量矩阵比对角质量矩阵能提供更快的收敛速度和更有效的样本，但无法扩展到较大的$T$值。
 
 It is relatively straightforward to speed up the effective samples per
 second generated by this model by one or more orders of magnitude.
@@ -718,7 +720,8 @@ reparameterizing in terms of a standardized volatility, then
 rescaling.  This requires a standardized parameter `h_std` to be
 declared instead of `h`.
 
-这加快了迭代速度，但并未改变有效样本大小，因为潜在的参数化和对数概率函数并未改变。通过将标准化波动性重新参数化，然后重新缩放，可以改善混合效果。这需要声明一个标准化参数 `h_std` 而不是 `h`。
+这加快了迭代速度，但不会改变有效样本量，因为背后的参数化和对数概率函数并未改变。通过将标准化波动性重新参数化，然后重新缩放，可以改善混合效果。这需要声明一个标准化参数 `h_std` 而不是 `h`。
+
 ```stan
 parameters {
   // ...
@@ -753,7 +756,7 @@ final loop adds in the moving average so that `h[2]` through
 `h[T]` are appropriately modeled relative to `phi` and
 `mu`.
 
-首个赋值操作将 `h_std` 重新缩放为具有 $\textsf{normal}(0,\sigma)$ 分布并临时赋值给 h。 第二个赋值操作重新缩放 h[1]，使得其先验与 h[2] 到 h[T] 的先验不同。接下来的赋值操作提供了一个 mu 偏移量，因此 h[2] 到 h[T] 现在分布为 $\textsf{normal}(\mu,\sigma)$；请注意，这个偏移必须在重新缩放 h[1] 之后进行。最后的循环添加了移动平均数，因此 h[2] 到 h[T] 都根据 phi 和 mu 进行了适当的建模。
+第一个赋值操作将 `h_std` 重新缩放为 $\textsf{normal}(0,\sigma)$ 分布，并暂时赋值给 `h`。第二个赋值操作重新缩放 `h[1]`，使得其先验与 `h[2]` 到 `h[T]` 的先验不同。接下来的赋值操作提供了一个 `mu` 偏移量，因此 `h[2]` 到 `h[T]` 现在分布为 $\textsf{normal}(\mu,\sigma)$；请注意，这个偏移必须在重新缩放 `h[1]` 之后进行。最后的循环添加了移动平均数，因此 `h[2]` 到 `h[T]` 都根据 `phi` 和 `mu` 进行了适当的建模。
 
 As a final improvement, the distribution statements for `h[1]` to
 `h[T]` are replaced with a
@@ -775,7 +778,7 @@ improved, which results in higher effective sample sizes per
 iteration.  Finally, each iteration runs in roughly a quarter of the
 time of the original iterations.
 
-尽管原始模型可能需要数百甚至数千次迭代才能收敛，但重新参数化的模型能够在数十次迭代内可靠地收敛。混合性也得到了显著改善，这导致了每次迭代的有效样本大小更大。最后，每次迭代的运行时间大约是原始迭代时间的四分之一。
+虽然原始模型可能需要数百乃至数千次迭代才能收敛，但经过重新参数化的模型通常只需数十次迭代即可可靠收敛。混合性也得到了显著改善，这导致了每次迭代的有效样本大小更大。最后，每次迭代的运行时间大约是原始迭代时间的四分之一。
 
 ## Hidden Markov models {#hmms.section}
 
@@ -874,7 +877,7 @@ probabilities in the Markov chain.  In this case, there is no distinct
 end to the data, so there is no need to model the probability that the
 sequence ends at $z_T$.
 
-尽管以上对于隐马尔可夫模型（HMMs）的描述是可行的，但它是不完整的，因为起始状态 $z_1$ 没有被建模（索引从2到 $T$）。如果数据被看作是一个长期运行的过程的子序列，那么 $z_1$ 的概率应该被设定为马尔可夫链中的平稳状态概率。在这种情况下，数据没有明确的结束点，因此没有必要建模序列在 $z_T$ 处结束的概率。
+虽然上述对隐马尔可夫模型（HMMs）的描述是可行的，但并不完整，因为起始状态 $z_1$ 没有被建模（索引从2到 $T$）。如果数据被看作是一个长期运行的过程的子序列，那么 $z_1$ 的概率应该被设定为马尔可夫链中的平稳状态概率。在这种情况下，数据没有明确的结束点，因此没有必要建模序列在 $z_T$ 处结束的概率。
 
 An alternative conception of HMMs is as models of finite-length
 sequences.  For example, human language sentences have distinct
