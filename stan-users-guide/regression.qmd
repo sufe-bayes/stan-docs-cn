@@ -668,6 +668,8 @@ effect $\beta_k$ for age group $k$ to make a linear predictor $\alpha +
 \beta_k$.  With this predictor, we can add a constant to $\alpha$ and
 subtract from each $\beta_k$ and get exactly the same likelihood.
 
+当回归模型中存在变化效应时，除非采取进一步的措施，否则得到的似然函数是不可识别的。例如，我们可能有一个全局截距 $\alpha$，然后为每个年龄组 $k$ 设置一个变化效应 $\beta_k$，从而构建线性预测器 $\alpha + \beta_k$。使用这种预测器时，我们可以为 $\alpha$ 添加一个常数，并从每个 $\beta_k$ 中减去该常数，得到的似然函数完全相同。
+
 The traditional approach to identifying such a model is to pin the
 first varing effect to zero, i.e., $\beta_1 = 0$.  With one of the
 varying effects fixed, you can no longer add a constant to all of them
@@ -676,15 +678,21 @@ difficulty in specifying such a model in Stan, it is awkward to
 formulate priors because the other coefficients are all interpreted
 relative to $\beta_1$.  
 
+识别此类模型的传统方法是将第一个变化效应固定为零，即 $\beta_1 = 0$。通过固定其中一个变化效应，我们不能再为所有的 $\beta_k$ 添加常数，这将使模型的似然函数变得可识别。然而，除了在 Stan 中指定此类模型的困难外，由于其他系数都是相对于 $\beta_1$ 解释的，因此设定先验分布也变得复杂。
+
 In a Bayesian setting, a proper prior on each of the $\beta$ is enough
 to identify the model.  Unfortunately, this can lead to inefficiency
 during sampling as the model is still only weakly identified through
 the prior---there is a very simple example of the difference in
 the discussion of collinearity in @collinearity.section.
 
+在贝叶斯框架中，为每个 $\beta$ 设置适当的先验分布足以识别模型。然而，这可能会导致采样效率低下，因为模型仅通过先验分布弱识别——在讨论共线性的章节中有一个非常简单的例子来说明这种差异。
+
 An alternative identification strategy that allows a symmetric prior
 is to enforce a sum-to-zero constraint on the varying effects, i.e.,
 $\sum_{k=1}^K \beta_k = 0.$
+
+另一种允许对称先验的识别策略是对变化效应施加总和为零的约束，即 $\sum_{k=1}^K \beta_k = 0$。
 
 A parameter vector constrained to sum to zero may also be used to
 identify a multi-logit regression parameter vector (see the
@@ -693,13 +701,19 @@ used for ability or difficulty parameters (but not both) in an IRT
 model (see the [item-response model
 section](#item-response-models.section) for details).
 
+一个总和为零的参数向量也可以用于识别多类别 Logistic 回归的参数向量（详见[多类别 Logistic 回归章节](#multi-logit.section)），或者用于项目响应理论（IRT）模型中的能力参数或难度参数（但不能同时用于两者，详见[项目响应模型章节](#item-response-models.section)）。
+
 这样的参数向量可以用于识别多分类逻辑回归回归的参数向量（详见[多分类逻辑回归部分](#multi-logit.section)），或者项目响应模型中的能力或难度参数（但不能同时识别，详见[项目响应模型部分](#item-response-models.section)）。
 
 
 ### Built-in sum-to-zero vector {-}
 
+### 内置的和为零的向量 {-}
+
 As of Stan 2.36, there is a built in `sum_to_zero_vector` type, which
 can be used as follows.
+
+从 Stan 2.36 开始，内置了 `sum_to_zero_vector` 类型，可以按如下方式使用：
 
 ```stan
 parameters {
@@ -712,7 +726,11 @@ This produces a vector of size `K` such that `sum(beta) = 0`.  In the
 unconstrained representation requires only `K - 1` values because the
 last is determined by the first `K - 1`.  
 
+这将生成一个大小为 `K` 的向量，且满足 `sum(beta) = 0`。在无约束表示中，只需要 `K - 1` 个值，因为最后一个值由前 `K - 1` 个值决定。
+
 Placing a prior on `beta` in this parameterization, for example,
+
+在这种参数化下对 `beta` 设置先验，例如
 
 ```stan
   beta ~ normal(0, 1);
@@ -722,10 +740,14 @@ leads to a subtly different posterior than what you would get with the
 same prior on an unconstrained size-`K` vector.  As explained below,
 the variance is reduced.
 
+会导致后验分布与在无约束的 `K` 维向量上使用相同先验时略有不同。如下所述，方差会减小。
+
 The sum-to-zero constraint can be implemented naively by setting the
 last element to the negative sum of the first elements, i.e., $\beta_K
 = -\sum_{k=1}^{K-1} \beta_k.$ But that leads to high correlation among
 the $\beta_k$.
+
+和为零的约束可以通过简单地将最后一个元素设置为前几个元素的负和来实现，即 $\beta_K = -\sum_{k=1}^{K-1} \beta_k$。但这会导致 $\beta_k$ 之间的高度相关性。
 
 The transform used in Stan eliminates these correlations by
 constructing an orthogonal basis and applying it to the
@@ -736,8 +758,7 @@ inverse isometric log transform because it is convenient to describe
 and the transform simplifies to efficient scalar operations rather
 than more expensive matrix operations.
 
-
-在对 `beta_raw` 设置先验时是否加入总和为 $0$ 的约束条件将会导致后验结果产生微妙差异。特别值得注意的是，在每个 `beta_raw` 分量上设置简单的先验与在无约束的 $K$ 维向量 `beta` 的每个分量上设置相同的先验会产生不同的结果。例如，设置 `beta` 和 `beta_raw` 服从相同的先验分布 $\textsf{normal}(0,5)$ 将产生不同的后验结果。
+Stan 中使用的变换通过构建正交基并将其应用于和为零的约束来消除这些相关性；@seyboldt:2024 提供了相关解释。*Stan 参考手册*在变换章节中提供了详细信息。尽管可以使用任何正交基，但 Stan 使用逆等距对数变换，因为它便于描述，并且该变换可以简化为高效的标量操作，而不是更昂贵的矩阵操作。
 
 #### Marginal distribution of sum-to-zero components {-}
 
