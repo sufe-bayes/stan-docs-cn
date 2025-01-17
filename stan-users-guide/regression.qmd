@@ -2,9 +2,9 @@
 pagetitle: Regression Models
 ---
 
-# Regression Models
-
 # 回归模型
+
+# Regression Models
 
 本节译者：于曙光、王才兴、王超
 

@@ -2,9 +2,9 @@
 pagetitle: Finite Mixtures
 ---
 
-# Finite Mixtures  {#mixture-modeling.chapter}
-
 # 有限混合模型  {#mixture-modeling.chapter--cn}
+
+# Finite Mixtures  {#mixture-modeling.chapter}
 
 本节译者：胡向宇、张梓源
 

@@ -6,6 +6,7 @@ bibliography: [../bibtex/all.bib]
 biblio-style: apalike
 toc: true
 toc-depth: 2
+toc-title: "目录"
 
 format:
   pdf:
@@ -15,9 +16,9 @@ format:
     latex-engine: "pdflatex"
     latex-auto-install: true
     documentclass: book
-    subtitle: "Version {{< env STAN_DOCS_VERSION >}}"
+    subtitle: "版本 {{< env STAN_DOCS_VERSION >}}"
     include-in-header: "../header.tex"
-    toc-title: "Table of Contents"
+    toc-title: "目录"
     syntax-definitions:
       - ../quarto-config/stan.xml
     highlight-style: tango
@@ -28,13 +29,13 @@ format:
     citecolor: darkgreen
 
 book:
-  title: "Stan User's Guide"
-  author: "Stan Development Team"
+  title: "Stan 用户指南"
+  author: "Stan 开发团队"
   search: true
 
   chapters:
     - index.qmd
-    - part: "Example Models"
+    - part: "示例模型"
       chapters:
         - regression.qmd
         - time-series.qmd
@@ -53,7 +54,7 @@ book:
         - complex-numbers.qmd
         - dae.qmd
         - survival.qmd
-    - part:  "Programming Techniques"
+    - part:  "编程技巧"
       chapters:
         - floating-point.qmd
         - matrices-arrays.qmd
@@ -65,7 +66,7 @@ book:
         - reparameterization.qmd
         - efficiency-tuning.qmd
         - parallelization.qmd
-    - part: "Posterior Inference & Model Checking"
+    - part: "后验推断和模型检查"
       chapters:
         - posterior-prediction.qmd
         - simulation-based-calibration.qmd
@@ -74,7 +75,7 @@ book:
         - poststratification.qmd
         - decision-analysis.qmd
         - bootstrap.qmd
-    - part: "Appendices"
+    - part: "附录"
       chapters:
         - using-stanc.qmd
         - style-guide.qmd

@@ -6,7 +6,7 @@
 
 * The Stan name and logo are registered trademarks of NumFOCUS.
 
-* Copyright 2011--2024, Stan 开发组及其受托人。
+* Copyright 2011--2024, Stan 开发团队及其受托人。
 
 * Stan 的名称和标识是 NumFOCUS 的注册商标。
 

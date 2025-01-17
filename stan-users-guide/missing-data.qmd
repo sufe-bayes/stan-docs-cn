@@ -2,9 +2,9 @@
 pagetitle: Missing Data and Partially Known Parameters
 ---
 
-# Missing Data and Partially Known Parameters
-
 # 缺失数据和部分已知参数
+
+# Missing Data and Partially Known Parameters
 
 本节译者：于娇
 

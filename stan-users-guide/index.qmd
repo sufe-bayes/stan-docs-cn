@@ -1,8 +1,8 @@
 ---
 format:
     html:
-        title: Stan User's Guide
-        subtitle: "Version {{< env STAN_DOCS_VERSION >}}"
+        title: Stan 用户指南
+        subtitle: "版本 {{< env STAN_DOCS_VERSION >}}"
         toc: false
 ---
 
@@ -35,7 +35,7 @@ not tied to any particular model.
 - Part 3 introduces algorithms for calibration and model checking that
 require multiple runs of Stan.
 
-- 第三部分介绍了模型校准和检验的各种方法，这些方法往往需要对 Stan 程序进行多次运行。
+- 第三部分介绍了模型校准和检查的各种方法，这些方法往往需要对 Stan 程序进行多次运行。
 
 - The appendices provide an introduction to the stanc3 compiler used in the
   various interfaces to Stan, a style guide, and advice for users of BUGS and

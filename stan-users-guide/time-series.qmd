@@ -2,9 +2,9 @@
 pagetitle: Time-Series Models
 ---
 
-# Time-Series Models  {#time-series.chapter}
-
 # 时间序列模型 {#time-series.chapter--cn}
+
+# Time-Series Models  {#time-series.chapter}
 
 本节译者：林余昌、洪世哲
 

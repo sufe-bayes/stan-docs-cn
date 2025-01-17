@@ -1,4 +1,7 @@
 ```{=latex}
 \pagestyle{plain}
 ```
+
+# <i style="font-size: 110%; color:var(--bs-body-color)">参考文献</i> {-}
+
 # <i style="font-size: 110%; color:var(--bs-body-color)">References</i> {-}
