@@ -4,15 +4,18 @@ pagetitle: Truncated or Censored Data
 
 # Truncated or Censored Data
 
-# 截断或者删失数据
+# 截断或删失数据
 
 本节译者：段园家
-本节校审：李君竹
+
+初次校审：李君竹
+
+二次校审：邱怡轩（DeepSeek V3 辅助）
 
 Data in which measurements have been truncated or censored can be
 coded in Stan following their respective probability models.
 
-存在截断或删失的数据可以在 Stan 中按照各自的概率模型进行编程。
+对于存在截断或删失的数据，可以在 Stan 中根据相应的概率模型进行建模
 
 ## Truncated distributions {#truncation.section}
 
@@ -24,9 +27,7 @@ complementary cumulative distribution (CCDF) functions are available.
 See the reference manual section on truncated distributions for more
 information on truncated distributions, CDFs, and CCDFs.
 
-Stan 中的截断仅限于具有相应对数累积分布函数 （CDF） 和对数互补累积分布
-（CCDF） 函数的单变量分布。有关截断分布、CDF 和 CCDF
-的更多信息，请查阅参考手册有关截断分布的部分。
+Stan 中的截断操作仅限于单变量分布，且这些分布需要具备相应的对数累积分布函数（CDF）和对数互补累积分布函数（CCDF）。有关截断分布、CDF 和 CCDF 的更多信息，请参阅参考手册中关于截断分布的部分。
 
 ## Truncated data {#truncated-data.section}
 
@@ -36,7 +37,7 @@ Truncated data are data for which measurements are only reported if
 they fall above a lower bound, below an upper bound, or between a
 lower and upper bound.
 
-截断数据是指仅当数据值高于某个下限、低于某个上限或介于下限和上限之间时才可以被观测到的数据。
+截断数据是指仅当测量值高于某个下限、低于某个上限或介于上下限之间时才会被记录的数据。
 
 Truncated data may be modeled in Stan using truncated distributions.
 For example, suppose the truncated data are $y_n$ with an upper
@@ -44,7 +45,7 @@ truncation point of $U = 300$ so that $y_n < 300$.  In Stan, this
 data can be modeled as following a truncated normal distribution for
 the observations as follows.
 
-截断数据可以在 Stan 中使用截断分布进行建模。例如，假设截断的数据是 $y_n$，截断点的上限为 $U=300$，因此有 $y_n<300$。在 Stan 中，可以将此数据建模成一个如下的带有截断的正态分布。
+在 Stan 中，可以使用截断分布对截断数据进行建模。例如，假设截断的数据是 $y_n$，截断点的上限为 $U=300$，因此有 $y_n<300$。在 Stan 中，可以将此数据建模成一个如下的带有截断的正态分布。
 
 ```stan
 data {
@@ -65,14 +66,13 @@ The model declares an upper bound `U` as data and constrains
 the data for `y` to respect the constraint;  this will be checked
 when the data are loaded into the model before sampling begins.
 
-该模型将上限 `U` 声明为数据，并要求 y
-产生的数据服从约束;在开始采样之前将数据加载到模型中时，将对此进行检查。
+该模型将上限 `U` 声明为数据，并要求 `y` 的取值满足相应约束；在开始采样之前将数据加载到模型中时，将对此进行检查。
 
 This model implicitly uses an improper flat prior on the scale and
 location parameters; these could be given priors in the model using
 distribution statements.
 
-此模型默认尺度和位置参数使用不恰当的平坦先验;我们可以使用抽样语句给出其他先验分布。
+该模型默认对尺度和位置参数使用了非正规的均匀先验；我们可以使用分布语句给出其他先验分布。
 
 ### Constraints and out-of-bounds returns {-}
 
@@ -83,7 +83,7 @@ the truncation range, the probability is zero, so the log probability
 will evaluate to $-\infty$.  For instance, if variate `y` is
 sampled with the statement.
 
-如果截断分布中的采样变量位于截断范围之外，则概率为零，因此概率对数值的计算结果为 $-\infty$。例如，如果使用下面的语句对变量 `y` 进行采样，
+如果截断分布中的采样变量超出截断范围，则其概率为零，相应的对数概率值为 $-\infty$。例如，如果使用下面的语句对变量 `y` 进行采样，
 
 ```stan
 y ~ normal(mu, sigma) T[L, U];
@@ -177,14 +177,14 @@ bounds.  With `N` declared as type `int<lower=1>`, there must be
 at least one data point.  The constraint that `L` is less than
 `U` is enforced indirectly, based on the non-empty data.
 
-在这，有一个下截断点 `L`，它被声明小于或等于 `y` 的最小值。上截断点 `U` 被声明大于 `y` 的最大值。尽管此声明依赖于数据，但也仅仅是强制数据落在截断边界内。将 `N` 声明为类型 `int<lower=1>` 是指至少有一个数据点。`L` 小于 `U` 的约束基于非空数据便间接给定了。
+此处有一个下截断点 `L`，它被声明小于或等于 `y` 的最小值。上截断点 `U` 被声明大于 `y` 的最大值。尽管此声明依赖于数据，但它仅强制要求数据落在截断边界内。将 `N` 声明为类型 `int<lower=1>` 是指至少有一个数据点。`L` 小于 `U` 的约束基于非空数据便间接给定了。
 
 The ellipses where the priors for the bounds `L` and `U`
 should go should be filled in with a an informative prior in
 order for this model to not concentrate `L` strongly around
 `min(y)` and `U` strongly around `max(y)`.
 
-省略号的位置表示边界 `L` 和 `U` 的先验,这里需要给定一个富含信息的先验，以便此模型不会将 `L` 强烈地集中在 `min(y)` 周围以及 `U` 不会强烈集中在 `max(y)` 周围。
+省略号的位置表示边界 `L` 和 `U` 的先验，它们需要用信息丰富的先验来填充，以防止模型将 `L` 过度集中在 `min(y)` 附近，以及将 `U` 过度集中在 `max(y)` 附近。
 
 
 ## Censored data {#censored.section}
@@ -196,7 +196,7 @@ both.  Unlike with truncated data, the number of data points that were
 censored is known.  The textbook example is the household scale which
 does not report values above 300 pounds.
 
-删失会掩盖太大、太小或两者兼而有之的点的值。与截断数据不同，被删减的数据点数量是已知的。教科书的例子是家用秤，它不报告超过300磅的值。
+删失会隐藏过大、过小或同时满足这两种情况的测量值。与截断数据不同，被删减的数据点数量是已知的。教科书的例子是家用秤，它不报告超过300磅的值。
 
 ### Estimating censored values {-}
 
@@ -208,7 +208,7 @@ values.  Since Stan does not allow unknown values in its arrays or
 matrices, the censored values must be represented explicitly, as in the
 following right-censored case.
 
-对删失数据进行建模的一种方法是将删失数据视为被限制在删失值范围内的缺失数据。由于 Stan 不允许在其数组或矩阵中使用未知值，因此必须显式表示删失值，如以下右删失情况所示。
+对删失数据进行建模的一种方法是将其视为受限于删失值范围内的缺失数据。由于 Stan 不允许在其数组或矩阵中使用未知值，因此必须显式表示删失值，如以下右删失情况所示。
 
 ```stan
 data {
@@ -236,7 +236,7 @@ for censored data will be greater than `U`.  The imputed censored
 data affects the location and scale parameters through the last
 distribution statement in the model.
 
-由于删失数据数组 `y_cens` 被声明为参数，因此它将与位置和尺度参数 `mu` 和 `sigma` 一起采样。由于删失数据数组 `y_cens` 被声明为具有类型为 `real<lower=U>` 的值，因此删失数据的所有插补值都将大于 `U`。估计的删失数据通过模型中的最后一个采样语句来影响位置和尺度参数。
+由于删失数据数组 `y_cens` 被声明为参数，因此它将与位置参数 `mu` 和尺度参数 `sigma` 一同进行采样。由于删失数据数组 `y_cens` 被声明为具有类型为 `real<lower=U>` 的值，因此删失数据的所有插补值都将大于 `U`。通过模型中的最后一个分布语句，插补的删失数据会影响位置和尺度参数。
 
 ### Integrating out censored values {-}
 

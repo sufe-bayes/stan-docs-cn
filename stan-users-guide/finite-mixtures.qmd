@@ -7,7 +7,10 @@ pagetitle: Finite Mixtures
 # 有限混合模型  {#mixture-modeling.chapter--cn}
 
 本节译者：胡向宇、张梓源
-本章校审：张梓源
+
+初次校审：张梓源
+
+二次校审：邱怡轩（DeepSeek V3 辅助）
 
 Finite mixture models of an outcome assume that the outcome is drawn
 from one of several distributions, the identity of which is controlled
@@ -18,7 +21,7 @@ described in the following sections.  Mixture models may be used
 directly for modeling data with multimodal distributions, or they may
 be used as priors for other parameters.
 
-有限混合模型中,我们假设最终的结果是从几个不同的分布中抽取出来的,而从哪个具体的分布中抽取,是由一个分类的混合分布模型来决定的。混合模型通常具有多峰密度，其峰值接近混合成分的峰值。混合模型可以通过多种方式进行参数化，以下各节所述。混合模型可以用于直接建模具有多峰分布的数据，也可以用作其他参数的先验。
+在有限混合模型中，我们假设观测结果是从多个不同分布中抽取的，而具体从哪个分布抽取则由一个分类混合分布决定。混合模型通常具有多峰密度分布，其峰值位置接近各混合成分的峰值。混合模型可以通过多种方式进行参数化，以下各节所述。混合模型可直接用于建模具有多峰分布的数据，也可作为其他参数的先验分布。
 
 ## Relation to clustering {#clustering-mixture.section}
 
@@ -33,7 +36,7 @@ basis for the $K$-means algorithm; the latent Dirichlet allocation
 model, usually applied to clustering problems, can be viewed as a
 mixed-membership multinomial mixture model.
 
-在[聚类模型](#clustering.chapter)讨论过的聚类模型是一类特殊的混合模型，这类模型在工程和机器学习领域的聚类研究中被广泛应用。本章讨论的正态混合模型以多元形式重新出现，作为 $K$ 均值算法的统计基础；通常应用于聚类问题的潜在狄利克雷分布模型，可以视为混合成分版本的多项混合模型。
+如[聚类章节](#clustering.chapter)所述，聚类模型是混合模型的一个特殊类别，这类模型在工程和机器学习领域的聚类研究中被广泛应用。本章讨论的正态混合模型以多元形式重现，成为 $K$-均值算法的统计基础；通常应用于聚类问题的潜在狄利克雷分布模型，可以视为混合成分版本的多项混合模型。
 
 ## Latent discrete parameterization
 
@@ -49,7 +52,7 @@ For each outcome $y_n$ there is a latent variable $z_n$ in
 $\{ 1,\dotsc,K \}$ with a categorical distribution parameterized
 by $\lambda$,
 
-一种参数化混合模型的方法是，使用潜在分类变量来指定哪个混合成分决定结果。例如，考虑 $K$ 个正态分布，它们的位置参数是 $\mu_k \in \mathbb{R}$ ，尺度参数是 $\sigma_k \in (0,\infty)$。现在将它们按比例 $\lambda$ 混合，其中 $\lambda_k \geq 0$ and
+参数化混合模型的一种方法是使用潜在分类变量来指示哪个混合成分生成观测结果。例如，考虑 $K$ 个正态分布，它们的位置参数是 $\mu_k \in \mathbb{R}$ ，尺度参数是 $\sigma_k \in (0,\infty)$。现在将它们按比例 $\lambda$ 混合，其中 $\lambda_k \geq 0$ and
 $\sum_{k=1}^K \lambda_k = 1$（即 $\lambda $位于单位 $K$ -单纯形上）。对于每个结果 $y_n$，都有一个从 $\{ 1,\dotsc,K \}$ 中取值的潜在变量 $z_n$，并有一个参数为 $\lambda$ 的分类分布。
 
 $$
@@ -69,7 +72,7 @@ This model is not directly supported by Stan because it involves
 discrete parameters $z_n$, but Stan can sample $\mu$ and $\sigma$
 by summing out the $z$ parameter as described in the next section.
 
-这个模型不是 Stan 直接支持的，因为它涉及离散参数 $z_n$，但是 Stan 可以通过对 $z$ 求和，来采样 $\mu$ 和 $\sigma$，就像下一节描述的那样。
+由于涉及离散参数 $z_n$，Stan 并不直接支持这种模型，但是 Stan 可以通过对 $z$ 求和，来采样 $\mu$ 和 $\sigma$，就像下一节描述的那样。
 
 ## Summing out the responsibility parameter
 
@@ -81,7 +84,7 @@ model. If $Y$ is a mixture of $K$ normal distributions with
 locations $\mu_k$ and scales $\sigma_k$ with mixing proportions
 $\lambda$ in the unit $K$-simplex, then
 
-为了在 Stan 中实现前面概述的正态混合模型，可以将模型中的离散参数求和消除。如果 $Y$ 是由 $K$ 个正态分布混合而成的，这些正态分布的位置参数是 $\mu_k$ ，尺度参数是 $\sigma_k$，并且混合比例 $\lambda$ 位于单位 $K$ -单纯形上，则
+要在 Stan 中实现前述的正态混合模型，可以通过对离散参数求和来消除它们。如果 $Y$ 是由 $K$ 个正态分布混合而成的，这些正态分布的位置参数是 $\mu_k$ ，尺度参数是 $\sigma_k$，并且混合比例 $\lambda$ 位于单位 $K$ -单纯形上，则
 
 $$
 p_Y\left(y \mid \lambda, \mu, \sigma \right)
@@ -111,7 +114,7 @@ linear addition on the log scale.   The reason to use Stan's built-in
 `log_sum_exp`  function is that it can prevent underflow and overflow
 in the exponentiation, by calculating the result as
 
-如果 $a$ 和 $b$ 是对数尺度上的概率，那么 $\exp(a) + \exp(b)$ 是它们在线性尺度上的和，外部对数将结果转换回对数尺度；总结来说，log_sum_exp 在对数尺度上进行线性加法。使用 Stan 内置的 `log_sum_exp` 函数的原因是，它可以通过下面的计算方式防止在指数运算中发生下溢和上溢，
+若 $a$ 和 $b$ 表示对数概率，则 $\exp(a) + \exp(b)$ 即为它们在原始概率尺度上的和，外部对数将结果转换回对数尺度；总结来说，log_sum_exp 在对数尺度上进行线性加法。使用 Stan 内置的 `log_sum_exp` 函数的原因是，它可以通过下面的计算方式防止在指数运算中发生下溢和上溢，
 
 $$
 \log \left( \exp(a) + \exp(b)\right)
@@ -371,7 +374,7 @@ for (n in 1:N) {
 This definition assumes that each observation $y_n$ may have arisen
 from either of the mixture components. The density is
 
-这个定义假设每个观测值 $y_n$ 都有可能来自混合模型中的任何一个组成部分。密度函数为
+该模型假设每个观测值 $y_n$ 都可能来自任意一个混合成分。密度函数为
 
 $$
 p\left(y \mid \lambda, \mu, \sigma\right)
@@ -424,14 +427,14 @@ the parameters of the mixture components have exchangeable priors and
 the mixture ratio gets a uniform prior so that the parameters of the
 mixture components are also exchangeable in the likelihood.
 
-在许多混合模型中，模型内部的混合成分是可以互换的，这意味着我们无法明确区分它们。如果混合成分的参数具有相同（可交换）的先验分布，并且混合比率具有均匀先验分布，那么混合成分的参数在似然函数中也是可交换的。
+许多混合模型中的混合成分具有可交换性，这意味着它们无法被明确区分。如果混合成分的参数具有相同（可交换）的先验分布，并且混合比率具有均匀先验分布，那么混合成分的参数在似然函数中也是可交换的。
 
 We have finessed this basic problem by ordering the parameters.  This
 will allow us in some cases to pick out mixture components either
 ahead of time or after fitting (e.g., male vs. female, or Democrat
 vs.\ Republican).
 
-我们通过对参数进行排序来解决这个基本问题。这种方法在某些情况下可以帮助我们识别出具体的混合成分，无论是在模型建立之前还是在模型拟合完成后（例如男性与女性，或民主党与共和党）。
+我们通过对参数施加排序约束来解决这个识别问题。这种方法在某些情况下可以帮助我们识别出具体的混合成分，无论是在模型建立之前还是在模型拟合完成后（例如男性与女性，或民主党与共和党）。
 
 In other cases, we do not care about the actual identities of the
 mixture components and want to consider inferences that are
@@ -457,14 +460,14 @@ $(\mu_1, \sigma_1)$ and $(\mu_2, \sigma_2)$,
 
 The prior on the mixture ratio is uniform,
 
-混合比率具有均匀先验分布
+混合比例具有均匀先验分布
 
 $$
 \lambda \sim \textsf{uniform}(0, 1),
 $$
 so that with the likelihood
 
-因此，利用似然函数
+因此，在给定如下似然函数时
 
 $$
 p\left(y_n \mid \mu, \sigma\right)
@@ -475,7 +478,7 @@ the joint distribution $p(y, \mu, \sigma, \lambda)$ is exchangeable
 in the parameters $(\mu_1, \sigma_1)$ and $(\mu_2, \sigma_2)$ with
 $\lambda$ flipping to $1 - \lambda$.^[Imposing a constraint such as $\theta < 0.5$ will resolve the symmetry, but fundamentally changes the model and its posterior inferences.]
 
-联合分布 $p(y, \mu, \sigma, \lambda)$ 在参数 $(\mu_1, \sigma_1)$ 和 $(\mu_2, \sigma_2)$ 中是可交换的，其中 $\lambda$ 转换为 $1 - \lambda$。^[施加一个约束，如 $\theta < 0.5$，将解决对称性问题，但从根本上改变了模型及其后验推断。]
+联合分布 $p(y, \mu, \sigma, \lambda)$ 在参数 $(\mu_1, \sigma_1)$ 和 $(\mu_2, \sigma_2)$ 间具有可交换性，其中 $\lambda$ 转换为 $1 - \lambda$。^[施加一个约束，如 $\theta < 0.5$，将解决对称性问题，但从根本上改变了模型及其后验推断。]
 
 ### Inference under label switching {-}
 
@@ -489,7 +492,7 @@ posterior inferences which do not refer to specific component labels
 are invariant under label switching and may be used directly.  This
 subsection considers a pair of examples.
 
-在混合成分不可识别的情况下，由于标签会在不同的 MCMC 链或不同的优化运行中切换或排列，因此诊断采样或优化算法的收敛性可能会很困难。幸运的是，不涉及特定成分标签的后验推断在标签切换下是不变的，可以直接使用。本小节考虑了一对示例。
+当混合成分不可识别时，诊断采样或优化算法的收敛性可能会很困难，因为标签会在不同的 MCMC 链或不同的优化运行中切换或重排列。幸运的是，不涉及特定成分标签的后验推断在标签切换下是不变的，可以直接使用。本小节考虑了一对示例。
 
 #### Posterior predictive distribution {-}
 
