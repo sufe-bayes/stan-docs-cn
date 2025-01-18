@@ -143,7 +143,7 @@ in the model block, the effect is an improper prior on non-negative
 real numbers.  Although a more informative prior may be added, improper
 priors are acceptable as long as they lead to proper posteriors.
 
-在 `sigma` 的声明中，通过 `lower=0` 的约束条件将其取值范围限制为非负实数。在模型块中没有设定先验分布，就相当于对非负实数设定了非正规先验分布。尽管可以添加一个更具信息量的先验分布，但只要能产生正规的后验分布，使用非正规先验分布也是可以接受的。
+在 `sigma` 的声明中，通过 `lower=0` 的约束条件将其取值范围限制为非负实数。在模型块中没有设定先验分布，就相当于对非负实数设定了非正规先验分布。尽管可以添加一个有信息的先验，但只要能产生正规的后验分布，使用非正规先验分布也是可以接受的。
 
 In the model above, `x` is an $N \times K$ matrix of predictors
 and `beta` a $K$-vector of coefficients, so `x * beta` is an
@@ -296,7 +296,7 @@ distribution of $\theta$ or $\beta$ but does affect $\alpha$ and
 allows you to interpret $\alpha$ as the expectation of $y$ in a linear
 model.
 
-因此，在 Stan 中处理线性和广义线性模型时，当 $K > 1$ 且缺乏关于 $\beta$ 位置的信息先验时，建议采用这种 QR 重参数化方法。在获得 QR 分解之前，将每列的均值减去也是值得考虑的做法。这不会影响 $\theta$ 或 $\beta$ 的后验分布，但会影响 $\alpha$，并使您能够将 $\alpha$ 解释为线性模型中 $y$ 的期望值。
+因此，在 Stan 中处理线性和广义线性模型时，当 $K > 1$ 且缺乏关于 $\beta$ 位置的有信息的先验时，建议采用这种 QR 重参数化方法。在获得 QR 分解之前，将每列的均值减去也是值得考虑的做法。这不会影响 $\theta$ 或 $\beta$ 的后验分布，但会影响 $\alpha$，并使您能够将 $\alpha$ 解释为线性模型中 $y$ 的期望值。
 
 ## Priors for coefficients and scales {#regression-priors.section}
 
@@ -981,7 +981,7 @@ informative or at least weakly informative priors for all parameters;
 see the [regression priors section](#regression-priors.section) for
 recommendations on priors for regression coefficients and scales.
 
-由于标准差参数 `sigma` 在声明中设定了下界为零，因此它隐式地获得了 $(0, \infty)$ 上的均匀先验分布。Stan 允许使用非正规先验分布，只要后验分布是正规的。然而，通常情况下，为所有参数提供信息量较大或至少是弱信息的先验分布是有帮助的；有关回归系数和尺度的先验分布建议，请参阅[回归先验章节](#regression-priors.section)。
+由于标准差参数 `sigma` 在声明中设定了下界为零，因此它隐式地获得了 $(0, \infty)$ 上的均匀先验分布。Stan 允许使用非正规先验分布，只要后验分布是正规的。然而，通常情况下，为所有参数提供有信息或至少弱信息的先验分布是有帮助的；有关回归系数和尺度的先验分布建议，请参阅[回归先验章节](#regression-priors.section)。
 
 #### Optimizing the model {-}
 
@@ -1258,7 +1258,7 @@ and only 25% missingness at random.  For real applications, the
 priors should be fit hierarchically along with the other parameters,
 as described in the next section.
 
-出于测试目的，Stan 中提供的 IRT 1PL 模型使用了信息量丰富的先验分布，这些先验与 R 中用于模拟数据的实际数据生成过程相匹配（模拟代码与模型位于同一目录下）。虽然这对大多数实际应用来说并不现实，但可以用于验证 Stan 的推断结果。通过使用更宽松的先验进行简单的敏感性分析可以发现，即使在拥有400名学生和100道题目，且仅有25%随机缺失数据的情况下，后验分布对先验仍然相当敏感。在实际应用中，应该将先验分布与其他参数一起进行分层拟合，这将在后续章节中详细讨论。
+出于测试目的，Stan 中提供的 IRT 1PL 模型使用了有信息的先验分布，这些先验与 R 中用于模拟数据的实际数据生成过程相匹配（模拟代码与模型位于同一目录下）。虽然这对大多数实际应用来说并不现实，但可以用于验证 Stan 的推断结果。通过使用更宽松的先验进行简单的敏感性分析可以发现，即使在拥有400名学生和100道题目，且仅有25%随机缺失数据的情况下，后验分布对先验仍然相当敏感。在实际应用中，应该将先验分布与其他参数一起进行分层拟合，这将在后续章节中详细讨论。
 
 ### Multilevel 2PL model {-}
 

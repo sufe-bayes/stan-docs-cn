@@ -184,7 +184,7 @@ should go should be filled in with a an informative prior in
 order for this model to not concentrate `L` strongly around
 `min(y)` and `U` strongly around `max(y)`.
 
-省略号的位置表示边界 `L` 和 `U` 的先验，它们需要用信息丰富的先验来填充，以防止模型将 `L` 过度集中在 `min(y)` 附近，以及将 `U` 过度集中在 `max(y)` 附近。
+省略号的位置表示边界 `L` 和 `U` 的先验，它们需要用有信息的先验来填充，以防止模型将 `L` 过度集中在 `min(y)` 附近，以及将 `U` 过度集中在 `max(y)` 附近。
 
 
 ## Censored data {#censored.section}

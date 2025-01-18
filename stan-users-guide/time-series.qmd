@@ -76,7 +76,7 @@ if information is available on the scale of the changes in `y`
 over time, or a weakly informative prior to help guide inference if
 rough knowledge of the scale of `y` is available.
 
-这里没有对第一个观测数据点 `y[1]` 进行建模，因为缺乏 `y[1]` 之前的数据；相反，它作为条件作用于 `y[2]`。该模型还对 `sigma` 使用了不恰当的平坦先验，但如果有关于 `y` 随时间变化的尺度的信息可用，那么添加一个含信息的先验是可行的，或者如果有关于 `y` 尺度的粗略知识可用，可以添加一个弱信息性的先验来帮助指导推断。
+这里没有对第一个观测数据点 `y[1]` 进行建模，因为缺乏 `y[1]` 之前的数据；相反，它作为条件作用于 `y[2]`。该模型还对 `sigma` 使用了非正规的均匀先验，但如果有关于 `y` 随时间变化的尺度的信息可用，那么添加一个有信息的先验是可行的，或者如果有关于 `y` 尺度的粗略知识可用，可以添加一个弱信息先验来帮助指导推断。
 
 #### Slicing for efficiency {-}
 

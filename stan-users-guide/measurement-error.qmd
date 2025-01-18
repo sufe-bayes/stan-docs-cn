@@ -159,7 +159,7 @@ Exercise 3.5(b) by @GelmanEtAl:2013 provides an example.
 
 > 3.5. 假设我们对一个物体进行了五次称重，并测得如下舍入到最近整数磅的
 > 质量：10、10、12、11、9。假设未舍入的测量值服从正态分布，并对 $\mu$
-> 和 $\sigma^2$ 采用无信息先验分布。
+> 和 $\sigma^2$ 采用无信息的先验分布。
 >
 > (b) 把测量值视为取整后，给出 $(\mu, \sigma^2)$ 正确的后验分布。
 
@@ -188,7 +188,7 @@ Gelman's answer for this problem took the noninformative prior to be
 uniform in the variance $\sigma^2$ on the log scale, but we replace it
 with more recently recommended half-normal prior on $\sigma$
 
-Gelman 解决这个问题的方法是令无信息先验在对数尺度上关于方差 $\sigma^2$ 是均匀的，但是我们将其替换为最近更被推荐使用的半正态先验： 
+Gelman 解决这个问题的方法是令无信息的先验在对数尺度上关于方差 $\sigma^2$ 是均匀的，但是我们将其替换为最近更被推荐使用的半正态先验： 
 
 $$
 \sigma \sim \textsf{normal}^+(0, 1).

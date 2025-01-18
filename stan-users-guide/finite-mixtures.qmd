@@ -324,7 +324,7 @@ The values in the scale array `sigma` are constrained to be
 non-negative, and have a weakly informative prior given in the model
 chosen to avoid zero values and thus collapsing components.
 
-尺度参数数组 `sigma` 中的值被限制为非负，并在模型中给出了一个弱信息先验分布，选择这样的先验是为了避免零值产生的退化情况。
+尺度参数数组 `sigma` 中的值被限制为非负，并在模型中给出了一个弱信息先验，选择这样的先验是为了避免零值产生的退化情况。
 
 The model declares a local array variable `lps` to be size
 `K` and uses it to accumulate the log contributions from the
