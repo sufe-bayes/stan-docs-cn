@@ -2,13 +2,15 @@
 pagetitle: Latent Discrete Parameters
 ---
 
-# Latent Discrete Parameters  {#latent-discrete.chapter}
-
 # 潜在离散参数 {#latent-discrete.chapter--cn}
 
-本节译者：方志清
-本节校审：张梓源
+# Latent Discrete Parameters  {#latent-discrete.chapter}
 
+本节译者：方志清
+
+初次校审：张梓源
+
+二次校审：邱怡轩（DeepSeek V3 辅助）
 
 Stan does not support sampling discrete parameters.  So it is not
 possible to directly translate BUGS or JAGS models with discrete
@@ -38,14 +40,14 @@ iteration-by-iteration basis because the expectation at all possible
 values is being used rather than itself being estimated through
 sampling a discrete parameter.
 
-尽管需要对联合概率函数进行一些代数运算，但同样需要计算的一个量是被边际化的变量的后验期望，这通常是模型感兴趣的量。因为使用了所有可能值的期望，而不是通过对离散参数进行抽样来估计期望，这样可以更好地探索分布的尾部，并且在每次迭代的基础上进行更有效的抽样。
+尽管需要对联合概率函数进行一些代数运算，但计算过程中会自然地得到被边际化变量的后验期望，这通常是模型关注的重点。由于直接使用了所有可能值的期望，而不是通过离散参数抽样来估计期望，这种方法能够更有效地探索分布的尾部，并在每次迭代中实现更高效的采样。
 
 Standard optimization algorithms, including expectation maximization
 (EM), are often provided in applied statistics papers to describe
 maximum likelihood estimation algorithms.  Such derivations provide
 exactly the marginalization needed for coding the model in Stan.
 
-标准优化算法，包括期望最大化（EM），在应用统计论文中通常用于描述最大似然估计算法。这些推导提供了编码 Stan 模型所需的边际化方法。
+标准优化算法，包括期望最大化（EM），在应用统计论文中通常用于描述最大似然估计算法。这些推导过程正好提供了在 Stan 中编码模型所需的边际化方法。
 
 ## Change point models {#change-point.section}
 
@@ -53,7 +55,7 @@ exactly the marginalization needed for coding the model in Stan.
 
 The first example is a model of coal mining disasters in the U.K. for the years 1851--1962.^[The source of the data is [@Jarret:1979], which itself is a note correcting an earlier data collection.]
 
-第一个例子是对英国1851年至1962年间的煤矿灾害进行建模。^[数据的来源是 [@Jarret:1979]，它本身是对早期数据收集的修正。]
+第一个例子是对英国1851年至1962年间煤矿灾害数据的建模分析。^[数据的来源是 [@Jarret:1979]，它本身是对早期数据收集的修正。]
 
 ### Model with latent discrete parameter {-}
 
@@ -220,7 +222,7 @@ programming similar to the forward-backward algorithm for Hidden
 Markov models; he submitted a slight variant of the following code to
 replace the transformed parameters block of the above Stan program.
 
-尽管变点模型是直接编码的，但用于 `s` 和 `t` 的双重嵌套循环在 `T` 上是二次的。Luke Wiklendt 指出，可以通过使用类似于隐马尔可夫模型的前向-后向算法的动态编程来实现线性替代；他提交了以下代码的稍微变种，用于替换上述Stan程序中的转换参数块。
+虽然变点模型是直接编码实现的，但用于 `s` 和 `t` 的双重嵌套循环的时间复杂度是 `T` 的二次方。Luke Wiklendt 指出，可以通过使用类似于隐马尔可夫模型的前向-后向算法的动态编程来实现线性替代；他提交了以下代码的稍微变种，用于替换上述Stan程序中的转换参数块。
 
 ```stan
 transformed parameters {
@@ -265,7 +267,7 @@ one effective sample every two iterations.  Because it is a relatively
 small model (the inner double loop over time is roughly 20,000 steps),
 it is  fast.
 
-使用默认配置的 NUTS 算法，可以轻松地使用 MCMC 拟合该模型。该模型收敛速度快，每两次迭代产生大约一个有效样本。因为这是一个相对较小的模型（在时间上的内部双重循环大约需要20,000步），所以运行速度很快。
+使用默认配置的 NUTS 算法，可以轻松地使用 MCMC 拟合该模型。该模型收敛速度快，每两次迭代产生大约一个有效样本。由于这是一个相对较小的模型（时间维度上的双重循环大约需要20000次计算），因此运行速度较快。
 
 The value of `lp` for each iteration for each change point is
 available because it is declared as a transformed parameter.  If the
@@ -273,7 +275,7 @@ value of `lp` were not of interest, it could be coded as a local
 variable in the model block and thus avoid the I/O overhead of saving
 values every iteration.
 
-因为 `lp` 被声明为转换参数，每个迭代中每个变点的 `lp` 值都是可用的。如果对 `lp` 的值不感兴趣，可以将其编码为模型块中的局部变量，从而避免了每次迭代保存值的 I/O 开销。
+因为 `lp` 被声明为转换参数，每个迭代中每个变点的 `lp` 值都是可用的。如果不需要关注 `lp` 的值，可以将其编码为模型块中的局部变量，从而避免每次迭代保存值所带来的输入/输出开销。
 
 ### Posterior distribution of the discrete change point {-}
 
@@ -303,7 +305,7 @@ dependence on a given iteration's value for $e$ and $l$.  A final
 normalization then produces the quantity of interest, the posterior
 probability of the change point being $s$ conditioned on the data $D$,
 
-其中 $\texttt{lp}[m,s]$ 表示后验抽取 $m$ 中变点 $s$ 的 `lp` 值。通过对抽取进行平均，$e$ 和 $l$ 本身被边际化处理，结果不依赖于给定迭代中 $e$ 和 $l$ 的值。最后的归一化操作产生了所关注的量，即在给定数据 $D$ 的条件下，变点为 $s$ 的后验概率，
+其中 $\texttt{lp}[m,s]$ 表示后验抽取 $m$ 中变点 $s$ 的 `lp` 值。通过对采样结果进行平均，$e$ 和 $l$ 被自然地边际化处理，使得最终结果不依赖于特定迭代中 $e$ 和 $l$ 的具体取值。最后的归一化操作产生了所关注的量，即在给定数据 $D$ 的条件下，变点为 $s$ 的后验概率，
 
 $$
 p(s \mid D) = \frac{q(s \mid D)}{\sum_{s'=1}^T q(s' \mid D)}.
@@ -364,7 +366,7 @@ explicitly required.   Otherwise, expectations should be computed in
 the generated quantities block based on the posterior distribution for
 `s` given by `softmax(lp)`.
 
-与基于期望值的方法相比，离散采样效率非常低，特别是对于分布的尾部。因此，只有在需要明确从分布中绘制样本时，才应使用此方法。否则，应根据由 `softmax(lp)` 给出的变点后验分布在生成的量块中计算期望值。
+与基于期望的方法相比，离散采样的计算效率较低，尤其是在处理分布尾部时。因此，只有在需要明确从分布中绘制样本时，才应使用此方法。否则，应根据由 `softmax(lp)` 给出的变点后验分布在生成的量块中计算期望值。
 
 ### Posterior covariance {-}
 
@@ -376,7 +378,7 @@ straightforward, it is more statistically efficient (in the sense of
 requiring far fewer iterations for the same degree of accuracy) to
 calculate these covariances in expectation using `lp`.
 
-可以使用对 $s$ 进行的离散采样来计算与其他参数的协方差。尽管采样方法直观简单，但使用 `lp` 计算这些协方差的期望值在统计意义上更高效（即在相同的准确度下所需的迭代次数更少）。
+可以使用对 $s$ 进行的离散采样来计算与其他参数的协方差。虽然采样方法直观易懂，但使用 `lp` 计算这些协方差的期望值在统计效率上更优（即在相同精度要求下需要更少的迭代次数）。
 
 ### Multiple change points {-}
 
@@ -517,7 +519,7 @@ uniform prior for $N$ is used; this could (and should) be replaced
 with a more informative prior if possible, based on knowledge of the
 population under study.
 
-为确保 MLE 是 Lincoln-Petersen 估计，对 $N$ 使用了不恰当的均匀先验分布；如果可能的话，应该根据对研究种群的了解，用更具信息性的先验进行替代。
+为确保 MLE 是 Lincoln-Petersen 估计，对 $N$ 使用了非正规的均匀先验分布；如果可能的话，应该根据对研究种群的了解，用更具信息的先验进行替代。
 
 The one tricky part of the model is the lower bound $C - R + M$ placed
 on the population size $N$.  Values below this bound are impossible
@@ -594,7 +596,7 @@ The conditional prevents the model positing zombies; once an animal is
 dead, it stays dead.  The data distribution is then simple to express
 conditional on $z$ as
 
-该条件杜绝了模型中存在僵尸动物的可能性；一旦动物死亡，它就会一直保持死亡状态。在给定 $z$ 的条件下，数据分布可以简单地表示为
+这个条件约束防止了模型中出现“僵尸”动物的情况；一旦动物死亡，它将保持死亡状态。在给定 $z$ 的条件下，数据分布可以简单地表示为
 
 $$
 y_{i,t} \sim \mathsf{Bernoulli}(z_{i,t} \; ? \; 0 \: : \: p_t).
@@ -602,12 +604,12 @@ $$
 
 The conditional enforces the constraint that dead animals cannot be captured.
 
-该条件确保了已经死亡的动物不能被捕获。
+这个条件约束确保了已死亡的动物无法被捕获。
 
 
 ### Collective Cormack-Jolly-Seber model {-}
 
-### 集体 Cormack-Jolly-Seber 模型
+### 群体 Cormack-Jolly-Seber 模型
 
 This subsection presents an implementation of the model in terms of
 counts for different history profiles for individuals over three
@@ -643,7 +645,7 @@ $\phi_t$, not being captured in the next time period with probability
 $(1 - p_{t+1})$, and not being captured again after being alive in
 period $t+1$ with probability $\chi_{t+1}$.
 
-基本情况是由于如果动物在最后一个时间段被捕获，那么它再次被捕获的概率为1，因为没有更多的捕获时间段。根据 $\chi_{t+1}$ 定义 $\chi_{t}$ 的递归情况包括两种可能性：(1) 不在下一个时间段存活的概率为 $(1-\phi_t)$；(2) 在下一个时间段存活的概率为 $\phi_t$，在下一个时间段未被捕获的概率为 $(1-p_{t+1})$，并且在 $t+1$ 期后继续存活的概率为 $\chi_{t+1}$。
+基本情况是，如果动物在最后一个时间段被捕获，那么它再次被捕获的概率为1，因为没有更多的捕获时间段。根据 $\chi_{t+1}$ 定义 $\chi_{t}$ 的递归情况包括两种可能性：(1) 不在下一个时间段存活的概率为 $(1-\phi_t)$；(2) 在下一个时间段存活的概率为 $\phi_t$，在下一个时间段未被捕获的概率为 $(1-p_{t+1})$，并且在 $t+1$ 期后继续存活的概率为 $\chi_{t+1}$。
 
 With three capture times, there are eight captured/not-captured
 profiles an individual may have.  These may be naturally coded as
@@ -757,7 +759,7 @@ a hierarchical model for the $p$ and $\phi$ parameters.
 
 ### Individual Cormack-Jolly-Seber model {-}
 
-### 个体级Cormack-Jolly-Seber模型 {-}
+### 个体级 Cormack-Jolly-Seber 模型 {-}
 
 This section presents a version of the Cormack-Jolly-Seber (CJS) model
 cast at the individual level rather than collectively as in the
@@ -767,7 +769,7 @@ capture events, the number $I$ of individuals, and a boolean flag
 $y_{i,t}$ indicating if individual $i$ was observed at time $t$.  In
 Stan,
 
-本节介绍的是 Cormack-Jolly-Seber（CJS）模型的个体级版本，而不是前一小节中的集体级模型。它还扩展了模型，允许任意数量的时间段。数据包括捕获事件数量 $T$，个体数量 $I$，以及一个布尔标志 $y_{i,t}$，指示个体 $i$ 是否在时间 $t$ 被观察到。在 Stan 中，
+本节介绍的是 Cormack-Jolly-Seber（CJS）模型的个体级别版本，而非前一小节中的群体级别模型。它还扩展了模型，允许任意数量的时间段。数据包括捕获事件数量 $T$，个体数量 $I$，以及一个布尔标志 $y_{i,t}$，指示个体 $i$ 是否在时间 $t$ 被观察到。在 Stan 中，
 
 
 ```stan
@@ -783,7 +785,7 @@ possible to add individual "random effects" that affect survival or
 capture probability, as well as to avoid the combinatorics involved in
 unfolding $2^T$ observation histories for $T$ capture times.
 
-个体级模型的优势在于可以添加影响存活或捕获概率的个体“随机效应”，以及避免在展开 $2^T$ 个观测历史（对应于 $T$ 个捕获时间）时涉及的组合问题。
+个体级别模型的优势在于能够引入影响存活或捕获概率的个体“随机效应”，同时避免了在展开 $2^T$ 个观测历史（对应于 $T$ 个捕获时间）时涉及的组合问题。
 
 #### Utility functions {-}
 
@@ -794,7 +796,7 @@ definitions.  The first two are used in the transformed data block to
 compute the first and last time period in which an animal was
 captured.^[An alternative would be to compute this on the outside and feed it into the Stan model as preprocessed data.  Yet another alternative encoding would be a sparse one recording only the capture events along with their time and identifying the individual captured.]
 
-个体级 CJS 模型包含几个函数定义。前两个函数用于在转换的数据块中计算动物被捕获的第一个和最后一个时间段。^[另一种方法是在外部计算并将其作为预处理数据输入到 Stan 模型中。另一种可选的编码方式是使用稀疏表示，仅记录捕获事件以及它们的时间和被捕获的个体的标识。]
+个体级 CJS 模型包含几个函数定义。前两个函数用于在转换数据块中计算动物被捕获的第一个和最后一个时间点。^[另一种方法是在外部计算并将其作为预处理数据输入到 Stan 模型中。另一种可选的编码方式是使用稀疏表示，仅记录捕获事件以及它们的时间和被捕获的个体的标识。]
 
 ```stan
 functions {
@@ -823,7 +825,7 @@ functions {
 These two functions are used to define the first and last capture time
 for each individual in the transformed data block.^[Both functions return 0 if the individual represented by the input array was never captured.  Individuals with no captures are not relevant for estimating the model because all probability statements are conditional on earlier captures.  Typically they would be removed from the data, but the program allows them to be included even though they make not contribution to the log probability function.]
 
-这两个函数用于在转换的数据块中定义每个个体的第一个和最后一个捕获时间。^[如果输入数组表示的个体从未被捕获，这两个函数都返回0。没有捕获记录的个体对于模型的估计是无关的，因为所有的概率陈述都是基于先前的捕获条件的。通常情况下，它们会被从数据中删除，但是程序允许它们被包含在内，即使它们对对数概率函数没有贡献。]
+这两个函数用于在转换的数据块中定义每个个体的第一个和最后一个捕获时间。^[如果输入数组表示的个体从未被捕获，这两个函数均返回0。没有捕获记录的个体对模型估计没有贡献，因为所有的概率计算都基于先前的捕获条件。通常这些个体会被从数据中移除，但程序允许保留它们，尽管它们不会影响对数概率函数的值。]
 
 ```stan
 transformed data {
@@ -853,14 +855,14 @@ the total number of captures at time `t`.  The variable
 so that it can be used in an elementwise vector operation in the generated
 quantities block to model the population estimates at each time point.
 
-转换的数据块还定义了 `n_captured[t]`，它表示时间 `t` 的总捕获数。变量 `n_captured` 被定义为一个向量而不是整数数组，以便在生成的数量块中可以将其用于元素级的向量操作，从而对每个时间点的种群估计进行建模。
+转换数据块还定义了 `n_captured[t]`，表示在时间点 `t` 的总捕获次数。变量 `n_captured` 被定义为一个向量而不是整数数组，以便在生成的数量块中可以将其用于元素级的向量操作，从而对每个时间点的种群估计进行建模。
 
 The parameters and transformed parameters are as before, but now there
 is a function definition for computing the entire vector `chi`, the
 probability that if an individual is alive at `t` that it will
 never be captured again.
 
-参数和转换参数与之前相同，但现在还有一个函数定义用于计算整个向量 `chi`，即如果个体在 `t` 时还活着，则它将永远不会再次被捕获的概率。
+参数和转换参数与之前一致，但现在增加了一个函数定义，用于计算整个向量 `chi`，表示如果个体在时间点 `t` 仍然存活，则它将永远不会再次被捕获的概率。
 
 ```stan
 parameters {
@@ -916,7 +918,7 @@ probability of the observations `q` given the parameters `p`
 and `phi` as well as the transformed parameter `chi` defined
 in terms of `p` and `phi`.
 
-给定预先计算的量，模型块直接编码了 CJS 模型的对数似然函数。所有参数均保留其默认的均匀先验分布，模型简单地编码了在给定参数 `p` 和 `phi` 以及以 `p` 和 `phi` 定义的变换参数 `chi` 的情况下，观测值 `q` 的对数概率。
+基于预先计算的量，模型块直接编码了 CJS 模型的对数似然函数。所有参数均保留其默认的均匀先验分布，模型简单地编码了在给定参数 `p` 和 `phi` 以及以 `p` 和 `phi` 定义的变换参数 `chi` 的情况下，观测值 `q` 的对数概率。
 
 ```stan
 model {
@@ -937,7 +939,7 @@ The outer loop is over individuals, conditional skipping individuals
 on the convention of the first-capture and last-capture functions
 returning 0 for `first` if an individual is never captured.
 
-外部循环是对个体进行的，条件是跳过从未被捕获的个体 `i`。判断个体是否从未被捕获依赖于第一次捕获和最后一次捕获函数对于未被捕获的个体返回0的约定。
+外部循环遍历所有个体，条件是跳过从未被捕获的个体 `i`。判断个体是否从未被捕获依赖于第一次捕获和最后一次捕获函数对于未被捕获的个体返回0的约定。
 
 The inner loop for individual `i` first increments the log
 probability based on the survival of the individual with probability
@@ -952,14 +954,14 @@ In the inner loop, the observed capture status `y[i, t]` for
 individual `i` at time `t` has a Bernoulli distribution
 based on the capture probability `p[t]` at time `t`.
 
-在内部循环中，个体 `i` 在时间点 `t` 的观测捕获状态 `y[i, t]` 具有基于时间点 `t` 的捕获概率 `p[t]` 的伯努利分布。
+在内部循环中，个体 `i` 在时间点 `t` 的观测捕获状态 `y[i, t]` 服从基于时间点 `t` 的捕获概率 `p[t]` 的伯努利分布。
 
 After the inner loop, the probability of an animal never being seen
 again after being observed at time `last[i]` is included, because
 `last[i]` was defined to be the last time period in which animal
 `i` was observed.
 
-在内部循环之后，还包括在个体 `i` 在时间 `last[i]` 被观察后再也没有被看到的概率，因为 `last[i]` 被定义为个体 `i` 最后一次被观察到的时间段。
+在内部循环之后，还计算了个体 `i` 在时间点 `last[i]` 被观察后再也没有被捕获的概率，因为 `last[i]` 被定义为个体 `i` 最后一次被观察到的时间点。
 
 #### Identified parameters {-}
 
@@ -970,7 +972,7 @@ this model does not identify `phi[T - 1]` and `p[T]`, but
 does identify their product, `beta`.  Thus `beta` is defined
 as a generated quantity to monitor convergence and report.
 
-与前面小节描述的集体模型类似，该模型无法确定 `phi[T - 1]` 和 `p[T]`，但可以确定它们的乘积 `beta`。因此，`beta` 被定义为生成的量，用于监测收敛性和报告。
+与前面小节描述的群体模型类似，该模型无法单独确定 `phi[T - 1]` 和 `p[T]`，但可以确定它们的乘积 `beta`。因此，`beta` 被定义为生成的量，用于监测收敛性和报告。
 
 ```stan
 generated quantities {
@@ -1002,7 +1004,7 @@ mark-recapture model as the number of individuals captured at time
 is done with the elementwise division operation for vectors
 (`./`) in the generated quantities block.
 
-在生成的量中，还计算了在每个时间点 `t` 的种群均值估计，方法与简单标记-重捕模型相同，即将时间 `t` 捕获的个体数除以时间 `t` 的捕获概率。这是通过向量的元素级除法操作（`./`）在生成的量块中完成的。
+在生成量中，还计算了每个时间点 `t` 的种群均值估计，方法与简单标记-重捕模型相同，即将时间点 `t` 捕获的个体数除以时间点 `t` 的捕获概率。这是通过向量的元素级除法操作（`./`）在生成的量块中完成的。
 
 ```stan
 generated quantities {
@@ -1023,7 +1025,7 @@ but this model could be easily generalized to use a logistic
 regression here based on individual-level inputs to be used as
 predictors.
 
-所有个体被建模为具有相同的捕获概率，但是这个模型可以很容易地推广到在个体级输入的基础上使用逻辑回归作为预测变量。
+所有个体被建模为具有相同的捕获概率，但该模型可以轻松扩展为基于个体级别输入的 Logistic 回归模型，作为预测变量。
 
 
 ## Data coding and diagnostic accuracy models {#data-coding-models.section}
