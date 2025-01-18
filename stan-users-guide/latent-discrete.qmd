@@ -18,7 +18,7 @@ parameters (i.e., discrete stochastic nodes).  Nevertheless, it is
 possible to code many models that involve bounded discrete
 parameters by marginalizing out the discrete parameters.^[The computations are similar to those involved in expectation maximization (EM) algorithms [@dempster-et-al:1977].]
 
-Stan 不支持对离散参数进行采样。因此，无法直接将具有离散参数（即离散随机节点）的 BUGS 或 JAGS 模型转换为 Stan。尽管如此，通过边际化离散参数，可以对涉及有界离散参数的许多模型进行编码。^[这些计算与期望最大化（EM）算法 [@dempster-et-al:1977] 中涉及的计算类似]。
+Stan 不支持对离散参数进行采样。因此，无法直接将具有离散参数（即离散随机节点）的 BUGS 或 JAGS 模型转换为 Stan。尽管如此，通过边际化离散参数，可以对涉及有界离散参数的许多模型进行编码。^[这些计算与期望最大化（EM）算法 [@dempster-et-al:1977] 中涉及的计算类似。]
 
 This chapter shows how to code several widely-used models involving
 latent discrete parameters.  The next chapter, the [clustering
@@ -29,7 +29,7 @@ models involving latent discrete parameters.
 
 ## The benefits of marginalization {#rao-blackwell.section}
 
-## 边际化的好处 {#rao-blackwell.section--cn}
+## 边际化的益处 {#rao-blackwell.section--cn}
 
 Although it requires some algebra on the joint probability function,
 a pleasant byproduct of the required calculations is the posterior
@@ -166,7 +166,7 @@ model calculations.
 
 ### Coding the model in Stan {-}
 
-### 在Stan中编码变点模型{-}
+### 在 Stan 中编码变点模型{-}
 
 The Stan program for the change point model is shown in
 the figure below.  The transformed parameter
