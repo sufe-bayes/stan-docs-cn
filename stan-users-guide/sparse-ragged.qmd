@@ -2,12 +2,15 @@
 pagetitle: Sparse and Ragged Data Structures
 ---
 
-# Sparse and Ragged Data Structures  {#sparse-ragged.chapter}
-
 # 稀疏与不规则数据结构 {#sparse-ragged.chapter--cn}
 
+# Sparse and Ragged Data Structures  {#sparse-ragged.chapter}
+
 本节译者：郭鑫
-本节校审：李君竹
+
+初次校审：李君竹
+
+二次校审：邱怡轩（DeepSeek V3 辅助）
 
 Stan does not directly support either sparse or ragged data
 structures, though both can be accommodated with some programming
@@ -16,7 +19,7 @@ introduces a special-purpose sparse matrix times dense vector
 multiplication, which should be used where applicable; this chapter
 covers more general data structures.
 
-Stan 不直接支持稀疏或不规则数据结构，尽管两者都可以通过一些编程来调节。[稀疏矩阵](#sparse-matrices.chapter) 这一章节介绍了一种专用的稀疏矩阵乘稠密向量乘法，应酌情使用；本章涵盖了更通用的数据结构。
+Stan 并不直接支持稀疏或不规则数据结构，但通过适当的编程处理，两者都可以实现。[稀疏矩阵章节](https://mc-stan.org/docs/functions-reference/sparse_matrix_operations.html) 介绍了一种专用的稀疏矩阵乘稠密向量乘法，适用于特定场景；本章则涵盖了更通用的数据结构。
 
 ## Sparse data structures
 
@@ -30,7 +33,8 @@ There are $J$ students and $K$ questions, and if every student answers every
 question, then it is practical to declare the data as a $J \times K$
 array of answers.
 
-对稀疏数据结构进行编码就像从类似矩阵的数据结构移动到类似数据库的数据结构一样容易。例如，考虑[项目-响应模型](#item-response-models.section) 中讨论的 IRT 模型的稀疏数据编码。有 $J$ 个学生和 $K$ 个问题，如果每个学生都回答了每个问题，那么将数据声明为 $J\times K$ 的答案数组是可行的。 
+稀疏数据结构的编码可以通过从矩阵形式的数据结构转换为类似数据库的结构来实现。例如，考虑[项目-响应模型](#item-response-models.section) 中讨论的 IRT 模型的稀疏数据编码。假设有 $J$ 个学生和 $K$ 个问题，如果每个学生都回答了每个问题，那么将数据声明为 $J \times K$ 的答案数组是可行的。
+
 ```stan
 data {
   int<lower=1> J;
@@ -50,9 +54,12 @@ model {
 When not every student is given every question, the dense array coding
 will no longer work, because Stan does not support undefined values.
 
+当并非每个学生都回答每个问题时，稠密数组编码将不再适用，因为 Stan 不支持未定义的值。
 
 The following missing data example shows an example with $J=3$ and $K=4$,
 with missing responses shown as NA, as in R.
+
+以下缺失数据示例展示了一个 $J=3$ 和 $K=4$ 的情况，缺失的响应用 NA 表示，类似于 R 中的表示方式。
 
 \begin{equation*}
 y
@@ -78,7 +85,7 @@ array elements, here $y_{1,1} = 0$, $y_{1,2} = 1$, up to $y_{3,2} = 1$.
 As the array becomes larger and sparser, the long form becomes
 the more economical encoding.
 
-左边是稀疏矩阵 $y$ 的定义，使用 R 的 NA 表示法（Stan 不支持）。右边是相同稀疏矩阵 $y$ 的类似数据库的编码，可以直接在 Stan 中使用。前两列 $jj$ 和 $kk$ 表示索引，最后一列 $y$ 表示值。例如，右侧类似数据库的数据结构的第五行表示 $y_{2,4}=1$。
+由于 Stan 不支持 R 的 NA 值，因此无法直接使用这种数据结构。相反，必须将其转换为类似数据库的“长格式”，其中列表示索引以及对应的值。使用 $jj$ 和 $kk$ 作为索引（遵循 @GelmanHill:2007），二维数组 $y$ 被重新编码为一个表格。表格的行数等于已定义的数组元素数量，例如 $y_{1,1} = 0$，$y_{1,2} = 1$，直到 $y_{3,2} = 1$。随着数组变得更大且更稀疏，长格式编码会变得更加高效。
 
 |*jj* | *kk* |*y* |
 |:----|:-----|:---|
@@ -89,12 +96,10 @@ the more economical encoding.
 |2    | 4    | 1  |
 |3    | 2    | 0  |
 
-当不是每个学生都被问到每个问题时，稠密数组编码将不再有效，因为 Stan 不支持未定义的值。稀疏数据示例显示了一个 $J=3$ 和 $K=4$ 的示例，缺少的响应显示为 NA，如 R 中所示。Stan 中不支持 R 的 NA 值，因此无法直接使用此数据结构。相反，它必须像在数据库中一样转换为“长格式”，列指示 $j$ 和 $k$ 索引以及值。例如，使用 $jj$ 和 $kk$ 作为索引(见 @GelmanHill:2007)，数据结构可以按照示例中右侧示例的方式进行编码。这意味着 $y_{1,1}＝0$，$y_{1,2}＝1$，依此类推，直到 $y_{3,2}＝1$ 为止，所有其他条目都未定义。
-
 Letting $N$ be the number of $y$ that are defined, here $N=6$,
 the data and model can be formulated as follows.
 
-假设 $N$ 是定义的 $y$ 的数量，这里 $N=6$，数据和模型可以公式化如下。
+假设 $N$ 是已定义的 $y$ 的数量，此处 $N=6$，数据和模型可以如下表示。
 
 ```stan
 data {
@@ -117,7 +122,7 @@ model {
 In the situation where there are no missing values, the two model
 formulations produce exactly the same log posterior density.
 
-在没有缺失值的情况下，两个模型公式产生完全相同的对数后验密度。
+在没有缺失值的情况下，两种模型公式会生成完全相同的对数后验密度。
 
 ## Ragged data structures {#ragged-data-structs.section}
 
@@ -127,19 +132,19 @@ Ragged arrays are arrays that are not rectangular, but have different
 sized entries.  This kind of structure crops up when there are
 different numbers of observations per entry.
 
-不规则数组是非矩形的数组，但具有不同大小的条目。当每个条目的观测值数量不同时，这种结构就会出现。
+不规则数组是指非矩形的数组，其条目大小各不相同。当每个条目的观测值数量不同时，这种结构就会出现。
 
 A general approach to dealing with ragged structure is to move to a
 full database-like data structure as discussed in the previous
 section.  A more compact approach is possible with some indexing into
 a linear array.
 
-处理不规则结构的一般方法是迁移到上一节中讨论的完整类似数据库的数据结构。通过将一些结构索引到线性数组中，可以实现更紧凑的方法。
+处理不规则结构的常见方法是采用上一节中讨论的类似数据库的完整数据结构。通过将某些结构索引到线性数组中，可以实现更紧凑的编码方式。
 
 For example, consider a data structure for three groups, each of which
 has a different number of observations.
 
-例如，考虑三个组的数据结构，每个组具有不同数量的观测值。
+例如，考虑一个包含三个组的数据结构，每个组的观测值数量不同。
 
 :::: {layout-ncol=2}
 
@@ -174,7 +179,7 @@ using vectorized notation, would yield a log-likelihood
 \end{equation*}
 There's no direct way to encode this in Stan.
 
-没有直接的方法可以在 Stan 中对此进行编码。
+在 Stan 中无法直接对此进行编码。
 
 A full database type structure could be used, as in the sparse
 example, but this is inefficient, wasting space for unnecessary
@@ -185,7 +190,7 @@ indicated on the right of the example. This coding uses a
 single array for the values and a separate array for the sizes of each
 row.
 
-可以使用完整的数据库类型结构，如稀疏示例所示，但这效率低下，浪费了不必要的索引空间，并且不允许基于矢量的密度操作。对此数据进行编码的更好方法是作为单个值列表，使用单独的数据结构指示每个子数组的大小。这在示例的右侧指示。此编码对值使用单个数组，对每行的大小使用单独的数组。
+虽然可以使用类似稀疏示例中的完整数据库结构，但这种方法效率较低，浪费了不必要的索引空间，并且无法支持基于向量的密度操作。更好的编码方式是将数据存储为单个值列表，并使用单独的数据结构来记录每个子数组的大小。这在示例的右侧指示。此编码对值使用单个数组，对每行的大小使用单独的数组。
 
 The model can then be coded up using slicing operations as follows.
 
@@ -211,4 +216,4 @@ model {
 This coding allows for efficient vectorization, which is worth the
 copy cost entailed by the `segment()` vector slicing operation.
 
-这种编码允许有效的矢量化，对于 `segment()` 矢量切片操作所需的复制成本而言是值得的。
+这种编码方式支持高效的向量化操作，尽管 `segment()` 向量切片操作会带来一定的复制成本，但这种代价是值得的。
