@@ -701,9 +701,7 @@ used for ability or difficulty parameters (but not both) in an IRT
 model (see the [item-response model
 section](#item-response-models.section) for details).
 
-一个总和为零的参数向量也可以用于识别多类别 Logistic 回归的参数向量（详见[多类别 Logistic 回归章节](#multi-logit.section)），或者用于项目响应理论（IRT）模型中的能力参数或难度参数（但不能同时用于两者，详见[项目响应模型章节](#item-response-models.section)）。
-
-这样的参数向量可以用于识别多分类逻辑回归回归的参数向量（详见[多分类逻辑回归部分](#multi-logit.section)），或者项目响应模型中的能力或难度参数（但不能同时识别，详见[项目响应模型部分](#item-response-models.section)）。
+一个总和为零的参数向量也可以用于识别多类别 Logistic 回归的参数向量（详见[多类别 Logistic 回归章节](#multi-logit.section)），或者用于项目-响应理论（IRT）模型中的能力参数或难度参数（但不能同时用于两者，详见[项目-响应模型章节](#item-response-models.section)）。
 
 
 ### Built-in sum-to-zero vector {-}
@@ -1123,7 +1121,7 @@ for a reasonably large value of $A$, such as $A = 10$.
 
 ## Item-response theory models {#item-response-models.section}
 
-## 项目响应理论模型 {#item-response-models.section--cn}
+## 项目-响应理论模型 {#item-response-models.section--cn}
 
 
 Item-response theory (IRT) models the situation in which a number of
@@ -1135,7 +1133,7 @@ correctly; see @GelmanHill:2007 [pps. 314--320] for a textbook
 introduction to hierarchical IRT models and @Curtis:2010 for
 encodings of a range of IRT models in BUGS.
 
-项目响应理论（Item-Response Theory，IRT）模型用于描述多个学生对一组测试题目中一个或多个问题的回答情况。该模型基于学生的能力、题目的难度等参数，在更复杂的模型中还会考虑题目的区分度和猜测正确的概率。有关分层 IRT 模型的教材介绍，请参考 @GelmanHill:2007 [pps. 314--320]，而关于在 BUGS 中编码各种 IRT 模型的内容，请参考 @Curtis:2010。
+项目-响应理论（Item-Response Theory，IRT）模型用于描述多个学生对一组测试题目中一个或多个问题的回答情况。该模型基于学生的能力、题目的难度等参数，在更复杂的模型中还会考虑题目的区分度和猜测正确的概率。有关分层 IRT 模型的教材介绍，请参考 @GelmanHill:2007 [pps. 314--320]，而关于在 BUGS 中编码各种 IRT 模型的内容，请参考 @Curtis:2010。
 
 
 ### Data declaration with missingness {-}
@@ -1179,7 +1177,7 @@ Stan for more flexibility.
 The 1PL item-response model, also known as the Rasch model, has one
 parameter (1P) for questions and uses the logistic link function (L).
 
-单参数 Logistic（1PL）项目响应模型，也称为 Rasch 模型，它假设每个问题只有一个参数（1P），并使用 Logistic 链接函数（L）。
+单参数 Logistic（1PL）项目-响应模型，也称为 Rasch 模型，它假设每个问题只有一个参数（1P），并使用 Logistic 链接函数（L）。
 
 
 The model parameters are declared as follows.

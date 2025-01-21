@@ -33,7 +33,7 @@ There are $J$ students and $K$ questions, and if every student answers every
 question, then it is practical to declare the data as a $J \times K$
 array of answers.
 
-稀疏数据结构的编码可以通过从矩阵形式的数据结构转换为类似数据库的结构来实现。例如，考虑[项目-响应模型](#item-response-models.section) 中讨论的 IRT 模型的稀疏数据编码。假设有 $J$ 个学生和 $K$ 个问题，如果每个学生都回答了每个问题，那么将数据声明为 $J \times K$ 的答案数组是可行的。
+稀疏数据结构的编码可以通过从矩阵形式的数据结构转换为类似数据库的结构来实现。例如，考虑[项目-响应模型章节](#item-response-models.section) 中讨论的 IRT 模型的稀疏数据编码。假设有 $J$ 个学生和 $K$ 个问题，如果每个学生都回答了每个问题，那么将数据声明为 $J \times K$ 的答案数组是可行的。
 
 ```stan
 data {
