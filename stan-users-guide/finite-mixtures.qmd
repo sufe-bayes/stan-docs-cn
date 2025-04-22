@@ -587,7 +587,7 @@ efficient than sampling.
 
 ## Zero-inflated and hurdle models {#zero-inflated.section}
 
-## 零膨胀模型与障碍模型 {-#zero-inflated.section}
+## 零膨胀模型与障碍模型 {-#zero-inflated.section--cn}
 
 Zero-inflated and hurdle models both provide mixtures of a Poisson and
 Bernoulli probability mass function to allow more flexibility in
