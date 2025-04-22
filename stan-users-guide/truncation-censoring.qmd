@@ -4,22 +4,22 @@ pagetitle: Truncated or Censored Data
 
 # 截断或删失数据
 
-# Truncated or Censored Data
+# Truncated or Censored Data {-}
 
 本节译者：段园家
 
 初次校审：李君竹
 
-二次校审：邱怡轩（DeepSeek V3 辅助）
+二次校审：邱怡轩（DeepSeek 辅助）
 
 Data in which measurements have been truncated or censored can be
 coded in Stan following their respective probability models.
 
-对于存在截断或删失的数据，可以在 Stan 中根据相应的概率模型进行建模
+对于存在截断或删失的数据，可以在 Stan 中根据相应的概率模型进行建模。
 
 ## Truncated distributions {#truncation.section}
 
-## 截断分布 {#truncation.section--cn} 
+## 截断分布 {-#truncation.section--cn} 
 
 Truncation in Stan is restricted to univariate distributions for which
 the corresponding log cumulative distribution function (CDF) and log
@@ -31,7 +31,7 @@ Stan 中的截断操作仅限于单变量分布，且这些分布需要具备相
 
 ## Truncated data {#truncated-data.section}
 
-## 截断数据 {#truncated-data.section--cn}
+## 截断数据 {-#truncated-data.section--cn}
 
 Truncated data are data for which measurements are only reported if
 they fall above a lower bound, below an upper bound, or between a
@@ -189,7 +189,7 @@ order for this model to not concentrate `L` strongly around
 
 ## Censored data {#censored.section}
 
-## 删失数据
+## 删失数据 {-#censored.section--cn}
 
 Censoring hides values from points that are too large, too small, or
 both.  Unlike with truncated data, the number of data points that were

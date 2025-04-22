@@ -4,7 +4,7 @@ pagetitle: Clustering Models
 
 # 聚类模型 {#clustering.chapter--cn}
 
-# Clustering Models  {#clustering.chapter}
+# Clustering Models  {-#clustering.chapter}
 
 本节译者：王钦怡
 
@@ -28,7 +28,7 @@ the [mixture modeling chapter](finite-mixtures.qmd)).
 
 ## Relation to finite mixture models
 
-## 与有限混合模型的关系
+## 与有限混合模型的关系 {-}
 
 As mentioned in the [clustering section](finite-mixtures.qmd#clustering-mixture.section),
 clustering models and finite mixture models are really just two sides
@@ -232,7 +232,7 @@ situation, a hierarchical prior may be used for the covariance matrices.
 
 ## The difficulty of Bayesian inference for clustering
 
-## 聚类中贝叶斯推断的困难之处
+## 聚类中贝叶斯推断的困难之处 {-}
 
 Two problems make it pretty much impossible to perform full Bayesian
 inference for clustering models, the lack of parameter identifiability
@@ -296,7 +296,7 @@ than sampling-based approaches.
 
 ## Naive Bayes classification and clustering
 
-## 朴素贝叶斯分类和聚类
+## 朴素贝叶斯分类和聚类 {-}
 
 Naive Bayes is a kind of mixture model that can be used for
 classification or for clustering (or a mix of both), depending on
@@ -585,7 +585,7 @@ parameters.
 
 ## Latent Dirichlet allocation
 
-## 潜在狄利克雷分配
+## 潜在狄利克雷分配 {-}
 
 Latent Dirichlet allocation (LDA) is a mixed-membership multinomial
 clustering model [@BleiNgJordan:2003] that generalizes naive

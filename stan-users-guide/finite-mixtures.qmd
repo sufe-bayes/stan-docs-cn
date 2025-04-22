@@ -4,13 +4,13 @@ pagetitle: Finite Mixtures
 
 # 有限混合模型  {#mixture-modeling.chapter--cn}
 
-# Finite Mixtures  {#mixture-modeling.chapter}
+# Finite Mixtures  {-#mixture-modeling.chapter}
 
 本节译者：胡向宇、张梓源
 
 初次校审：张梓源
 
-二次校审：邱怡轩（DeepSeek V3 辅助）
+二次校审：邱怡轩（DeepSeek 辅助）
 
 Finite mixture models of an outcome assume that the outcome is drawn
 from one of several distributions, the identity of which is controlled
@@ -25,7 +25,7 @@ be used as priors for other parameters.
 
 ## Relation to clustering {#clustering-mixture.section}
 
-## 与聚类的关系 {#clustering-mixture.section--cn}
+## 与聚类的关系 {-#clustering-mixture.section--cn}
 
 Clustering models, as discussed in the [clustering
 chapter](clustering.qmd), are just a particular class of mixture
@@ -40,7 +40,7 @@ mixed-membership multinomial mixture model.
 
 ## Latent discrete parameterization
 
-## 通过潜在离散变量参数化
+## 通过潜在离散变量参数化 {-}
 
 One way to parameterize a mixture model is with a latent categorical
 variable indicating which mixture component was responsible for the
@@ -76,7 +76,7 @@ by summing out the $z$ parameter as described in the next section.
 
 ## Summing out the responsibility parameter
 
-## 对责任参数进行求和
+## 对责任参数进行求和 {-}
 
 To implement the normal mixture model outlined in the previous
 section in Stan, the discrete parameters can be summed out of the
@@ -339,7 +339,7 @@ sum of exponentials of those values.
 
 ## Vectorizing mixtures
 
-## 混合模型的向量化
+## 混合模型的向量化 {-}
 
 There is (currently) no way to vectorize mixture models at the
 observation level in Stan.  This section is to warn users away from
@@ -419,7 +419,7 @@ $$
 
 ## Inferences supported by mixtures {#mixture-inference.section}
 
-## 混合模型支持的推断分析
+## 混合模型支持的推断分析 {-#mixture-inference.section--cn}
 
 In many mixture models, the mixture components are underlyingly
 exchangeable in the model and thus not identifiable.  This arises if
@@ -587,7 +587,7 @@ efficient than sampling.
 
 ## Zero-inflated and hurdle models {#zero-inflated.section}
 
-## 零膨胀模型与障碍模型
+## 零膨胀模型与障碍模型 {-#zero-inflated.section}
 
 Zero-inflated and hurdle models both provide mixtures of a Poisson and
 Bernoulli probability mass function to allow more flexibility in
@@ -628,6 +628,7 @@ and the intensity $\lambda$, the distribution for $y_n$ can be written as
 y_n & = 0 & \quad\text{with probability } \theta, \text{ and}\\
 y_n & \sim \textsf{Poisson}(y_n \mid \lambda) & \quad\text{with probability } 1-\theta.
 \end{align*}
+
 
 Stan does not support conditional distribution statements (with `~`) conditional on some parameter, and we need to consider the corresponding likelihood
 
@@ -889,7 +890,7 @@ not be propagated until a non-constant term is encountered.
 
 ## Priors and effective data size in mixture models
 
-## 混合模型中的先验与有效数据大小
+## 混合模型中的先验与有效数据大小 {-}
 
 Suppose we have a two-component mixture model with mixing rate
 $\lambda \in (0, 1)$.  Because the likelihood for the mixture

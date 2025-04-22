@@ -4,13 +4,13 @@ pagetitle: Sparse and Ragged Data Structures
 
 # 稀疏与不规则数据结构 {#sparse-ragged.chapter--cn}
 
-# Sparse and Ragged Data Structures  {#sparse-ragged.chapter}
+# Sparse and Ragged Data Structures  {-#sparse-ragged.chapter}
 
 本节译者：郭鑫
 
 初次校审：李君竹
 
-二次校审：邱怡轩（DeepSeek V3 辅助）
+二次校审：邱怡轩（DeepSeek 辅助）
 
 Stan does not directly support either sparse or ragged data
 structures, though both can be accommodated with some programming
@@ -23,7 +23,7 @@ Stan 并不直接支持稀疏或不规则数据结构，但通过适当的编程
 
 ## Sparse data structures
 
-## 稀疏数据结构
+## 稀疏数据结构 {-}
 
 Coding sparse data structures is as easy as moving from a matrix-like
 data structure to a database-like data structure.  For example,
@@ -126,7 +126,7 @@ formulations produce exactly the same log posterior density.
 
 ## Ragged data structures {#ragged-data-structs.section}
 
-## 不规则数据结构 {#ragged-data-structs.section--cn}
+## 不规则数据结构 {-#ragged-data-structs.section--cn}
 
 Ragged arrays are arrays that are not rectangular, but have different
 sized entries.  This kind of structure crops up when there are

@@ -4,13 +4,13 @@ pagetitle: Measurement Error and Meta-Analysis
 
 # 测量误差和元分析
 
-# Measurement Error and Meta-Analysis
+# Measurement Error and Meta-Analysis {-}
 
 本节译者：马桢
 
 初次校审：李君竹
 
-二次校审：邱怡轩（DeepSeek V3 辅助）
+二次校审：邱怡轩（DeepSeek 辅助）
 
 Most quantities used in statistical models arise from measurements.
 Most of these measurements are taken with some error.  When the
@@ -33,7 +33,7 @@ to true parameter values.
 
 ## Bayesian measurement error model
 
-## 贝叶斯测量误差模型
+## 贝叶斯测量误差模型 {-}
 
 A Bayesian approach to measurement error can be formulated directly by
 treating the true quantities being measured as missing data
@@ -272,7 +272,7 @@ unrounded parameters.
 
 ## Meta-analysis
 
-## 元分析
+## 元分析 {-}
 
 Meta-analysis aims to pool the data from several studies, such as the
 application of a tutoring program in several schools or treatment

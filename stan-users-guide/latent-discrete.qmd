@@ -4,13 +4,13 @@ pagetitle: Latent Discrete Parameters
 
 # 潜在离散参数 {#latent-discrete.chapter--cn}
 
-# Latent Discrete Parameters  {#latent-discrete.chapter}
+# Latent Discrete Parameters  {-#latent-discrete.chapter}
 
 本节译者：方志清
 
 初次校审：张梓源
 
-二次校审：邱怡轩（DeepSeek V3 辅助）
+二次校审：邱怡轩（DeepSeek 辅助）
 
 Stan does not support sampling discrete parameters.  So it is not
 possible to directly translate BUGS or JAGS models with discrete
@@ -29,7 +29,7 @@ models involving latent discrete parameters.
 
 ## The benefits of marginalization {#rao-blackwell.section}
 
-## 边际化的益处 {#rao-blackwell.section--cn}
+## 边际化的益处 {-#rao-blackwell.section--cn}
 
 Although it requires some algebra on the joint probability function,
 a pleasant byproduct of the required calculations is the posterior
@@ -51,7 +51,7 @@ exactly the marginalization needed for coding the model in Stan.
 
 ## Change point models {#change-point.section}
 
-## 变点模型 {#change-point.section--cn}
+## 变点模型 {-#change-point.section--cn}
 
 The first example is a model of coal mining disasters in the U.K. for the years 1851--1962.^[The source of the data is [@Jarret:1979], which itself is a note correcting an earlier data collection.]
 
@@ -413,7 +413,7 @@ The matrix can then be converted back to a vector using
 
 ## Mark-recapture models
 
-## 标记-重捕模型
+## 标记-重捕模型 {-}
 
 A widely applied field method in ecology is to capture (or sight)
 animals, mark them (e.g., by tagging), then release them.  This
@@ -609,7 +609,7 @@ The conditional enforces the constraint that dead animals cannot be captured.
 
 ### Collective Cormack-Jolly-Seber model {-}
 
-### 群体 Cormack-Jolly-Seber 模型
+### 群体 Cormack-Jolly-Seber 模型 {-}
 
 This subsection presents an implementation of the model in terms of
 counts for different history profiles for individuals over three
@@ -1030,7 +1030,7 @@ predictors.
 
 ## Data coding and diagnostic accuracy models {#data-coding-models.section}
 
-## 数据编码和诊断准确性模型 {#data-coding-models.section--cn}
+## 数据编码和诊断准确性模型 {-#data-coding-models.section--cn}
 
 Although seemingly disparate tasks, the rating/coding/annotation of
 items with categories and diagnostic testing for disease or other
@@ -1083,6 +1083,7 @@ categories of items in the data.
 通常需要人类来对数据进行编码（也可以称为评级或注释）。例如，期刊或拨款评审人员对提交的稿件进行评级，政治研究可能对竞选广告进行编码，判断其是否是攻击性广告，自然语言处理研究可能对推文进行注释，判断其整体情感是积极还是消极，牙医在查看X光片时对患者进行龋齿与否的分类。在所有这些情况下，数据编码者扮演着诊断测试的角色，并且所有相同的估计量都适用——数据编码者的准确性和偏差，被编码的项目的真实类别，以及数据中各类别项目的患病率。
 
 ### Noisy categorical measurement model {-}
+
 ### 嘈杂的分类测量模型 {-}
 
 In this section, only categorical ratings are considered, and the
@@ -1338,7 +1339,7 @@ distribution over each $z_i$.
 
 ## The mathematics of recovering marginalized parameters {#marginalization-mathematics.section}
 
-## 从边缘化模型中恢复边缘化参数的数学原理 {#marginalization-mathematics.section--cn}
+## 从边缘化模型中恢复边缘化参数的数学原理 {-#marginalization-mathematics.section--cn}
 
 ### Introduction {-}
 
