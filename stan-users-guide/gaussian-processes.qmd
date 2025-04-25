@@ -2,12 +2,15 @@
 pagetitle: Gaussian Processes
 ---
 
-# Gaussian Processes  {#gaussian-processes.chapter}
-
 # 高斯过程 {#gaussian-processes.chapter--cn}
 
+# Gaussian Processes  {-#gaussian-processes.chapter}
+
 本节译者：李巧玲、王嘉宁
-本节校审：李君竹
+
+初次校审：李君竹
+
+二次校审：邱怡轩（DeepSeek 辅助）
 
 Gaussian processes are continuous stochastic processes and thus may be
 interpreted as providing a probability distribution over functions.  A
@@ -17,7 +20,7 @@ one for each valid input.  The generality of the supported functions
 makes Gaussian priors popular choices for priors in general
 multivariate (non-linear) regression problems.
 
-高斯过程是一种连续随机过程，因此可以被解释为提供函数概率分布的方法。连续函数的概率分布可以粗略地看作是随机变量的不可数无限集合，其中每个变量对应一个有效的输入。支持各种函数的通用性使高斯先验成为一般多元（非线性）回归问题中流行的先验选择。
+高斯过程是一种连续随机过程，因此可以解释为对函数的概率分布。连续函数的概率分布可以粗略地看作是随机变量的不可数无限集合，其中每个随机变量对应一个有效输入。由于支持的函数具有广泛性，高斯先验常被用作一般多元（非线性）回归问题中的先验。
 
 The defining feature of a Gaussian process is that the joint distribution of
 the function's value at a finite number of input points is a multivariate
@@ -25,7 +28,7 @@ normal distribution.  This makes it tractable to both fit models from finite
 amounts of observed data and make predictions for finitely many new data
 points.
 
-高斯过程的定义特征是：函数值在有限数量的输入点处的联合分布是多元正态分布。 这使得既可以从有限数量的观测数据拟合模型，又可以预测有限数量的新数据点。
+高斯过程的定义特征在于，函数在有限个输入点处的联合分布是多元正态分布。这使得既可以从有限数量的观测数据拟合模型，又可以预测有限数量的新数据点。
 
 Unlike a simple multivariate normal distribution, which is
 parameterized by a mean vector and covariance matrix, a Gaussian
@@ -35,8 +38,7 @@ return a mean vector and covariance matrix which provide the mean and
 covariance of the outputs corresponding to those input points in the
 functions drawn from the process.
 
-与由均值向量和协方差矩阵参数化的简单多元正态分布不同，高斯过程由均值函数和协方差函数参数化。均值函数和协方差函数将输入向量返回为均值向量和协方差矩阵，它们表示从 输入位置提取出的多元正态分布对应的均值和协方差矩阵。
-<!-- 提供与从过程中提取的函数中的那些输入点相对应的输出的均值和协方差。 -->
+与由均值向量和协方差矩阵参数化的简单多元正态分布不同，高斯过程由均值函数和协方差函数参数化。均值函数和协方差函数将输入向量返回为均值向量和协方差矩阵，它们表示从输入位置提取出的多元正态分布对应的均值和协方差矩阵。
 
 Gaussian processes can be encoded in Stan by implementing their mean and
 covariance functions or by using the specialized covariance functions
@@ -48,7 +50,7 @@ over the latent Gaussian process, and applies a Cholesky-factor
 reparameterization of the Gaussian to compute the likelihood and the posterior
 predictive distribution analytically.
 
-高斯过程可以通过实现其均值和协方差函数并将结果代入其采样分布的高斯形式，或使用下面概述的专用协方差函数，在 Stan 中编码。这种形式的模型很简单，可用于模拟、模型拟合或后验预测推理。具有正态分布结果的 GP 的更有效的 Stan 实现在潜在高斯过程中被边缘化，并应用高斯的 Cholesky 因子重新参数化来分析计算可能性和后验预测分布。
+高斯过程可以通过实现其均值和协方差函数并将结果代入其采样分布的高斯形式，或使用下面概述的专用协方差函数，在 Stan 中进行编码。这种形式的模型很简单，可用于模拟、模型拟合或后验预测推断。对于具有正态分布结果的高斯过程，一种更高效的 Stan 实现是对潜在高斯过程进行边缘化，并应用高斯分布的 Cholesky 因子重参数化来解析地计算似然和后验预测分布。
 
 After defining Gaussian processes, this chapter covers the basic
 implementations for simulation, hyperparameter estimation, and
@@ -58,7 +60,7 @@ Gaussian processes are  general, and by necessity this chapter
 only touches on some basic models.  For more information, see
 @RasmussenWilliams:2006.
 
-定义高斯过程后，本章将介绍单变量回归、多元回归和多元逻辑回归的模拟、超参数估计和后验预测推理的基本实现。高斯过程是一般的过程，本章必然只涉及一些基本模型。 有关详细信息，请参阅 @RasmussenWilliams:2006.
+在定义高斯过程后，本章将介绍单变量回归、多元回归和多元 Logistic 回归的模拟、超参数估计和后验预测推断的基本实现。高斯过程具有普遍性，因此本章仅涉及一些基本模型。更多信息请参阅 @RasmussenWilliams:2006。
 
 Note that fitting Gaussian processes as described below using exact
 inference by computing Cholesky of the covariance matrix scales
@@ -71,9 +73,11 @@ speed-up Gaussian process computation, from which the basis function
 approaches for 1-3 dimensional $x$ are easiest to implement in Stan
 (see, e.g., @Riutort-Mayol:2023:HSGP).
 
+需要注意的是，使用协方差矩阵的 Cholesky 分解来拟合高斯过程并进行精确推断时，计算复杂度随数据量呈立方增长。由于 Stan 自动微分的实现方式，其速度也慢于专门的高斯过程软件。对于数据量 $N>1000$ 的情况，在 Stan 中使用精确推断可能因速度过慢而不实用。目前有许多加速高斯过程计算的近似方法，其中基函数方法在1-3维 $x$ 的情况下最容易在 Stan 中实现（参见 @Riutort-Mayol:2023:HSGP）。
+
 ## Gaussian process regression
 
-## 高斯过程回归
+## 高斯过程回归 {-}
 
 The data for a multivariate Gaussian process regression consists of a
 series of $N$ inputs $x_1,\dotsc,x_N \in \mathbb{R}^D$ paired with outputs
@@ -81,7 +85,7 @@ $y_1,\dotsc,y_N \in \mathbb{R}$.  The defining feature of Gaussian
 processes is that the probability of a finite number of outputs $y$
 conditioned on their inputs $x$ is Gaussian:
 
-多元高斯过程回归的数据由 $N$ 个输入值 $x_1,\dotsc,x_N \in \mathbb{R}^D$ 和相应的输出值 $y_1,\dotsc,y_N \in \mathbb{R}$ 组成。高斯过程的定义特征在于，给定一组输入值 $x$，有限数量的输出值 $y$ 的概率分布是高斯分布，
+多元高斯过程回归的数据由 $N$ 个输入值 $x_1,\dotsc,x_N \in \mathbb{R}^D$ 和相应的输出值 $y_1,\dotsc,y_N \in \mathbb{R}$ 组成。高斯过程的定义特征在于，给定一组输入值 $x$，有限个输出值 $y$ 的概率分布是高斯分布：
 
 $$
 y \sim \textsf{multivariate normal}(m(x), K(x \mid \theta)),
@@ -92,13 +96,13 @@ covariance matrix.  The mean function $m : \mathbb{R}^{N \times D}
 $K : \mathbb{R}^{N \times D} \rightarrow \mathbb{R}^{N \times N}$ must produce
 a positive-definite matrix for any input $x$.^[Gaussian processes can be extended to covariance functions producing positive semi-definite matrices, but Stan does not support inference in the resulting models because the resulting distribution does not have unconstrained support.]
 
-其中均值为 $m(x)$，协方差矩阵为 $K(x \mid \theta)$。这里的 $m(x)$ 是一个 $N$ 维向量，$K(x \mid \theta)$ 是一个 $N \times N$ 的协方差矩阵。均值函数 $m : \mathbb{R}^{N \times D}
-\rightarrow \mathbb{R}^{N}$ 可以是任何函数，但是协方差函数 $K : \mathbb{R}^{N \times D} \rightarrow \mathbb{R}^{N \times N}$ 必须对于任何输入 $x$ 都产生正定矩阵。^[高斯过程可以扩展到产生半正定矩阵的协方差函数，但是 Stan 不支持推断出这些模型的结果，因为它们的分布不具有无约束的支持。]
+其中 $m(x)$ 是一个 $N$ 维向量，$K(x \mid \theta)$ 是一个 $N \times N$ 的协方差矩阵。均值函数 $m : \mathbb{R}^{N \times D}
+\rightarrow \mathbb{R}^{N}$ 可以是任意的函数，但协方差函数 $K : \mathbb{R}^{N \times D} \rightarrow \mathbb{R}^{N \times N}$ 必须对于任何输入 $x$ 都产生正定矩阵。^[高斯过程可以扩展到产生半正定矩阵的协方差函数，但是 Stan 不支持此类模型的推断，因为它们的分布不具有无约束的支撑集。]
 
 A popular covariance function, which will be used in the implementations later
 in this chapter, is an exponentiated quadratic function,
 
-指数二次函数是一种常用的协方差函数，将在本章后面的部分中用到。其表达式如下：
+一种常用的协方差函数是指数二次函数，后文实现中将使用该函数：
 
 $$
   K(x \mid \alpha, \rho, \sigma)_{i, j}
@@ -115,7 +119,7 @@ test is between the indexes $i$ and $j$, not between values $x_i$ and
 $x_j$. This kernel is obtained through a convolution of two
 independent Gaussian processes, $f_1$ and $f_2$, with kernels
 
-其中 $\alpha$、$\rho$ 和 $\sigma$ 是定义协方差函数的超参数，$\delta_{i,j}$ 是克罗内克（Kronecker）$\delta$ 函数，如果 $i=j$ 则值为 1，否则值为 0（针对索引 $i$ 和 $j$，而不是针对值 $x_i$ 和 $x_j$）。该协方差函数通过两个独立的高斯过程 $f_1$ 和 $f_2$ 进行卷积得到，其中 $f_1$ 的核函数为
+其中 $\alpha$、$\rho$ 和 $\sigma$ 是定义协方差函数的超参数，$\delta_{i,j}$ 是 Kronecker delta 函数，如果 $i=j$ 则值为1，否则值为0（这一测试是针对索引 $i$ 和 $j$，而不是针对值 $x_i$ 和 $x_j$）。该核函数通过两个独立的高斯过程 $f_1$ 和 $f_2$ 进行卷积得到，其中 $f_1$ 的核函数为
 
 $$
   K_1(x \mid \alpha, \rho)_{i, j}
@@ -139,7 +143,7 @@ to ensure the positive definiteness of the resulting matrix in the case of
 two identical inputs $x_i = x_j$.  In statistical terms, $\sigma$ is
 the scale of the noise term in the regression.
 
-在对角线上加入 $\sigma^2$ 是为了确保在输入 $x_i=x_j$ 相同的情况下得到的矩阵是正定的。从统计学的角度来看，$\sigma$ 是回归中噪声项的尺度。
+在对角线上加入 $\sigma^2$ 是为了确保在输入 $x_i=x_j$ 相同的情况下得到的矩阵是正定的。从统计学的角度来看，$\sigma$ 是回归中噪声项的尺度参数。
 
 The hyperparameter $\rho$ is the *length-scale*, and corresponds to the
 frequency of the functions represented by the Gaussian process prior with
@@ -151,7 +155,7 @@ by the GP. If you were to take the standard deviation of many draws from the GP
 $f_1$ prior at a single input $x$ conditional on one value of $\alpha$ one
 would recover $\alpha$.
 
-超参数 $\rho$ 是长度尺度，对应于高斯过程先验函数相对于定义域的频率。$\rho$ 值越接近 0，则 GP 表示高频函数，而 $\rho$ 较大的值则表示低频函数。超参数 $\alpha$ 是边际标准差。它控制 GP 所表示函数的范围的大小。如果在条件为一个 $\alpha$ 值的情况下，在单个输入 $x$ 处从 GP 先验 $f_1$ 中多次采样并取标准差，则会得到 $\alpha$。
+超参数 $\rho$ 是*长度尺度*，对应于高斯过程先验所表示函数在定义域上的频率。$\rho$ 值接近0，则高斯过程表示高频函数，而 $\rho$ 较大时则表示低频函数。超参数 $\alpha$ 是*边际标准差*，它控制高斯过程所表示函数的幅度范围。在给定 $\alpha$ 值的情况下，如果从高斯过程先验 $f_1$ 中抽取大量样本，并在单个输入 $x$ 处计算标准差，则结果就是 $\alpha$。
 
 The only term in the squared exponential covariance function involving
 the inputs $x_i$ and $x_j$ is their vector difference, $x_i - x_j$.
@@ -160,7 +164,7 @@ if an input vector $x$ is translated by a vector $\epsilon$ to $x +
 \epsilon$, the covariance at any pair of outputs is unchanged, because
 $K(x \mid \theta) = K(x + \epsilon \mid \theta)$.
 
-指数二次协方差函数中涉及输入 $x_i$ 和 $x_j$ 的唯一项是它们的向量差，即 $x_i - x_j$。这产生了一个具有平稳协方差的过程，也就是说，如果将输入向量 $x$ 沿着向量 $\epsilon$ 移动到 $x+\epsilon$，输出成对的任何协方差都不会改变，因为 $K(x \mid \theta) = K(x + \epsilon \mid \theta)$。
+指数二次协方差函数中唯一涉及输入 $x_i$ 和 $x_j$ 的项是它们的向量差，即 $x_i - x_j$。这产生了一个具有平稳协方差的过程，也就是说，如果将输入向量 $x$ 沿着向量 $\epsilon$ 移动到 $x+\epsilon$，任意两个成对输出的协方差将保持不变，因为 $K(x \mid \theta) = K(x + \epsilon \mid \theta)$。
 
 The summation involved is just the squared Euclidean distance between
 $x_i$ and $x_j$ (i.e., the $L_2$ norm of their difference, $x_i -
@@ -168,24 +172,24 @@ x_j$). This results in support for smooth functions in the process.
 The amount of variation in the function is controlled by the free
 hyperparameters $\alpha$, $\rho$, and $\sigma$.
 
-涉及的求和仅仅是 $x_i$ 和 $x_j$ 之间的欧几里得距离的平方（即它们的差的 $L_2$ 范数，$x_i - x_j$）。这导致该过程支持平滑函数。函数变化的大小由自由超参数 $\alpha$、$\rho$ 和 $\sigma$ 控制。
+涉及的求和仅仅是 $x_i$ 和 $x_j$ 之间的欧氏距离的平方（即它们差值 $x_i - x_j$ 的 $L_2$ 范数的平方），这使得过程支持平滑函数。函数变化的大小由自由超参数 $\alpha$、$\rho$ 和 $\sigma$ 控制。
 
 Changing the notion of distance from Euclidean to taxicab distance
 (i.e., an $L_1$ norm) changes the support to functions which are
 continuous but not smooth.
 
-将距离的概念从欧几里得距离更改为曼哈顿距离（即 $L_1$ 范数）会变成支持连续但不平滑的函数。
+将距离的概念从欧氏距离更改为曼哈顿距离（即 $L_1$ 范数）会变成支持连续但不平滑的函数。
 
 ## Simulating from a Gaussian process
 
-## 从高斯过程中模拟
+## 从高斯过程中模拟 {-}
 
 It is simplest to start with a Stan model that does nothing more than
 simulate draws of functions $f$ from a Gaussian process.  In practical
 terms, the model will draw values $y_n = f(x_n)$ for finitely many
 input points $x_n$.
 
-最简单的方法是从一个 Stan 模型开始，该模型仅用于从高斯过程中模拟函数 $f$ 的绘制。在实际应用中，该模型将针对有限数量的输入点 $x_n$ 绘制值 $y_n = f(x_n)$。
+最简单的方法是从一个 Stan 模型开始，该模型仅用于从高斯过程中模拟函数 $f$ 的抽取。在实际应用中，该模型将针对有限数量的输入点 $x_n$ 抽取值 $y_n = f(x_n)$。
 
 The Stan model defines the mean and covariance functions in a
 transformed data block and then samples outputs $y$ in the model using
@@ -196,7 +200,7 @@ and $\sigma^2 = 0.1$, and the mean function $m$ is defined to always
 return the zero vector, $m(x) = \textbf{0}$.  Consider the following
 implementation of a Gaussian process simulator.
 
-Stan 模型在 `transformed data` 块中定义了均值和协方差函数，然后使用多元正态分布对输出 $y$ 进行采样。为使模型具体化，将使用前面一节中描述的指数二次协方差函数，并将超参数设置为 $\alpha^2 = 1$、$\rho^2 = 1$ 和 $\sigma^2 = 0.1$，均值函数 $m$ 被定义为始终返回零向量，即 $m(x) = \textbf{0}$。考虑以下高斯过程模拟器的实现。
+Stan 模型在“transformed data”块中定义了均值和协方差函数，然后使用多元正态分布对输出 $y$ 进行采样。为使模型具体化，将使用前面一节中描述的指数二次协方差函数，并将超参数设置为 $\alpha^2 = 1$、$\rho^2 = 1$ 和 $\sigma^2 = 0.1$。均值函数 $m$ 被定义为始终返回零向量，即 $m(x) = \textbf{0}$。考虑以下高斯过程模拟器的实现。
 
 ```stan
 data {
@@ -253,7 +257,7 @@ The input data are just the vector of inputs `x` and its size
 spaced over some interval in order to plot sample draws of functions
 from a Gaussian process.
 
-输入数据仅是输入向量 `x` 和其大小 `N`。可以使用在某个区间内均匀分布的 `x` 值，来绘制从高斯过程中对函数的样本绘制。
+输入数据仅是输入向量 `x` 及其长度 `N`。此类模型可用于在某个区间上均匀分布的 `x` 值，来绘制从高斯过程中抽取的函数样本。
 
 ### Multivariate inputs {-}
 
@@ -266,7 +270,7 @@ multivariate model.
 
 The only lines that change from the univariate model above are as follows.
 
-从上面的单变量模型中唯一变化的行如下所示。
+与之前的单变量模型相比，唯一变化的部分如下所示。
 
 
 ```stan
@@ -283,24 +287,24 @@ transformed data {
 The data are now declared as an array of vectors instead of an array of
 scalars; the dimensionality `D` is also declared.
 
-数据现在声明为向量的数组，而不是标量的数组；维度 `D` 也被声明。
+数据现在声明为向量的数组，而不是标量的数组；同时还声明了维度 `D`。
 
 In the remainder of the chapter, univariate models will be used for simplicity,
 but any of the models could be changed to multivariate in the same way as the
 simple sampling model. The only extra computational overhead from a
 multivariate model is in the distance calculation.
 
-在本章的其余部分中，仅使用单变量模型以保持简单，但任何模型都可以像简单采样模型一样改为多元模型。从多元模型中额外的计算开销只在距离计算中发生。
+为简便起见，本章的后续部分将仅使用单变量模型，但任何模型都可以像简单采样模型一样改为多元模型。多元模型的额外计算开销仅体现在距离计算中。
 
 ### Cholesky factored and transformed implementation {-}
 
-### Cholesky 分解和转换实现 {-}
+### Cholesky 分解与变换实现 {-}
 
 A more efficient implementation of the simulation model can be
 coded in Stan by relocating, rescaling and rotating an isotropic standard
 normal variate.  Suppose $\eta$ is an an isotropic standard normal variate
 
-一个更有效的模拟模型可以通过重新定位、重新缩放和旋转标准多元正态变量来在 Stan 中编码。假设 $\eta$ 是一个标准多元正态变量
+通过平移、缩放和旋转各向同性标准正态变量，可在 Stan 中实现更高效的模拟模型。假设 $\eta$ 是一个标准多元正态变量
 
 $$
 \eta \sim \textsf{normal}(\textbf{0}, \textbf{1}),
@@ -311,7 +315,7 @@ $K(x \mid \theta)$, i.e., the lower-triangular matrix $L$ such that $LL^{\top} =
 K(x \mid \theta)$.  Then the transformed variable $\mu + L\eta$ has the intended
 target distribution,
 
-其中 $\textbf{0}$ 是一个 0 值的 $N$ 向量，$\textbf{1}$ 是 $N\times N$ 的单位矩阵。令 $L$ 是 $K(x \mid \theta)$ 的 Cholesky 分解，即下三角矩阵 $L$ 满足 $LL^{\top} = K(x \mid \theta)$。那么变换后的变量 $\mu + L\eta$ 具有预期的目标分布，
+其中 $\textbf{0}$ 是 $N$ 维零向量，$\textbf{1}$ 是 $N\times N$ 的单位矩阵。令 $L$ 表示 $K(x \mid \theta)$ 的 Cholesky 分解，即下三角矩阵 $L$ 满足 $LL^{\top} = K(x \mid \theta)$。于是变换后的变量 $\mu + L\eta$ 服从目标分布，
 
 $$
   \mu + L\eta \sim \textsf{multivariate normal}(\mu(x), K(x \mid \theta)).
@@ -320,7 +324,7 @@ $$
 This transform can be applied directly to Gaussian process
 simulation.
 
-这种转换可以直接应用于高斯过程模拟中。
+这种变换可以直接应用于高斯过程的模拟中。
 
 This model has the same data declarations for `N` and `x`,
 and the same transformed data definitions of `mu` and
@@ -329,7 +333,7 @@ data variable for the Cholesky decomposition.  The parameters change
 to the raw parameters sampled from an isotropic standard normal, and the
 actual samples are defined as generated quantities.
 
-这个模型对于 `N` 和 `x` 的数据声明，以及对于 `mu` 和 `K` 的相同转换数据定义与先前的模型相同，增加了一个用于 Cholesky 分解的转换数据变量。参数更改为从各向同性标准正态分布中采样的原始参数，并且实际的样本被定义为生成量。
+这个模型对于 `N` 和 `x` 的数据声明，以及对于 `mu` 和 `K` 的“transformed data”定义与之前的模型相同，并增加了一个用于 Cholesky 分解的“transformed data”变量。参数更改为从各向同性标准正态分布中采样的原始参数，并且实际的样本被定义为生成量（即“generated quantities”）。
 
 ```stan
 // ...
@@ -358,21 +362,21 @@ univariate distribution for efficiency; this specifies that each
 vector `y` is then defined as a generated quantity using a direct
 encoding of the transform described above.
 
-在加载数据并计算协方差矩阵 `K` 后，仅计算一次 Cholesky 分解。各向同性正态分布的 `eta` 被指定为矢量化的单变量分布以提高效率；这表明每个 `eta[n]` 都具有独立的标准正态分布。然后使用上述转换的直接编码定义采样向量 `y` 作为生成量。
+Cholesky 分解仅在加载数据并计算协方差矩阵 `K` 后计算一次。各向同性正态分布的 `eta` 被指定为向量化的单变量分布以提高效率；这表明每个 `eta[n]` 都具有独立的标准正态分布。采样向量 `y` 作为生成量通过上述变换直接定义。
 
 ## Fitting a Gaussian process {#fit-gp.section}
 
-## 拟合高斯过程 {#fit-gp.section--cn}
+## 拟合高斯过程 {-#fit-gp.section--cn}
 
 ### GP with a normal outcome {-}
 
 ### 带有正态输出的高斯过程 {-}
 
 The full generative model for a GP with a normal outcome,
-
-带有正态输出的高斯过程的完整生成模型：
-
 $y \in \mathbb{R}^N$, with inputs $x \in \mathbb{R}^N$, for a finite $N$:
+
+带有正态输出 $y \in \mathbb{R}^N$，输入为 $x \in \mathbb{R}^N$ 的完整生成模型如下，其中 $N$ 表示一个有限的数据量：
+
 \begin{align*}
 \rho   &\sim \textsf{InvGamma}(5, 5) \\
 \alpha &\sim \textsf{normal}(0, 1) \\
@@ -382,6 +386,9 @@ y_i    &\sim \textsf{normal}(f_i, \sigma) \, \forall i \in \{1, \dots, N\}
 \end{align*}
 With a normal outcome, it is possible to integrate out the Gaussian
 process $f$, yielding the more parsimonious model:
+
+对于正态输出，可以将高斯过程 $f$ 积分掉，得到更简洁的模型：
+
 \begin{align*}
 \rho   &\sim \textsf{InvGamma}(5, 5) \\
 \alpha &\sim \textsf{normal}(0, 1) \\
@@ -397,7 +404,7 @@ both models in Stan. The former model will be referred to as the latent
 variable GP, while the latter will be called the marginal likelihood
 GP.
 
-在处理正态输出时，通过积分高斯过程可以获得计算上更有效的结果，因为这会产生一个较低维度的参数空间进行推断。我们将在 Stan 中拟合这两个模型。前面的模型称为潜变量高斯过程，而后者称为边际似然高斯过程。
+在处理正态输出时，通过积分掉高斯过程可以提高计算效率，因为这会产生一个较低维度的参数空间来进行推断。我们将在 Stan 中拟合这两个模型。前面的模型称为潜变量高斯过程，而后者称为边际似然高斯过程。
 
 The hyperparameters controlling the covariance function of a Gaussian
 process can be fit by assigning them priors, like we have in the
@@ -410,7 +417,7 @@ the output values ($\alpha$), the scale of the output noise
 for more information about how to specify
 appropriate priors for the hyperparameters.
 
-控制高斯过程协方差函数的超参数可以通过设置先验来进行拟合，就像我们在上面的生成模型中所做的那样，然后计算给定观测数据的超参数的后验分布。关于参数的先验应该根据输出值（$\alpha$）的尺度、输出噪声（$\sigma$）的尺度以及在输入之间测量距离的尺度（$\rho$）的先前知识来定义。有关如何为超参数指定适当的先验的更多信息，请参见[高斯过程先验](#priors-gp.section)部分。
+控制高斯过程协方差函数的超参数可以通过设置先验来进行拟合，就像我们在上面的生成模型中所做的那样，然后计算给定观测数据的超参数的后验分布。参数的先验应该根据输出值的尺度（$\alpha$）、输出噪声的尺度（$\sigma$）以及输入之间距离的测量尺度（$\rho$）的先验知识来定义。更多关于超参数先验设置的信息，请参阅[高斯过程的先验参数](#priors-gp.section)一节。
 
 The Stan program implementing the marginal likelihood GP is shown below. The
 program is similar to the Stan programs that implement the simulation GPs
@@ -418,7 +425,7 @@ above, but because we are doing inference on the hyperparameters, we need to
 calculate the covariance matrix `K` in the model block, rather than
 the transformed data block.
 
-下面是实现边际似然高斯过程的 Stan 程序。该程序类似于上面实现模拟高斯过程的 Stan 程序，但由于我们对超参数进行推断，因此需要在模型块中计算协方差矩阵 `K`，而不是在转换数据块中进行计算。
+下面是实现边际似然高斯过程的 Stan 程序。该程序类似于上面实现模拟高斯过程的 Stan 程序，但由于我们将对超参数进行推断，因此需要在“model”块中计算协方差矩阵 `K`，而不是在“transformed data”块中进行计算。
 
 ```stan
 data {
@@ -465,7 +472,7 @@ Cholesky-parameterized normal distribution, only now the value `y` is known
 and the covariance matrix `K` is an unknown dependent on the
 hyperparameters, allowing us to learn the hyperparameters.
 
-数据块声明了一个观察值向量 `y`，其输入为 `x[n]`。转换数据块现在仅将均值向量定义为零。三个超参数被定义为参数并受到非负约束。协方差矩阵 `K` 的计算现在在模型中进行，因为它涉及未知参数，因此不能像转换数据那样预先计算。模型的其余部分包括超参数的先验分布和多元 Cholesky 参数化正态似然，现在已知价值 `y`，而协方差矩阵 `K` 是取决于超参数的未知数，允许我们学习超参数。
+“data”块声明了一个观察值向量 `y`，其输入为 `x[n]`。“transformed data”块现在仅将均值向量定义为零。三个超参数被定义为非负参数。协方差矩阵 `K` 的计算现在在“model”块中进行，因为它涉及未知参数，因此不能像转换数据那样预先计算。模型的其余部分包括超参数的先验分布和基于 Cholesky 分解的多元正态分布，其中 `y` 是已知观测值，而协方差矩阵 `K` 依赖于超参数，从而允许学习超参数。
 
 We have used the Cholesky parameterized multivariate normal rather
 than the standard parameterization because it allows us to the
@@ -475,14 +482,14 @@ in computational speed between the two approaches will not be
 noticeable, but for larger matrices ($N \gtrsim 100$) the Cholesky
 decomposition version will be faster.
 
-我们使用了 Cholesky 参数化的多元正态分布，而不是标准参数化，因为这使我们可以使用已针对小型和大型矩阵进行优化的 `cholesky_decompose` 函数。当处理小矩阵时，两种方法之间的计算速度差异不会很明显，但对于较大的矩阵（$N \gtrsim 100$），Cholesky 分解版本将更快。
+我们使用了基于 Cholesky 分解的多元正态分布而不是标准参数化形式，是因为 `cholesky_decompose` 函数针对大小矩阵都进行了优化。当处理小矩阵时，两种方法之间的计算速度差异不会很明显，但对于较大的矩阵（$N \gtrsim 100$），Cholesky 分解版本将更快。
 
 Hamiltonian Monte Carlo sampling is fast and effective for hyperparameter
 inference in this model [@Neal:1997]. If the posterior is
 well-concentrated for the hyperparameters the Stan implementation will fit
 hyperparameters in models with a few hundred data points in seconds.
 
-在这个模型中，Hamilton Monte Carlo 抽样对于超参数推断是快速和有效的[@Neal:1997]。如果后验密度函数在超参数方面高度集中，则 Stan 实现将在几百个数据点的模型中在几秒钟内拟合超参数。
+在这个模型中，Hamiltonian Monte Carlo 采样对于超参数推断是快速和有效的 [@Neal:1997]。如果后验密度函数在超参数方面高度集中，则 Stan 实现可以在几秒钟内拟合包含数百个数据点的模型。
 
 #### Latent variable GP {-}
 
@@ -493,7 +500,7 @@ This will be useful for when the outcome is not normal. We'll need to add a
 small positive term, $\delta$ to the diagonal of the covariance matrix in order
 to ensure that our covariance matrix remains positive definite.
 
-我们也可以在 Stan 中明确编码 GP 的潜变量公式，这对于处理非正态数据时非常有用。我们需要在协方差矩阵的对角线上添加一个小的正数项 $\delta$，以确保我们的协方差矩阵始终是正定的。
+我们也可以在 Stan 中显式编写高斯过程的潜变量形式，这在处理非正态数据时非常有用。我们需要在协方差矩阵的对角线上添加一个小的正数项 $\delta$，以确保我们的协方差矩阵始终是正定的。
 
 
 ```stan
@@ -547,21 +554,21 @@ one $N$-dimensional multivariate normal with an identity covariance
 matrix multiplied by $\sigma^2$, we instead use vectorized univariate
 normal distribution, which is equivalent but more efficient to use.
 
-潜变量 GP 和边际似然 GP 之间的两个差异值得注意。第一个是我们将参数块增加了一个长度为 $N$ 的新参数向量 `eta`。在模型块中，它用于生成对应于潜在 GP 的多元正态向量 $f$。我们对 `eta` 使用 $\textsf{normal}(0,1)$ 先验，就像在模拟部分中 Cholesky 参数化的 GP 中所做的那样。第二个区别是我们的似然现在是单变量的，虽然我们可以将 $N$ 个似然项编码为一个具有恒等协方差矩阵乘以 $\sigma^2$ 的 $N$ 维多元正态分布。但是，使用像上面显示的向量化语句更有效率。
+潜变量高斯过程和边际似然高斯过程之间有两个差异值得注意。首先，“parameter”块中增加了一个长度为 $N$ 的新参数向量 `eta`，它用于在“model”块中生成对应于潜在高斯过程的多元正态向量 $f$。我们对 `eta` 使用 $\textsf{normal}(0,1)$ 先验，就像在模拟章节中对基于 Cholesky 分解的高斯过程所做的那样。第二个区别是，虽然我们可以利用一个 $N$ 维多元正态分布来编码 $y$ 的分布，其中协方差是单位阵乘以 $\sigma^2$，但现在我们使用向量化的一元正态分布，这两种形式等价，但后者更高效。
 
 ### Discrete outcomes with Gaussian processes {-}
 
-### 使用高斯过程处理离散结果 {-}
+### 使用高斯过程处理离散输出 {-}
 
 Gaussian processes can be generalized the same way as standard linear
 models by introducing a link function.  This allows them to be used as
 discrete data models.
 
-高斯过程可以通过引入链接函数的方式与标准线性模型一样进行推广。这使得它们可以用作离散数据模型。
+高斯过程可以通过引入链接函数的方式与标准线性模型一样进行推广。这使得它们可以用作离散数据的模型。
 
 #### Poisson GP {-}
 
-#### 泊松分布 GP {-}
+#### 泊松高斯过程 {-}
 
 If we want to model count data, we can remove the $\sigma$ parameter, and use
 `poisson_log`, which implements a Poisson distribution with log link function,
@@ -570,7 +577,7 @@ than `normal`. We can also add an overall mean parameter, $a$, which
 will account for the marginal expected value for $y$. We do this because we
 cannot center count data like we would for normally distributed data.
 
-如果我们想要建模计数数据，可以移除 $\sigma$ 参数，并在似然函数中使用 `poisson_log`，该函数实现了一个对数链接，而不是 `normal`。我们还可以添加一个总体均值参数 $a$，它将考虑到 $y$ 的边际期望值。这是因为我们不能像对于正态分布数据一样居中处理计数数据。
+如果我们想要建模计数数据，可以移除 $\sigma$ 参数，并使用 `poisson_log` 函数而非 `normal` 函数。该函数实现了一个对数链接的泊松分布。我们还可以添加一个总体均值参数 $a$，它将考虑到 $y$ 的边际期望值。这是因为我们不能像对于正态分布数据一样对计数数据进行中心化。
 
 
 ```stan
@@ -600,20 +607,20 @@ model {
 
 #### Logistic Gaussian process regression {-}
 
-#### 逻辑回归高斯过程回归模型 {-}
+#### Logistic 高斯过程回归模型 {-}
 
 For binary classification problems, the observed outputs $z_n \in
 \{ 0,1 \}$ are binary.  These outputs are modeled using a Gaussian
 process with (unobserved) outputs $y_n$ through the logistic link,
 
-对于二元分类问题，观测输出 $z_n \in \{ 0,1 \}$ 是二进制的。通过逻辑链接，这些输出可以使用高斯过程进行建模，并且相应的未观测输出为 $y_n$，具体如下所示：
+对于二元分类问题，观测输出 $z_n \in \{ 0,1 \}$ 是二元取值的。通过 Logistic 链接函数，这些输出可以使用高斯过程进行建模，其中（未观测到的）输出为 $y_n$，具体如下所示：
 
 $$
 z_n \sim \textsf{Bernoulli}(\operatorname{logit}^{-1}(y_n)),
 $$
 or in other words,
 
-或者说，
+换言之，
 
 $$
 \Pr[z_n = 1] = \operatorname{logit}^{-1}(y_n).
@@ -623,7 +630,7 @@ We can extend our latent variable GP Stan program to deal with classification
 problems. Below `a` is the bias term, which can help account for imbalanced
 classes in the training data:
 
-我们可以扩展我们的潜变量 GP Stan 程序以处理分类问题。下面的 `a` 是偏置项，它可以帮助解决训练数据中类别不平衡的问题：
+我们可以扩展潜变量高斯过程的 Stan 程序以处理分类问题。下面的 `a` 是偏置项，它可以帮助解决训练数据中类别不平衡的问题：
 
 ```stan
 data {
@@ -641,7 +648,7 @@ model {
 
 ### Automatic relevance determination {-}
 
-### 自动相关性确定 (ARD)
+### 自动相关性确定 {-}
 
 If we have multivariate inputs $x \in \mathbb{R}^D$, the squared exponential
 covariance function can be further generalized by fitting a scale
@@ -663,7 +670,7 @@ along dimension $d$. Moreover, the scale of the parameters $\rho_d$ measures
 non-linearity along the $d$-th dimension, rather than "relevance"
 [@PiironenVehtari:2016].
 
-Neal (1996) 将 $\rho$ 的估计称为“自动相关性确定”，但这是令人误解的，因为每个 $\rho_d$ 的后验分布的尺度大小取决于输入数据沿 $d$ 维度的缩放比例。此外，参数 $\rho_d$ 的尺度测量的是第 $d$ 维度上的非线性程度，而不是“相关性”[@PiironenVehtari:2016]。
+@Neal:1996 将 $\rho$ 的估计称为“自动相关性确定”，但这一说法具有误导性，因为每个 $\rho_d$ 的后验分布尺度大小取决于输入数据在第 $d$ 维上的缩放比例。此外，参数 $\rho_d$ 的尺度衡量的是第 $d$ 维上的非线性程度，而不是“相关性” [@PiironenVehtari:2016]。
 
 A priori, the closer $\rho_d$ is to zero, the more nonlinear the
 conditional mean in dimension $d$ is.  A posteriori, the actual dependencies
@@ -674,37 +681,15 @@ of $x_1$ is higher [@RasmussenWilliams:2006, page 80].
 The collection of $\rho_d$ (or $1/\rho_d$) parameters can also be
 modeled hierarchically.
 
-从先验上讲，$\rho_d$ 越接近于零，第 $d$ 维条件均值的非线性程度就越高。从后验上看，实际上 $x$ 和 $y$ 之间的依赖关系也起到了作用。如果一个协变量 $x_1$ 具有线性效应，而另一个协变量 $x_2$ 具有非线性效应，则即使 $x_1$ 的预测相关性更高，也可能出现 $\rho_1 > \rho_2$ 的情况[@RasmussenWilliams:2006，第80页]。$\rho_d$（或$1/\rho_d$）参数的集合也可以按分层方式进行建模。
+从先验上讲，$\rho_d$ 越接近于零，第 $d$ 维的条件均值的非线性程度就越高。从后验上看，$x$ 和 $y$ 之间的实际依赖关系也起到了作用。如果一个协变量 $x_1$ 具有线性效应，而另一个协变量 $x_2$ 具有非线性效应，则即使 $x_1$ 的预测相关性更高，也可能出现 $\rho_1 > \rho_2$ 的情况 [@RasmussenWilliams:2006，第80页]。$\rho_d$（或 $1/\rho_d$）参数的集合也可以按分层方式进行建模。
 
-The implementation of automatic relevance determination in Stan is
-straightforward, though it currently requires the user to directly code the
-covariance matrix. We'll write a function to generate the Cholesky of the
-covariance matrix called `L_gp_exp_quad_cov_ARD`.
+The implementation of automatic relevance determination is a straightforward
+extension of the one-dimensional case by modifying `rho` to be an array.
 
-在 Stan 中实现自动相关性确定是很简单的，虽然目前需要用户直接编写协方差矩阵的代码。我们将编写一个名为 `L_cov_exp_quad_ARD` 的函数来生成协方差矩阵的 Cholesky 分解。
+自动相关性确定的实现是对一维情况的直接扩展，需将 `rho` 修改为数组。
 
 
 ```stan
-functions {
-  matrix L_gp_exp_quad_cov_ARD(array[] vector x,
-                            real alpha,
-                            vector rho,
-                            real delta) {
-    int N = size(x);
-    matrix[N, N] K;
-    real sq_alpha = square(alpha);
-    for (i in 1:(N-1)) {
-      K[i, i] = sq_alpha + delta;
-      for (j in (i + 1):N) {
-        K[i, j] = sq_alpha
-                      * exp(-0.5 * dot_self((x[i] - x[j]) ./ rho));
-        K[j, i] = K[i, j];
-      }
-    }
-    K[N, N] = sq_alpha + delta;
-    return cholesky_decompose(K);
-  }
-}
 data {
   int<lower=1> N;
   int<lower=1> D;
@@ -715,7 +700,7 @@ transformed data {
   real delta = 1e-9;
 }
 parameters {
-  vector<lower=0>[D] rho;
+  array[D] real<lower=0> rho;
   real<lower=0> alpha;
   real<lower=0> sigma;
   vector[N] eta;
@@ -723,7 +708,12 @@ parameters {
 model {
   vector[N] f;
   {
-    matrix[N, N] L_K = L_gp_exp_quad_cov_ARD(x, alpha, rho, delta);
+    matrix[N, N] L_K;
+    matrix[N, N] K = gp_exp_quad_cov(x, alpha, rho);
+    for (n in 1:N) {
+      K[n, n] = K[n, n] + delta;
+    }
+    L_K = cholesky_decompose(K);
     f = L_K * eta;
   }
 
@@ -739,7 +729,7 @@ model {
 
 ### Priors for Gaussian process parameters {- #priors-gp.section}
 
-### 高斯过程的先验参数 {- #priors-gp.section--cn}
+### 高斯过程参数的先验分布 {- #priors-gp.section--cn}
 
 Formulating priors for GP hyperparameters requires the analyst to consider the
 inherent statistical properties of a GP, the GP's purpose in the model, and the
