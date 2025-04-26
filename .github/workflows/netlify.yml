@@ -11,24 +11,27 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: quarto
-        run: |
-          wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.6.43/quarto-1.6.43-linux-amd64.tar.gz
-          tar xzf quarto-1.6.43-linux-amd64.tar.gz
+      - name: quarto-setup
+        uses: quarto-dev/quarto-actions/setup@v2
+        with:
+          version: 1.6.43
       
-      - name: render
-        run: cd stan-users-guide && ../quarto-1.6.43/bin/quarto render --to html
+      - name: quarto-render
+        uses: quarto-dev/quarto-actions/render@v2
+        with:
+          to: html
+          path: stan-users-guide
       
-      - name: link
+      - name: netlify-link
         uses: netlify/actions/cli@master
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         with:
           args: link --name stan-cn
       
-      - name: deploy
+      - name: netlify-deploy
         uses: netlify/actions/cli@master
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         with:
-          args: deploy --dir=stan-users-guide/_book
+          args: deploy --dir=stan-users-guide/_book --prod
