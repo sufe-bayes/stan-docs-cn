@@ -19,9 +19,16 @@ jobs:
       - name: render
         run: cd stan-users-guide && ../quarto-1.6.43/bin/quarto render --to html
       
-      - name: deploy
+      - name: link
         uses: netlify/actions/cli@master
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         with:
           args: link --name stan-cn
+      
+      - name: deploy
+        uses: netlify/actions/cli@master
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        with:
+          args: deploy --dir=stan-users-guide/_book
