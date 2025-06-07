@@ -8,8 +8,6 @@ pagetitle: Directions, Rotations, and Hyperspheres
 
 本节译者：张梓源
 
-初次校审：张梓源（ChatGPT辅助）
-
 Directional statistics involve data and/or parameters that are
 constrained to be directions.  The set of directions forms a sphere,
 the geometry of which is not smoothly mappable to that of a Euclidean
