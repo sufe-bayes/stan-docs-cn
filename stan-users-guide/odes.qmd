@@ -144,7 +144,7 @@ sensitivity interface see the
 The function signatures for Stan's ODE solvers can be found in
 the function reference manual section on ODE solvers.
 
-有关刚性 ODE 系统的讨论，请参见[刚性 ODE 部分](#stiff-ode.section)。有关伴随灵敏度接口的信息，请参见[伴随 ODE 求解器部分](#adjoint-ode.section)。Stan的ODE求解器的函数签名可以在函数参考手册中的 ODE 求解器部分找到。
+有关刚性 ODE 系统的讨论，请参见[刚性 ODE 部分](#stiff-ode.section)。有关伴随灵敏度接口的信息，请参见[伴随 ODE 求解器部分](#adjoint-ode.section)。Stan 的 ODE 求解器的函数签名可以在函数参考手册中的 ODE 求解器部分找到。
 
 ## Notation
 
@@ -176,7 +176,7 @@ documentation for the Boost Numeric Odeint library
 [@AhnertMulansky:2011], which Stan uses to implement the `rk45` and
 `ckrk` solver.]
 
-作为一个 ODE 系统的示例，先考虑一个谐波振荡器。在谐波振荡器中，被扰乱平衡的粒子被一个与平衡位移成比例的力拉回其平衡位置。这里的系统还有一个与粒子速度成正比的摩擦力，它指向粒子速度的相反方向。系统的状态由表示位置和速度的 $y = (y_1, y_2)$ 决定。系统相对于时间的变化由以下微分方程给出。
+作为一个 ODE 系统的示例，先考虑一个谐波振荡器。在谐波振荡器中，被扰乱平衡的粒子被一个与平衡位移成比例的力拉回其平衡位置。这里的系统还有一个与粒子速度成正比的摩擦力，它指向粒子速度的相反方向。系统的状态由表示位置和速度的 $y = (y_1, y_2)$ 决定。系统相对于时间的变化由以下微分方程给出。^[本示例来自 Boost Numeric Odeint 库的文档 [@AhnertMulansky:2011]，Stan 使用该库实现了 `rk45` 和 `ckrk` 求解器。]
 
 \begin{align*}
 &\frac{d}{dt} y_1 = y_2  \\
@@ -292,12 +292,11 @@ where each measurement of $y(t, \theta)$ has independent
 $\textsf{normal}(0, 0.1)$ error in both dimensions ($y_1(t, \theta)$
 and $y_2(t, \theta)$).
 
-作为示例，假设有一个带有参数值 $\theta = 0.15$ 以及初始状态 $y(t = 0, \theta = 0.15) = (1, 0)$ 的简谐振子。假设该系统在10个时间点进行了测量，$t = 1, 2, \cdots, 10$，其中每个 $y(t, \theta)$ 的观测值在两个分量上 ($y_1(t, \theta)$
-和$y_2(t, \theta)$) 都具有独立的 $\textsf{normal}(0, 0.1)$ 噪声。
+作为示例，假设有一个带有参数值 $\theta = 0.15$ 以及初始状态 $y(t = 0, \theta = 0.15) = (1, 0)$ 的简谐振子。假设该系统在10个时间点进行了测量，$t = 1, 2, \cdots, 10$，其中每个 $y(t, \theta)$ 的观测值在两个分量上 ($y_1(t, \theta)$ 和 $y_2(t, \theta)$) 都具有独立的 $\textsf{normal}(0, 0.1)$ 噪声。
 
 The following model can be used to generate data like this:
 
-以下模型可以用于产生上述数据：
+可以用下面的模型产生上述数据：
 
 ```stan
 functions {
@@ -444,7 +443,7 @@ correlation in the state variables (e.g., with a multivariate
 normal distribution), or both heavy tails and correlation in the state
 variables (e.g., with a multivariate Student-t distribution).
 
-与其他回归模型类似，可以轻松将噪声模型更改为具有更重尾部的分布（例如，Student-t 分布），状态变量具有相关性的分布（例如，使用多元正态分布），或者状态变量具有重尾部和相关性的分布（例如，使用多元 Student-t 分布）。
+与其他回归模型类似，我们可以很容易地将噪声模型替换为具有更重尾部的分布（例如，Student-t 分布），状态变量具有相关性的分布（例如，使用多元正态分布），或同时具有重尾特性和变量相关性的分布（例如多元 Student-t 分布）。
 
 ## Stiff ODEs {#stiff-ode.section}
 
@@ -482,7 +481,7 @@ attempting to use the non-stiff solver for a stiff system will cause
 the timestep to become very small, leading the non-stiff solver taking more
 time overall even if each step is easier to compute than for the stiff solver.
 
-对于非刚性系统，使用刚性（bdf）求解器可能比使用非刚性（rk45）求解器慢得多，因为每个刚性求解器的步骤需要更长时间来计算。另一方面，尝试在刚性系统上使用非刚性求解器将导致时间步长变得非常小，即使对于非刚性求解器，每个步骤比刚性求解器易于计算，但总体上需要更长的时间。
+对于非刚性系统，使用刚性（`bdf`）求解器可能比使用非刚性（`rk45`）求解器慢得多，因为每个刚性求解器的步骤需要更长时间来计算。另一方面，尝试在刚性系统上使用非刚性求解器将导致时间步长变得非常小，即使对于非刚性求解器，每个步骤比刚性求解器易于计算，但总体上需要更长的时间。
 
 If it is not known for sure that an ODE system is stiff, run the model with
 both the `rk45` and `bdf` solvers and see which is faster. If the `rk45`
@@ -505,7 +504,7 @@ function names but with `_tol` appended to the end. All three control
 arguments must be supplied with this signature (there are no
 defaults).
 
-为了对求解器进行更多的控制，刚性和非刚性向前 ODE 求解器具有函数签名，允许用户指定 `relative_tolerance`、`absolute_tolerance` 和 `max_num_steps` 参数。这些与常规函数名称相同，但末尾添加了 `_tol`。使用该签名时，三个控制参数都必须显式给出（不提供默认值）。
+为了进一步控制求解过程，Stan 提供的刚性与非刚性前向 ODE 求解器都支持带有特定函数签名的版本，使用户可以显式指定 `relative_tolerance`、`absolute_tolerance` 和 `max_num_steps` 等控制参数。这些函数与常规版本的函数名称相同，但在末尾加上 `_tol` 后缀。使用该函数签名时，三个控制参数都必须显式提供（不设默认值）。
 
 ```stan
 array[T] vector[2] y_sim = ode_bdf_tol(sho, y0, t0, ts,
@@ -519,9 +518,7 @@ array[T] vector[2] y_sim = ode_bdf_tol(sho, y0, t0, ts,
 `max_num_steps` specifies the maximum number of steps the solver will
 take between output time points before throwing an error.
 
-`relative_tolerance` 和 `absolute_tolerance`
-控制求解器想要实现的精度，并且 `max_num_steps`
-指定求解器在输出时间点之间执行的最大步数，然后才会抛出异常。
+`relative_tolerance` 和 `absolute_tolerance` 控制求解器尝试达到的精度，`max_num_steps` 则指定在两个输出时间点之间，求解器最多允许执行的步数，超过该步数将抛出错误。
 
 The control parameters must be data variables -- they cannot be
 parameters or expressions that depend on parameters, including local
@@ -530,7 +527,7 @@ quantities. User-defined function arguments may be qualified as only
 allowing data arguments using the `data` qualifier.
 
 这些控制参数必须是数据变量 --
-它们不能是参数或取决于参数的表达式，包括转换数据（transformed data ）和生成数量（generated quantities ）以外的任何块中的局部变量。用户定义的函数参数可以使用
+它们不能是参数或依赖于参数的表达式，包括转换数据（transformed data ）和生成数量（generated quantities ）以外的任何块中的局部变量。用户定义的函数参数可以使用
 `data` 限定符限定为仅允许数据参数。
 
 For the RK45 and Cash-Karp solvers, the default values for relative and absolute tolerance are
@@ -549,8 +546,7 @@ If there are discontinuities in the ODE system function, it is best
 to integrate the ODE between the discontinuities, stopping the solver at each
 one, and restarting it on the other side.
 
-如果 ODE 系统函数存在间断点，则最好在间断点之间积分 ODE，停止求解器并在另一侧重新启动。
-
+如果 ODE 系统函数中存在间断点，最佳做法是仅在间断点之间对 ODE 进行积分，在每个间断点处停止求解器，并在间断点之后重新启动积分。
 
 Nonetheless, the ODE solvers will attempt to integrate over discontinuities
 they encounters in the state function. The accuracy of the solution near the
@@ -559,7 +555,7 @@ such a discontinuity is a lag in a pharmacokinetic model, where a
 concentration is zero for times $0 < t < t'$ and then positive for $t \geq t'$.
 In this example example, we would use code in the system such as
 
-尽管如此，ODE 求解器将尝试在状态函数中遇到的间断处进行积分。在间断点附近的解的精度可能存在问题（需要许多小步骤）。这种间断的一个例子是药代动力学模型中的延迟，在这个例子中，浓度值在时间点 $0<t<t'$ 为零，在 $t'\geq t$ 时为正。在这个例子中，我们可以在系统中使用如下代码：
+尽管如此，ODE 求解器仍会尝试在状态函数中遇到的间断点上进行积分。在间断点附近，解的精度可能会存在问题（需要非常小的步长）。这种间断的一个例子是药代动力学模型中的滞后现象，即当 $0 < t < t'$ 时浓度为零，而在 $t \geq t'$ 时变为正值。在这种情况下，我们可以在系统函数中编写如下代码：
 
 ```stan
 if (t < t_lag) {
@@ -591,20 +587,16 @@ The relative tolerance RTOL and absolute tolerance ATOL control the accuracy of 
 numerical solution. Specifically, when solving an ODE with unknowns
 $y=(y_1,\dots,y_n)^T$, at every step the
 solver controls estimated local error $e=(e_1,\dots,e_n)^T$ through its weighted root-mean-square norm
-(@SerbanHindmarsh:2005, @hairer:1993)
+(@SerbanHindmarsh:2005, @hairer:1993)by reducing the stepsize when the inequality is not satisfied.
+
+相对容差 RTOL 和绝对容差 ATOL 控制数值解的精度。具体地，在求解具有未知量
+$y=(y_1,\dots,y_n)^T$
+的 ODE 时，每一步求解器通过减小步长来控制加权均方根范数估计(@SerbanHindmarsh:2005,
+@hairer:1993)的局部误差 $e=(e_1,\dots,e_n)^T$，直到不满足不等式
 
 \begin{equation*}
 \sqrt{\sum_{i=1}^n{\frac{1}{n}\frac{e_i^2}{(\text{RTOL}\times y_i + \text{ATOL})^2}}} < 1
 \end{equation*}
-by reducing the stepsize when the inequality is not satisfied.
-
-相对容差 RTOL 和绝对容差 ATOL 控制数值解的精度。具体地，在求解具有未知量
-$y=(y_1,\dots,y_n)^T$
-的ODE时，每一步求解器通过减小步长来控制加权均方根范数估计(@SerbanHindmarsh:2005,
-@hairer:1993)的局部误差 $e=(e_1,\dots,e_n)^T$，直到不满足不等式
-$$
-\sqrt{\sum_{i=1}^n{\frac{1}{n}\frac{e_i^2}{(\text{RTOL}\times y_i + \text{ATOL})^2}}} < 1
-$$。
 
 To understand the roles of the two tolerances it helps to assume $y$ at
 opposite scales in the above expression: on one hand the absolute
@@ -731,33 +723,26 @@ considerably faster than using one of the ODE solvers.
 The solution to $\frac{d}{dt} y = ay$ is $y = y_0e^{at}$, where the constant
 $y_0$ is determined by boundary conditions. We can extend this solution
 to the vector case:
+
+$\frac{d}{dt} y = ay$ 的解为 $y = y_0e^{at}$，其中 $y_0$ 由边界条件决定。我们可以将此解扩展到向量情况：
+
 $$
 \frac{d}{dt}y = A \, y
 $$
 <a name="id:ode.linODEs"></a>
 where $y$ is now a vector of length $n$ and $A$ is an $n$ by $n$ matrix. The
 solution is then given by:
+
+其中 $y$ 是一个长度为$n$的向量，$A$ 是一个 $n \times n$ 的矩阵。此时，其通解为：
+
 $$
 y = e^{tA} \, y_0
 $$
 <a name="id:ode.linOEs.sln"></a>
 where the matrix exponential is formally defined by the convergent power series:
-$$
-e^{tA} = \sum_{n=0}^{\infty} \dfrac{tA^n}{n!} = I + tA + \frac{t^2A^2}{2!} + \dotsb
-$$
-<a name="id:ode.matrix_exp.def"></a>
 
-$\frac{d}{dt} y = ay$ 的解为 $y = y_0e^{at}$，其中 $y_0$ 由边界条件决定。我们可以将此解扩展到向量情况：
-$$
-\frac{d}{dt}y = A \, y
-$$
-<a name="id:ode.linODEs"></a>
-其中 $y$ 是一个长度为$n$的向量，$A$ 是一个 $n \times n$ 的矩阵。此时，其通解为：
-$$
-y = e^{tA} \, y_0
-$$
-<a name="id:ode.linOEs.sln"></a>
 其中矩阵指数是由收敛幂级数正式定义的：
+
 $$
 e^{tA} = \sum_{n=0}^{\infty} \dfrac{tA^n}{n!} = I + tA + \frac{t^2A^2}{2!} + \dotsb
 $$
@@ -765,13 +750,9 @@ $$
 
 We can apply this technique to the simple harmonic oscillator example, by
 setting
-$$
-y = \begin{bmatrix} y_1 \\ y_2 \end{bmatrix} \qquad
-A = \begin{bmatrix} 0 & 1 \\ -1 & -\theta \end{bmatrix}
-$$
-<a name="id:ode.sho_matrix"></a>
 
 我们可以将这种技术应用于简单的谐波振荡器的例子，通过设置
+
 $$
 y = \begin{bmatrix} y_1 \\ y_2 \end{bmatrix} \qquad
 A = \begin{bmatrix} 0 & 1 \\ -1 & -\theta \end{bmatrix}
