@@ -2,19 +2,20 @@
 pagetitle: Ordinary Differential Equations
 ---
 
-# Ordinary Differential Equations  {#ode-solver.chapter}
-
 # 常微分方程 {#ode-solver.chapter--cn}
 
+# Ordinary Differential Equations  {-#ode-solver.chapter}
+
 本节译者：杨静远
-本节校审：张梓源
+
+本节校审：张梓源（ChatGPT辅助）
 
 Stan provides a number of different methods for solving systems of
 ordinary differential equations (ODEs). All of these methods adaptively
 refine their solutions in order to satisfy given tolerances, but
 internally they handle calculations quite a bit differently.
 
-Stan 提供了多种不同的方法来求解常微分方程组（ODEs）。这些方法都可以自适应地优化其解以满足给定的容差，但在内部计算时它们的处理方式有所不同。
+Stan 提供了多种不同的方法来求解常微分方程组（ODEs）。这些方法都能自适应地细化其解，以满足给定的容差要求。但在内部计算时它们的处理方式有所不同。
 
 
 Because Stan's algorithms requires gradients of the log density, the ODE
@@ -25,7 +26,7 @@ in Stan to solve this problem, each having very different
 computational cost depending on the number of ODE
 states $N$ and the number of parameters $M$ being used:
 
-因为 Stan 中的算法需要对对数密度的梯度进行求解，ODE 求解器不仅要提供 ODE 本身的解，还要提供关于参数（灵敏度）的 ODE 解的梯度。在 Stan 中，有两种根本上不同的方法可用于解决此问题，具体的计算成本取决于正在使用的 ODE 状态数量 $N$ 和参数的数量 $M$ 等因素：
+因为 Stan 中的算法需要对对数密度的梯度进行求解，ODE 求解器不仅需要提供 ODE 本身的解，还要给出该解关于参数的梯度（即灵敏度）。在 Stan 中，针对该问题有两种本质上不同的方法可供选择，具体的计算成本取决于正在使用的 ODE 状态数量 $N$ 和参数的数量 $M$ 等因素：
 
 * A *forward sensitivity* solver expands the base ODE system
   with additional ODE equations for the gradients of the solution.
@@ -33,7 +34,7 @@ states $N$ and the number of parameters $M$ being used:
   sensitivity states are added meaning that the full ODE solved has
   $N \, + N \cdot M$ states.
 
-* 前向灵敏度求解器通过为解的梯度添加额外的 ODE 方程来扩展基本 ODE 系统。对于每个参数，都会添加一个完整的 $N$ 个灵敏度状态，这意味着所解的完整 ODE 具有 $N \, + N \cdot M$ 个状态。
+* 前向灵敏度求解器通过为解的梯度添加额外的 ODE 方程，扩展了原始 ODE 系统。对于每个参数，都会添加一个完整的 $N$ 个灵敏度状态，这意味着所解的完整 ODE 具有 $N \, + N \cdot M$ 个状态。
 
 * An *adjoint sensitivity* solver starts by solving the base ODE system
   forward in time to get the ODE solution and then solves
@@ -42,7 +43,7 @@ states $N$ and the number of parameters $M$ being used:
   There is additionally one quadrature problem solved for every
   parameter.
 
-* 伴随灵敏度求解器首先对基础 ODE 方程组进行正向求解，然后再对另一个 ODE 方程组（伴随方程）进行反向求解来获得梯度。正向和反向求解都各自拥有 $N$ 个状态。此外，每个参数都有一个数值积分问题需要求解。
+* 伴随灵敏度求解器首先对基础 ODE 方程组进行正向求解，然后再对另一个 ODE 方程组（伴随方程）进行反向求解来获得梯度。正向和反向求解都各自拥有 $N$ 个状态。此外，每个参数还需要单独求解一个求积问题。
 
 The adjoint sensitivity approach scales much better than the forward
 sensitivity approach. Whereas the computational cost of the forward
@@ -56,7 +57,7 @@ interfaces. For information on the adjoint sensitivity interface see
 the [Adjoint ODE solver](#adjoint-ode.section)
 
 
-伴随灵敏度方法比正向灵敏度方法的可扩展性要好得多。虽然正向方法的计算成本随着 ODE 状态数 $N$ 和参数数 $M$ 的乘法增长，而伴随灵敏度方法的计算成本随着状态数 $N$ 和参数数 $M$ 线性增长。然而，伴随问题更难配置，对于小问题来说其开销使得伴随灵敏度算法比解决完整的正向灵敏度方程组更慢。考虑到这一点，本文余下的部分将重点介绍正向灵敏度接口。有关伴随灵敏度接口的信息，请参阅[伴随ODE求解器](#adjoint-ode.section)。
+伴随灵敏度方法比正向灵敏度方法的可扩展性要好得多。虽然正向方法的计算成本随着 ODE 状态数 $N$ 和参数数 $M$ 成乘法关系增长，而伴随灵敏度方法的计算成本随着状态数 $N$ 和参数数 $M$ 线性增长。然而，伴随问题更难配置，对于小问题来说其开销使得伴随灵敏度算法比解决完整的正向灵敏度方程组更慢。考虑到这一点，本文余下的部分将重点介绍正向灵敏度接口。有关伴随灵敏度接口的信息，请参阅[伴随 ODE 求解器](#adjoint-ode.section)。
 
 Two interfaces are provided for each forward sensitivity solver: one
 with default tolerances and default max number of steps, and one
@@ -73,7 +74,7 @@ It is also often useful to reduce the absolute tolerance when
 a component of the solution is expected to approach zero. For information on choosing
 tolerances, see the [control parameters section](#control-ode.section).
 
-每个正向灵敏度求解器都提供两个接口：一个带有默认容差和默认最大步数，一个允许修改这些控件。选择容差对于使任何求解器正常工作都非常重要-默认值不适用于所有情况。容差应首先考虑解的尺度、所需解的精度以及模型中使用解的方式。例如，如果解的分量在3.0和5.0之间缓慢变化，并且 ODE 状态的测量具有噪声，则容差可能不需要像解在3.0和3.1之间变化且可用高精度测量的情况下那么严格。当预计解的某个分量趋近于零时，减小绝对容差通常也很有用。有关选择容差的信息，请参阅[控制参数部分](#control-ode.section)。
+每个正向灵敏度求解器都提供两个接口：一个带有默认容差和默认最大步数，一个允许用户自定义这些控制参数。选择容差对于使任何求解器正常工作都非常重要-默认值不适用于所有情况。容差应首先考虑解的尺度、所需解的精度以及模型中使用解的方式。例如，如果解的分量在3.0和5.0之间缓慢变化，并且 ODE 状态的测量具有噪声，则容差可能不需要像解在3.0和3.1之间变化且可用高精度测量的情况下那么严格。当预计解的某个分量趋近于零时，减小绝对容差通常也很有用。有关选择容差的信息，请参阅[控制参数部分](#control-ode.section)。
 
 
 The advantage of adaptive solvers is that as long as reasonable tolerances
@@ -143,11 +144,11 @@ sensitivity interface see the
 The function signatures for Stan's ODE solvers can be found in
 the function reference manual section on ODE solvers.
 
-有关刚性 ODE 系统的讨论，请参见[刚性ODE部分](#stiff-ode.section)。有关伴随灵敏度接口的信息，请参见[伴随ODE求解器部分](#adjoint-ode.section)。Stan的ODE求解器的函数签名可以在函数参考手册中的 ODE 求解器部分找到。
+有关刚性 ODE 系统的讨论，请参见[刚性 ODE 部分](#stiff-ode.section)。有关伴随灵敏度接口的信息，请参见[伴随 ODE 求解器部分](#adjoint-ode.section)。Stan的ODE求解器的函数签名可以在函数参考手册中的 ODE 求解器部分找到。
 
 ## Notation
 
-## 符号
+## 符号  {-}
 
 An ODE is defined by a set of differential equations,
 $y(t, \theta)' = f(t, y, \theta)$, and initial conditions,
@@ -161,7 +162,7 @@ a function of any parameters used in the computation.
 
 ## Example: simple harmonic oscillator
 
-## 示例：简谐振子
+## 示例：简谐振子 {-}
 
 As an example of a system of ODEs, consider a harmonic oscillator. In a harmonic
 oscillator a particle disturbed from equilibrium is pulled back towards its
@@ -189,13 +190,13 @@ as a function of an initial state and the system parameters.
 
 ## Coding the ODE system function
 
-## ODE系统函数编程
+## ODE系统函数编程 {-}
 
 The first step in coding an ODE system in Stan is defining the ODE system
 function. The system functions require a specific signature so that the solvers
 know how to use them properly.
 
-在 Stan 中编写 ODE 系统的第一步是定义 ODE 系统函数。系统函数需要特定的签名，以便求解器知道如何正确使用它们。
+在 Stan 中编写 ODE 系统的第一步是定义 ODE 系统函数。系统函数必须具有特定的函数签名，以便求解器能够正确调用它们。
 
 The first argument to the system function is time, passed as a `real`;
 the second argument to the system function is the system state,
@@ -207,7 +208,7 @@ integration). These argument can be parameters (in this case, the friction
 coefficient), data, or any quantities that are needed to define the
 differential equation.
 
-系统函数的第一个参数是时间，作为 `real` 传递；系统函数的第二个参数是系统状态，作为 `vector` 传递，并且系统函数的返回值是当前状态的时间导数，定义为 `vector`。可以在系统函数中包含其他参数以将其他信息传递到解决方案中（这些将通过启动 ODE 积分的函数传递）。这些参数可以是参数（在这种情况下是摩擦系数）、数据或任何需要定义微分方程的量。
+系统函数的第一个参数是时间，作为 `real` 传递；系统函数的第二个参数是系统状态，作为 `vector` 传递，并且系统函数的返回值是当前状态的时间导数，定义为 `vector`。可以在系统函数中包含其他参数以将其他信息传递给求解过程（这些参数将由启动 ODE 积分的函数传入）。这些参数可以是参数（在这种情况下是摩擦系数）、数据或任何需要定义微分方程的量。
 
 The simple harmonic oscillator can be coded using the following function
 in Stan (see the [user-defined functions chapter](user-functions.qmd) for
@@ -233,7 +234,7 @@ parameter `theta`. The simple harmonic oscillator coded here does not have
 time-sensitive equations; that is, `t` does not show up in the definition of
 `dydt`, however it is still required.
 
-该函数接收时间 `t`（`real`）、系统状态 `y`（`vector`）和参数 `theta`（`real`）。该函数返回在时间 `t`、状态 `y` 和参数 `theta` 下的系统状态的时间导数的向量。此处编码的简谐振子没有时间敏感的方程；也就是说，`t` 没有出现在 `dydt` 的定义中，但它仍然是必需的。
+该函数接收时间 `t`（`real`）、系统状态 `y`（`vector`）和参数 `theta`（`real`）。该函数返回在时间 `t`、状态 `y` 和参数 `theta` 下的系统状态的时间导数的向量。此处编码的简谐振子不依赖时间变量；也就是说，`t` 未出现在 `dydt` 的定义中，但仍必须作为参数提供。
 
 ### Strict signature {-}
 
@@ -246,7 +247,7 @@ fail to compile. The third argument onwards can be any type, granted all
 the argument types match the types of the respective arguments in the solver
 call.
 
-ODE 系统函数中的类型是严格的。第一个参数是作为实数传递的时间，第二个参数是作为向量传递的状态，返回类型是向量。没有这个签名的模型将无法编译。从第三个参数开始，可以是任何类型，只要所有参数类型与求解器调用中相应参数的类型匹配即可。
+ODE 系统函数中的类型是严格的。第一个参数是作为实数传递的时间，第二个参数是作为向量传递的状态，返回类型是向量。不符合该签名的模型将无法通过编译。从第三个参数开始，可以是任何类型，只要所有参数类型与求解器调用中相应参数的类型匹配即可。
 
 All of these are possible ODE signatures:
 
@@ -273,7 +274,7 @@ vector myode3(vector y, real a0);
 
 ## Measurement error models
 
-## 误差测量模型
+## 误差测量模型 {-}
 
 Noisy observations of the ODE state can be used to estimate the parameters
 and/or the initial state of the system.
@@ -282,7 +283,7 @@ and/or the initial state of the system.
 
 ### Simulating noisy measurements {-}
 
-### 测量模拟噪声 {-}
+### 模拟测量噪声 {-}
 
 As an example, suppose the simple harmonic oscillator has a parameter
 value of $\theta = 0.15$ and an initial state $y(t = 0, \theta = 0.15) = (1, 0)$.
@@ -291,8 +292,8 @@ where each measurement of $y(t, \theta)$ has independent
 $\textsf{normal}(0, 0.1)$ error in both dimensions ($y_1(t, \theta)$
 and $y_2(t, \theta)$).
 
-作为示例，假设有一个带有参数值 $\theta = 0.15$ 以及初始状态 $y(t = 0, \theta = 0.15) = (1, 0)$ 的简谐振子。假设该系统在10个时间点进行了测量，$t = 1, 2, \cdots, 10$，其中每个 $y(t, \theta)$ 的观测值在两个维度上 ($y_1(t, \theta)$
-和$y_2(t, \theta)$) 都具有独立的 $\textsf{normal}(0, 0.1)$ 误差。
+作为示例，假设有一个带有参数值 $\theta = 0.15$ 以及初始状态 $y(t = 0, \theta = 0.15) = (1, 0)$ 的简谐振子。假设该系统在10个时间点进行了测量，$t = 1, 2, \cdots, 10$，其中每个 $y(t, \theta)$ 的观测值在两个分量上 ($y_1(t, \theta)$
+和$y_2(t, \theta)$) 都具有独立的 $\textsf{normal}(0, 0.1)$ 噪声。
 
 The following model can be used to generate data like this:
 
@@ -334,7 +335,7 @@ for the specified times, and then random measurement errors are added to
 produce simulated observations `y_sim`. Because the system is not stiff, the
 `ode_rk45` solver is used.
 
-系统参数 `theta` 和初始状态 `y0` 与初始时间 `t0` 和观测时间 `ts` 一起作为数据读入。ODE 在指定的时间内求解，然后添加随机测量误差以产生模拟观测值 `y_sim`。由于系统非刚性，因此使用 `ode_rk45` 求解器。
+系统参数 `theta` 和初始状态 `y0` 与初始时间 `t0` 和观测时间 `ts` 一起作为数据读入。ODE 在指定的时间内求解，然后添加随机测量误差以产生模拟观测值 `y_sim`。由于系统是非刚性的，因此选择 `ode_rk45` 求解器，它适用于此类系统。
 
 This program illustrates the way in which the ODE solver is called in
 a Stan program,
@@ -381,7 +382,7 @@ Because all none of the input arguments are a function of parameters, the ODE
 solver is called in the generated quantities block. The random measurement noise
 is added to each of the `T` outputs with `normal_rng`.
 
-由于所有输入参数均不是参数的函数，因此在生成的数量块中调用 ODE 求解器。使用 `normal_rng` 将随机测量噪声添加到每个 `T` 输出中。
+由于所有输入参数均为已知数据（即它们不依赖于模型参数），因此在生成的数量块中调用 ODE 求解器。使用 `normal_rng` 将随机测量噪声添加到每个 `T` 输出中。
 
 ![Typical realization of harmonic oscillator trajectory.](./img/sho-ode-trajectory.png){width=50%}
 
@@ -435,7 +436,7 @@ measurement error scales `sigma`, and standard normal priors on `theta` and the
 initial state vector `y0`. The solutions to the ODE are assigned to `mu`, which
 is used as the location for the normal observation model.
 
-由于解现在是模型参数的函数，因此 `ode_rk45` 调用现在在模型块中进行。测量误差尺度 `sigma` 具有半正态先验，并且参数 `theta` 和初始状态向量 `y0` 具有标准正态先验。ODE 的解分配给 `mu`，作为正态观测模型的位置。
+由于解现在是模型参数的函数，因此 `ode_rk45` 调用现在在模型块中进行。测量误差尺度 `sigma` 具有半正态先验，并且参数 `theta` 和初始状态向量 `y0` 具有标准正态先验。ODE 的解分配给 `mu`，并作为正态观测模型的均值项。
 
 As with other regression models, it's easy to change the noise
 model to something with heavier tails (e.g., Student-t distributed),
@@ -447,7 +448,7 @@ variables (e.g., with a multivariate Student-t distribution).
 
 ## Stiff ODEs {#stiff-ode.section}
 
-## 刚性 ODEs {#stiff-ode.section--cn}
+## 刚性 ODEs {-#stiff-ode.section--cn}
 
 Stiffness is a numerical phenomena that causes some differential equation
 solvers difficulty, notably the Runge-Kutta RK45 solver used in the examples
@@ -457,8 +458,8 @@ a system can also vary between different parts of parameter space, and so a
 typically non-stiff system may exhibit stiffness occasionally. These sorts of
 difficulties can occur more frequently with loose priors or during warmup.
 
-刚性是一种数值现象，会导致某些微分方程求解器出现困难，尤其是先前示例中使用的 Runge-Kutta
-RK45 求解器。这种现象在化学反应系统中很常见，这些系统通常具有多个截然不同的时间尺度。系统的刚性也可能因参数空间的不同部分而有所不同，因此通常非刚性的系统可能偶尔会表现出刚性。这些问题在宽松的先验或预热期间可能更频繁地发生。
+刚性是一种数值现象，会使某些微分方程求解器面临计算上的困难，尤其是先前示例中使用的 Runge-Kutta
+RK45 求解器。这种现象在化学反应系统中很常见，这些系统通常具有多个截然不同的时间尺度。系统的刚性也可能因参数空间的不同部分而有所不同，因此通常非刚性的系统可能偶尔会表现出刚性。这些问题在使用宽松先验或模型预热阶段可能更频繁地出现。
 
 Stan provides a specialized solver for stiff ODEs
 [@CohenHindmarsh:1996; @SerbanHindmarsh:2005].  An ODE system is
@@ -466,8 +467,8 @@ specified exactly the same way with a function of exactly the same
 signature.  The only difference is in the call to the solver the
 `rk45` suffix is replaced with `bdf`, as in
 
-Stan 为刚性 ODE 提供了专门的求解器 [@CohenHindmarsh:1996;
-@SerbanHindmarsh:2005]。ODE 系统的指定方式完全相同，使用完全相同签名的函数。唯一的区别在于，在调用求解器时，`rk45` 后缀被替换为 `bdf`，例如：
+Stan 针对刚性 ODE 提供了专用求解器 [@CohenHindmarsh:1996;
+@SerbanHindmarsh:2005]。ODE 系统的定义方式与前述完全一致，使用完全相同签名的函数。唯一的区别在于，在调用求解器时，`rk45` 后缀被替换为 `bdf`，例如：
 
 
 ```stan
@@ -481,7 +482,7 @@ attempting to use the non-stiff solver for a stiff system will cause
 the timestep to become very small, leading the non-stiff solver taking more
 time overall even if each step is easier to compute than for the stiff solver.
 
-对于非刚性系统使用刚性（bdf）求解器可能比使用非刚性（rk45）求解器慢得多，因为每个刚性求解器的步骤需要更长时间来计算。另一方面，尝试在刚性系统上使用非刚性求解器将导致时间步长变得非常小，即使对于非刚性求解器，每个步骤比刚性求解器易于计算，但总体上需要更长的时间。
+对于非刚性系统，使用刚性（bdf）求解器可能比使用非刚性（rk45）求解器慢得多，因为每个刚性求解器的步骤需要更长时间来计算。另一方面，尝试在刚性系统上使用非刚性求解器将导致时间步长变得非常小，即使对于非刚性求解器，每个步骤比刚性求解器易于计算，但总体上需要更长的时间。
 
 If it is not known for sure that an ODE system is stiff, run the model with
 both the `rk45` and `bdf` solvers and see which is faster. If the `rk45`
@@ -490,11 +491,11 @@ sense to try the `adams` solver as well. The `adams` solver uses higher order
 methods which can take larger timesteps than the `rk45` solver, though similar
 to the `bdf` solver each of these steps is more expensive to compute.
 
-如果不确定 ODE 系统是否具有刚性，请使用 `rk45` 和 `bdf` 求解器运行模型，并查看哪个更快。如果 `rk45` 求解器更快，那么这个问题可能是非刚性的，然后试试 `adams` 求解器也是有意义的。`adams` 求解器使用更高阶方法，可以比 `rk45` 求解器采用更大的时间步长，尽管与 `bdf` 求解器类似，这些步骤的计算更耗费时间
+如果不确定 ODE 系统是否具有刚性，请使用 `rk45` 和 `bdf` 求解器运行模型，并查看哪个更快。如果 `rk45` 求解器更快，那么这个问题可能是非刚性的，此时尝试使用 `adams` 求解器也是合理的选择。`adams` 求解器使用更高阶方法，可以比 `rk45` 求解器采用更大的时间步长，尽管与 `bdf` 求解器类似，`adams` 求解器的每一步也更耗费计算资源。
 
 ## Control parameters for ODE solving {#control-ode.section}
 
-## ODE 求解中的控制参数 {#control-ode.section--cn}
+## ODE 求解中的控制参数 {-#control-ode.section--cn}
 
 For additional control of the solves, both the stiff and non-stiff
 forward ODE solvers have function signatures that makes it possible to
@@ -504,7 +505,7 @@ function names but with `_tol` appended to the end. All three control
 arguments must be supplied with this signature (there are no
 defaults).
 
-为了对求解器进行更多的控制，刚性和非刚性向前 ODE 求解器具有函数签名，使得可以指定 `relative_tolerance`、`absolute_tolerance` 和 `max_num_steps` 参数。这些与常规函数名称相同，但末尾添加了 `_tol`。所有三个控制参数必须使用此签名提供（没有默认值）。
+为了对求解器进行更多的控制，刚性和非刚性向前 ODE 求解器具有函数签名，允许用户指定 `relative_tolerance`、`absolute_tolerance` 和 `max_num_steps` 参数。这些与常规函数名称相同，但末尾添加了 `_tol`。使用该签名时，三个控制参数都必须显式给出（不提供默认值）。
 
 ```stan
 array[T] vector[2] y_sim = ode_bdf_tol(sho, y0, t0, ts,
@@ -529,7 +530,7 @@ quantities. User-defined function arguments may be qualified as only
 allowing data arguments using the `data` qualifier.
 
 这些控制参数必须是数据变量 --
-它们不能是参数或取决于参数的表达式，包括转换数据和生成数量以外的任何块中的局部变量。用户定义的函数参数可以使用
+它们不能是参数或取决于参数的表达式，包括转换数据（transformed data ）和生成数量（generated quantities ）以外的任何块中的局部变量。用户定义的函数参数可以使用
 `data` 限定符限定为仅允许数据参数。
 
 For the RK45 and Cash-Karp solvers, the default values for relative and absolute tolerance are
@@ -573,8 +574,7 @@ then integrate from `t_lag` onwards in another. Mathematically, the
 discontinuity can make the problem ill-defined and the numerical integrator
 may behave erratically around it.
 
-通常最好通过一次求解来积分到 `t_lag`，然后再通过另一次求解从 `t_lag`
-开始积分。从数学上讲，间断点可能使问题不完整，数值积分器在其周围的行为可能会出现异常。
+通常最好通过一次求解来积分到 `t_lag`，然后在 `t_lag` 之后重新开始积分。从数学上讲，间断点可能导致问题在数学上变得不适定，数值积分器在其周围的行为可能会出现异常。
 
 If the location of the discontinuity cannot be controlled precisely, or there is
 some other rapidly change in ODE behavior, it can be useful to tell the ODE
@@ -641,11 +641,11 @@ can happen during warmup.  With the non-stiff solver, this may happen when
 the sampler moves to stiff regions of parameter space, which will requires small
 step sizes.
 
-最大迭代步数可用于停止失控的模拟。这可能发生在 MCMC 移动到参数空间中离通常求解微分方程的区域非常远的情况下。特别是在预热期间可能会发生这种情况。对于非刚性求解器，当采样器移动到参数空间的刚性区域时（需要较小的步长），这种情况可能会发生。
+设置最大迭代步数可以防止模拟过程失控。这可能发生在 MCMC 移动到参数空间中离通常求解微分方程的区域非常远的情况下。特别是在预热期间可能会发生这种情况。对于非刚性求解器，当采样器移动到参数空间的刚性区域时（需要较小的步长），这种情况可能会发生。
 
 ## Adjoint ODE solver {#adjoint-ode.section}
 
-## 伴随 ODE 求解器 {#adjoint-ode.section--cn}
+## 伴随 ODE 求解器 {-#adjoint-ode.section--cn}
 
 The adjoint ODE solver method differs mathematically from the forward
 ODE solvers in the way gradients of the ODE solution are obtained. The
@@ -656,7 +656,7 @@ required, then the augmented ODE system has a total of $N \cdot (M +
 1)$ states. This can result in very large ODE systems through the
 multiplicative scaling of the computational effort needed.
 
-数学上讲，伴随 ODE 求解器方法与正向 ODE 求解器在获取 ODE 解的梯度方面存在差异。正向 ODE 方法对需要梯度的每个参数增加了 $N$ 个附加状态。如果需要 $M$ 个参数的灵敏度，则增加的 ODE 系统总共具有
+在数学上，伴随 ODE 求解方法与正向求解方法在计算 ODE 解的梯度方式上存在本质差异。正向 ODE 方法对需要梯度的每个参数增加了 $N$ 个附加状态。如果需要 $M$ 个参数的灵敏度，则增加的 ODE 系统总共具有
 $N \cdot (M + 1)$
 个状态。这可能会导致 ODE 系统变得非常大，因为所需的计算工作量会成倍地增加。
 
@@ -673,7 +673,7 @@ as the `bdf` and `adams` forward sensitivity interfaces).
 个方程的系统来计算 ODE 解，并在时间上后向积分另一个包含 $N$
 个方程的系统来获取灵敏度。此外，对于需要 $M$
 个参数的情况，在后向求解期间还有 $M$
-个额外的方程需要积分。由于这个原因，伴随灵敏度问题在参数数量上比正向灵敏度问题有更好的扩展性。Stan 中的伴随求解器使用 CVODES（与 `bdf` 和 `adams` 正向灵敏度接口相同）。
+个额外的方程需要积分。因此，伴随灵敏度方法在参数数量增加时具有更好的可扩展性。Stan 中的伴随求解器使用 CVODES（与 `bdf` 和 `adams` 正向灵敏度接口相同）。
 
 The solution computed in the forward integration is required during the
 backward integration. CVODES uses a checkpointing scheme that saves the
@@ -682,7 +682,7 @@ checkpoints is configurable in the interface. These checkpoints are
 then interpolated during the backward solve using one of two
 interpolation schemes.
 
-在前向积分中计算的解必须在后向积分中使用。CVODES 使用检查点方案定期保存前向求解器状态。在接口中，可以配置保存检查点之间的步数。然后，这些检查点使用两种插值方案之一在后向求解期间进行插值。
+在前向积分中计算的解必须在后向积分中使用。CVODES 使用采用检查点机制定期保存前向求解器的状态。在接口中，可以配置保存检查点之间的步数。然后，后向求解期间，这些检查点将通过两种插值方法之一进行插值还原。
 
 The solver type (either `bdf` or `adams`) can be individually set for
 both the forward and backward solves.
@@ -721,12 +721,12 @@ Stan function reference manual.
 
 ## Solving a system of linear ODEs using a matrix exponential
 
-## 用矩阵指数求解线性 ODE 系统
+## 用矩阵指数求解线性 ODE 系统 {-}
 
 Linear systems of ODEs can be solved using a matrix exponential. This can be
 considerably faster than using one of the ODE solvers.
 
-线性 ODE 系统可以使用矩阵指数解决。这比使用其中一个 ODE 求解器要快得多。
+线性 ODE 系统可以通过矩阵指数形式求解。相较于数值积分法，这种方法在效率上更具优势。
 
 The solution to $\frac{d}{dt} y = ay$ is $y = y_0e^{at}$, where the constant
 $y_0$ is determined by boundary conditions. We can extend this solution
@@ -752,7 +752,7 @@ $$
 \frac{d}{dt}y = A \, y
 $$
 <a name="id:ode.linODEs"></a>
-其中 $y$ 是一个长度为$n$的向量，$A$ 是一个 $n \times n$ 的矩阵。其解如下：
+其中 $y$ 是一个长度为$n$的向量，$A$ 是一个 $n \times n$ 的矩阵。此时，其通解为：
 $$
 y = e^{tA} \, y_0
 $$
