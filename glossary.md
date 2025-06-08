@@ -25,11 +25,14 @@
 | 1.13分层模型的多元先验                 | group-level coefficients             | 组级系数           |                |                                          |        |
 | 1.13分层模型的多元先验                 | scale vector                         | 尺度向量           |                |                                          |        |
 | 3 缺失数据和部分已知参数               | dummy values                         | 虚拟值             |                |                                          |        |
-| 5 有限混合模型                         | modes                                | 模态               |                |               |也可翻为“峰值”，暂保留原译         |
+| 5 有限混合模型                         | modes                                | 模态               |                |                   |也可翻为“峰值”，暂保留原译         |
 | 11 方向、旋转和超球面                  | compact                              | 紧致的             |                | 如数学中的紧集                           |        |
-| 11 方向、旋转和超球面                  | improper                             | 不正确的           |                |               |也可译为“非正规”“不合理”等         |
+| 11 方向、旋转和超球面                  | improper                             | 不正确的           |                |                       |也可译为“非正规”“不合理”等         |
 | 11.2 圆、球体和超球体                  | a set of points                      | 一组点             |                | $\mathbb{R}^3$ 中的点集                  |        |
 | 11.2 圆、球体和超球体                  | discrimination parameter             | 区分参数           |                | IRT 中的区分度参数                       |        |
+|13  常微分方程                       |forward sensitivity                    |前向灵敏度           |                |ODE 解对参数的前向敏感度               |        |
+|13  常微分方程                       |adjoint sensitivity                   |伴随灵敏度            |                |反向计算梯度的 ODE 方法                |        |
+|13  常微分方程                       |stiffness / stiff system               |刚性系统               |                |包含快速变化与慢速变化的微分系统|        |
 | 14 Computing One Dimensional Integrals | integrator                           | 积分器             |                |                                          |        |
 | 14 Computing One Dimensional Integrals | evaluate                             | 求解               |                | 求方程、公式、函数的数值                 |        |
 | 14 Computing One Dimensional Integrals | norm                                 | 范数               |                |                                          |        |
