@@ -25,11 +25,36 @@
 | 1.13分层模型的多元先验                 | group-level coefficients             | 组级系数           |                |                                          |        |
 | 1.13分层模型的多元先验                 | scale vector                         | 尺度向量           |                |                                          |        |
 | 3 缺失数据和部分已知参数               | dummy values                         | 虚拟值             |                |                                          |        |
-| 5 有限混合模型                         | modes                                | 模态               |                |               |也可翻为“峰值”，暂保留原译         |
+| 5 有限混合模型                         | modes                                | 模态               |                |                   |也可翻为“峰值”，暂保留原译         |
 | 11 方向、旋转和超球面                  | compact                              | 紧致的             |                | 如数学中的紧集                           |        |
-| 11 方向、旋转和超球面                  | improper                             | 不正确的           |                |               |也可译为“非正规”“不合理”等         |
+| 11 方向、旋转和超球面                  | improper                             | 不正确的           |                |                       |也可译为“非正规”“不合理”等         |
 | 11.2 圆、球体和超球体                  | a set of points                      | 一组点             |                | $\mathbb{R}^3$ 中的点集                  |        |
 | 11.2 圆、球体和超球体                  | discrimination parameter             | 区分参数           |                | IRT 中的区分度参数                       |        |
+|13  常微分方程                       |forward sensitivity                    |前向灵敏度           |                |ODE 解对参数的前向敏感度               |        |
+|13  常微分方程                       |adjoint sensitivity                   |伴随灵敏度            |                |反向计算梯度的 ODE 方法                |        |
+|13  常微分方程                       |stiffness / stiff system               |刚性系统               |                |包含快速变化与慢速变化的微分系统        |        |
+|13  常微分方程                       | system function                     | 系统函数             |                  |描述 ODE 系统结构的函数                       |       |
+|13  常微分方程                       | time derivative                  | 时间导数                 |                |对时间的导数                      |       |
+|13  常微分方程                       | initial condition                | 初始条件                 |                 |ODE 解的起始值设定                    |       |
+|13  常微分方程                       | measurement error           | 测量误差            |                            |观测值中非系统性偏差         |         |
+|13  常微分方程                       | generated quantities block  | 生成数量块           |                           | Stan 模型中生成推断结果的代码段 |        |
+|13  常微分方程                       | initial value problem (IVP) | 初值问题            |                           | 指定初始条件下求解微分方程的问题   | 可用于“ODE 初值问题” |
+|13  常微分方程                       | state variable              | 状态变量            |                            |表征系统状态的变量，如位置和速度等  |         |
+|13  常微分方程                       | multivariate Student-t      | 多元 Student-t 分布 |                            |多维具有重尾和相关性的概率分布    |               |
+|13  常微分方程                       | stiff ODE                       | 刚性 ODE |                            | 含有多个时间尺度、导致求解困难的微分方程 |      |
+|13  常微分方程                       | warmup                          | 预热     |                            | MCMC 初始化阶段，用于调整采样参数  |      |
+|13  常微分方程                       | time-scale                      | 时间尺度   |                            | 描述系统中变量变化快慢的相对速度     |    |
+|13  常微分方程                       | control parameters        | 控制参数  |                            | 用于调节求解精度和步数等行为的 ODE 参数 |               |
+|13  常微分方程                       | relative tolerance (RTOL) | 相对容差  |                            | 控制误差相对于解的大小            |               |
+|13  常微分方程                       | absolute tolerance (ATOL) | 绝对容差  |                            | 控制误差的最小阈值（无论解是否接近零）    |               |
+|13  常微分方程                       | discontinuity             | 间断点   |                            | 状态函数中不连续或跃变的位置         |                  |
+|13  常微分方程                       | ill-defined problem       | 不适定问题 |                            | 数学上解不存在或不唯一的微分方程       |               |
+|13  常微分方程                       | adjoint ODE solver    | 伴随 ODE 求解器 |                            | 通过后向积分计算梯度的 ODE 求解方法     |      |
+|13  常微分方程                       | checkpointing         | 检查点机制      |                            | 在前向积分中保存状态以便后向阶段插值使用     |                 |
+|13  常微分方程                       | Hermite interpolation | Hermite 插值 |                            | 一种插值方法，匹配函数及导数           |         |
+|13  常微分方程                       | matrix exponential    | 矩阵指数       |                            | 定义为幂级数展开的矩阵函数，用于线性 ODE 解 |           |
+|13  常微分方程                       | linear ODE system     | 线性 ODE 系统  |                            | 状态导数是状态本身线性函数的微分方程组      |                 |
+|13  常微分方程                       | quadrature tolerance  | 积分容差       |                            | 在伴随求解器中用于积分计算精度控制        |                 |
 | 14 Computing One Dimensional Integrals | integrator                           | 积分器             |                |                                          |        |
 | 14 Computing One Dimensional Integrals | evaluate                             | 求解               |                | 求方程、公式、函数的数值                 |        |
 | 14 Computing One Dimensional Integrals | norm                                 | 范数               |                |                                          |        |
@@ -43,3 +68,9 @@
 | 14 Computing One Dimensional Integrals | call                                 | 调用               |                | 调用子程序                               |        |
 | 14 Computing One Dimensional Integrals | Integration                          | 积分               |                | 泛指                                     |        |
 | 14 Computing One Dimensional Integrals | integral                             | 积分               |                | 特指                                     |        |
+|15  复数                       | imaginary literals                        | 虚数字面量       |                            | 构造复数时的虚部字面量表达      |        |
+|15  复数                       | complex vector                            | 复向量         |                            | Stan 中复数元素的向量类型    |        |
+|15  复数                       | Cholesky factor                           | Cholesky 因子 |                            | 协方差矩阵的 Cholesky 分解 |        |
+|15  复数                       | multivariate normal                       | 多元正态分布      |                            | 用于建模相关的随机变量        |        |
+|15  复数                       | promotion                                 | 类型提升        |                            | 实数/整数自动转为复数        |        |
+
