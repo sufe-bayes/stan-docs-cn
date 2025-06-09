@@ -68,3 +68,9 @@
 | 14 Computing One Dimensional Integrals | call                                 | 调用               |                | 调用子程序                               |        |
 | 14 Computing One Dimensional Integrals | Integration                          | 积分               |                | 泛指                                     |        |
 | 14 Computing One Dimensional Integrals | integral                             | 积分               |                | 特指                                     |        |
+|15  复数                       | imaginary literals                        | 虚数字面量       |                            | 构造复数时的虚部字面量表达      |        |
+|15  复数                       | complex vector                            | 复向量         |                            | Stan 中复数元素的向量类型    |        |
+|15  复数                       | Cholesky factor                           | Cholesky 因子 |                            | 协方差矩阵的 Cholesky 分解 |        |
+|15  复数                       | multivariate normal                       | 多元正态分布      |                            | 用于建模相关的随机变量        |        |
+|15  复数                       | promotion                                 | 类型提升        |                            | 实数/整数自动转为复数        |        |
+
