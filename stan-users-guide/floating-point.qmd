@@ -2,12 +2,13 @@
 pagetitle: Floating Point Arithmetic
 ---
 
-# Floating Point Arithmetic
+# 浮点数算术 {#floating-point.chapter--cn}
 
-# 浮点数算术
+# Floating Point Arithmetic {-#floating-point.chapter}
 
 本节译者：洪世哲
-本节校审：张梓源
+
+本节校审：张梓源（ChatGPT辅助）
 
 Computers approximate real values in $\mathbb{R}$ using a fixed number
 of bits. This chapter explains how this is done and why it is
@@ -15,11 +16,11 @@ important for writing robust Stan (and other numerical) programs.  The
 subfield of computer science devoted to studying how real arithmetic
 works on computers is called *numerical analysis*.
 
-在 $\mathbb{R}$ 语言中，计算机会使用固定的位数来近似实数值。本章将解释这是如何实现的，以及为什么编写稳健的 Stan（和其他数值）程序会非常重要。研究计算机上实数算术工作原理的计算机科学子领域被称为*数值分析*。
+计算机会使用固定的位数来近似 $\mathbb{R}$ 中的实数值。本章将解释这是如何实现的，以及为什么编写稳健的 Stan（和其他数值）程序非常重要。研究计算机上实数算术工作原理的计算机科学子领域被称为*数值分析*。
 
 ## Floating-point representations
 
-## 浮点数表示
+## 浮点数表示 {-}
 
 Stan's arithmetic is implemented using double-precision arithmetic.
 The behavior of most^[The notable exception is Intel's optimizing
@@ -38,7 +39,7 @@ representation of real values using a fixed pattern of 64 bits (8
 bytes).  All values are represented in base two (i.e., binary).  The
 representation is divided into two signed components:
 
-IEEE 754标准中的双精度部分指定使用64位（8字节）的固定模式表示实数值。所有的值都是以基数为2的形式（即二进制）表示的。该表示形式由两个有正负之分的部分构成：
+IEEE 754标准中的双精度部分指定使用64位（8字节）的固定模式表示实数值。所有值均采用以 2 为底的形式（即二进制）表示。其表示由两个带符号的部分组成：
 
 * *significand* (53 bits): base value representing significant digits
 
@@ -46,7 +47,7 @@ IEEE 754标准中的双精度部分指定使用64位（8字节）的固定模式
 
 * *exponent* (11 bits): power of two multiplied by the base
 
-* *指数* （11位）：用来乘以基数的二的幂
+* *指数* （11位）：表示要乘的以2为底的幂
 
 The *value* of a finite floating point number is
 
@@ -59,13 +60,13 @@ $$
 
 ### Normality {-}
 
-### 正规性
+### 正规性 {-}
 
 A *normal* floating-point value does not use any leading zeros in
 its significand;  *subnormal* numbers may use leading zeros.  Not all
 I/O systems support subnormal numbers.
 
-一个*正规*的浮点数值在尾数中不会使用零作为第一位；而*次正规*数第一位可能会使用零。并非所有的 I/O 系统都支持次正规数。
+*正规*浮点数的尾数部分不会以零开头；而*次正规*数第一位可能会使用零。并非所有的 输入/输出（I/O）系统都支持次正规数。
 
 ### Ranges and extreme values {-}
 
@@ -85,7 +86,7 @@ small values.  Some extreme values are
 
 * *smallest positive subnormal number*: $\approx 4.9 \times 10^{-324}$
 
-为了使合法的指数值范围在 $-(2^{10}) + 2 = -1022$ 和 $2^{10} - 1 = 1023$ 之间，会有一些预设的指数值。合法的尾数值介于 $-2^{52}$  和$2^{52} - 1$ 之间。浮点数允许表示非常大和非常小的值。一些极端值包括：
+指数的某些取值被保留，因此合法指数的范围是 $-(2^{10}) + 2 = -1022$ 和 $2^{10} - 1 = 1023$ 之间。合法的尾数值介于 $-2^{52}$ 和 $2^{52} - 1$ 之间。浮点数允许表示非常大和非常小的值。一些极端值包括：
 
 * *最大的正规有限数*：$\approx 1.8 \times 10^{308}$
 
@@ -104,7 +105,7 @@ called "positive zero" and "negative zero".  This distinction is
 irrelevant in Stan (as it is in R), because the two values are equal
 (i.e., `0 == -0` evaluates to true).
 
-由于符号位的存在，有两种表示零的方式，通常被称为“正零”和“负零”。这种区别在 Stan 中是无关紧要的（就像在 R 中一样），因为这两个值是相等的(即 `0 == -0` 被认为是正确的)。
+由于存在符号位，零有两种表示方式，分别为“正零”和“负零”。这种区别在 Stan 中是无关紧要的（就像在 R 中一样），因为这两个值是相等的(即 `0 == -0` 被认为是正确的)。
 
 ### Not-a-number values {-}
 
@@ -136,7 +137,7 @@ return not-a-number if any of their arguments are not-a-number.  The
 built-in functions such as `log` and `exp` have the same behavior,
 propagating not-a-number values.
 
-在几乎所有数学运算中，非数字值都会传播。例如，所有的内置二元算术运算（加法、减法、乘法、除法、不等于运算）如果它们的任何一个参数是非数字，则返回非数字。内置函数如 `log` 和 `exp` 也具有该传播非数字值的行为。
+在几乎所有数学运算中，非数字值都会传播。例如，所有的内置二元算术运算（加法、减法、乘法、除法、取反运算）如果它们的任何一个参数是非数字，则返回非数字。内置函数如 `log` 和 `exp` 也具有该传播非数字值的行为。
 
 Most of Stan's built-in functions will throw exceptions (i.e., reject)
 when any of their arguments is not-a-number.
@@ -150,7 +151,7 @@ somewhat confusingly returns false.  That is why there is a built-in
 is negation, which remains coherent.  This means `not_a_number() !=
 not_a_number()` returns true.
 
-与非数字的比较会始终返回 false，包括与自身的比较。也就是说，`not_a_number() == not_a_number()` 会返回 false，尽管这会有些令人困惑。这就是为什么在 Stan（和C++）中需要一个内置的 `is_nan()` 函数。唯一的例外是不等于运算，它仍然连贯。这意味着 `not_a_number() != not_a_number()` 返回 true。
+与非数字的比较会始终返回 false，包括与自身的比较。也就是说，`not_a_number() == not_a_number()` 会返回 false，尽管这会有些令人困惑。这也是为什么 Stan（以及 C++）中会提供内置函数 `is_nan()`。唯一的例外是取反运算，它仍然连贯。这意味着 `not_a_number() != not_a_number()` 返回 true。
 
 Undefined operations often return not-a-number values.  For example,
 `sqrt(-1)` will evaluate to not-a-number.
@@ -171,7 +172,7 @@ zero, so that `0 == exp(log(0))`.  Nevertheless, this should not be
 done in Stan because the chain rule used to calculate the derivatives
 will attempt illegal operations and return not-a-number.
 
-还有两个特殊值用于表示正无穷（$\infty$）和负无穷（$-\infty$）。它们不像非数字那样病态，但通常用于表示上溢和下溢等错误条件。例如，`log(0)` 不会引发错误或返回非数字，而是求值为负无穷。对负无穷进行指数化将返回零，因此会有 `0 == exp(log(0))`。然而，在 Stan 中不应该这样做，因为用于计算导数的链式法则将尝试非法操作并返回非数字。
+还有两个特殊值用于表示正无穷（$\infty$）和负无穷（$-\infty$）。它们不像非数字那样“病态”，但仍常用于表示如上溢或下溢等错误情形。例如，`log(0)` 不会引发错误或返回非数字，而是求值为负无穷。对负无穷进行指数化将返回零，因此会有 `0 == exp(log(0))`。然而，在 Stan 中不应该这样做，因为用于计算导数的链式法则将尝试非法操作并返回非数字。
 
 There are value functions `positive_infinity()` and
 `negative_infinity()` as well as a test function `is_inf()`.
@@ -196,7 +197,7 @@ results in a not-a-number value.
 
 ## Literals: decimal and scientific notation
 
-## 字面量：十进制和科学计数法
+## 字面量：十进制和科学计数法 {-}
 
 In programming languages such as Stan, numbers may be represented in
 standard *decimal* (base 10) notation.  For example, `2.39` or
@@ -207,12 +208,12 @@ decimal representation of a base and a signed integer decimal
 exponent.  For example, `36.29e-3` represents the number $36.29 \times
 10^{-3}$, which is the same number as is represented by `0.03629`.
 
-在像 Stan 这样的编程语言中，数字可以用标准的十进制（基数为10）表示法来表示。例如，`2.39` 或 `-1567846.276452`。请记住，编写超过16个有效数字的做法是没有意义的，因为它们无法被表示。可以使用*科学计数法*来编码 Stan 中的数字，它由带符号的基数的十进制表示和带符号的整数十进制指数组成。例如，`36.29e-3`表示的数字是 $36.29 \times
+在像 Stan 这样的编程语言中，数字可以用标准的十进制（基数为10）表示法来表示。例如，`2.39` 或 `-1567846.276452`。请注意，超过 16 位的有效数字将无法被准确表示，因此书写时无实际意义。可以使用*科学计数法*来编码 Stan 中的数字，它由带符号的基数的十进制表示和带符号的整数十进制指数组成。例如，`36.29e-3`表示的数字是 $36.29 \times
 10^{-3}$，它与 `0.03629` 表示的数字相同。
 
 ## Arithmetic precision
 
-## 算术精度
+## 算术精度 {-}
 
 The choice of significand provides $\log_{10} 2^{53} \approx 15.95$
 decimal (base 10) digits of *arithmetic precision*.  This is just the
@@ -220,7 +221,7 @@ precision of the floating-point representation.  After several
 operations are chained together, the realized arithmetic precision is
 often much lower.
 
-对尾数的选择提供了 $\log_{10} 2^{53} \approx 15.95$ 个十进制（基数为10）数字的算术精度。这只是浮点表示的精度。在多个操作链接在一起后，实际的算术精度通常要低得多。
+有效数字部分的选择提供了 $\log_{10} 2^{53} \approx 15.95$ 位十进制（以10为底）数字的*算术精度*。这仅仅是浮点数表示的精度。当多个运算连接在一起后，实际的算术精度往往会大大降低。
 
 ### Rounding and probabilities {-}
 
@@ -249,13 +250,13 @@ $1$ itself.   By contrast,
 This highlights the fact that precision depends on scale.  Even though
 `1 + 1e-20 == 1`, we have `1e-20 + 1e-20 == 2e-20`, as expected.
 
-这突显出了精度取决于尺度。尽管`1 + 1e-20 == 1`，但我们有`1e-20 + 1e-20 == 2e-20`，正如预期的那样。
+这说明了精度依赖于数值的尺度。尽管`1 + 1e-20 == 1`，但我们有`1e-20 + 1e-20 == 2e-20`，正如预期的那样。
 
 Rounding also manifests itself in a lack of *transitivity*.  In
 particular, it does *not* usually hold for three floating point numbers
 $a, b, c$ that $(a + b) + c = a + (b + c)$.
 
-舍入也表现为缺乏*传递性*。特别地，对于三个浮点数 $a, b, c$，$(a + b) + c = a + (b + c)$ 通常是不成立的。
+舍入也表现为缺乏*传递性*。特别是，对于三个浮点数 $a, b, c$，通常*不*满足 $(a + b) + c = a + (b + c)$。
 
 In statistical applications, problems often manifest in situations
 where users expect the usual rules of real-valued arithmetic to hold.
@@ -265,7 +266,7 @@ matrix $L \, L^{\top}$.  In practice, rounding and loss of precision
 may render the result $L \, L^{\top}$ neither symmetric nor positive
 definite.
 
-在统计应用中，当用户期望实数运算的常规规则能够成立是，问题会经常显现出来。假设我们有一个具有严格正对角线的下三角矩阵 $L$，使得它是正定矩阵 $L \, L^{\top}$ 的乔里斯基因子。在实际应用中，舍入和精度损失可能导致结果 $L \, L^{\top}$ 既不对称也不正定。
+在统计应用中，当用户假设实数运算的常规规则始终成立时，问题往往就会暴露出来。假设我们有一个具有严格正对角线的下三角矩阵 $L$，使得它是正定矩阵 $L \, L^{\top}$ 的 Cholesky 因子。在实际应用中，舍入和精度损失可能导致结果 $L \, L^{\top}$ 既不对称也不正定。
 
 In practice, care must be taken to defend against rounding.  For
 example, symmetry may be produced by adding $L \, L^{\top}$ with its
@@ -273,11 +274,11 @@ transpose and dividing by two, or by copying the lower triangular
 portion into the upper portion.  Positive definiteness may be
 maintained by adding a small quantity to the diagonal.
 
-在实践中，必须小心防止舍入误差。例如，可以通过将 $L \, L^{\top}$ 与其转置相加并除以二，或者将下三角部分复制到上半部分来产生对称性。正定性则可以通过在对角线上加一个小量来保持。
+在实践中，应注意避免舍入误差带来的影响。例如，可以通过将 $L \, L^{\top}$ 与其转置相加并除以二，或者将下三角部分复制到上半部分来产生对称性。正定性则可以通过在对角线上加一个小的数值来保持。
 
 ### Machine precision and the asymmetry of 0 and 1 {-}
 
-### 机器精度和0与1的不对称性 {-}
+### 机器精度与0、1的不对称性 {-}
 
 The smallest number greater than zero is roughly $0 + 10^{-323}$.  The
 largest number less than one is roughly $1 - 10^{-15.95}$.  The
@@ -286,7 +287,7 @@ largest number smaller than one---the exponent is of no help, and the
 number is represented as the binary equivalent of
 $0.9999999999999999$.
 
-大于零的最小数字大约是 $0 + 10^{-323}$。小于1的最大数字大约是 $1 - 10^{-15.95}$。当考虑到小于1的最大数字的表示时，不对称性就变得明显了--- 指数没有任何帮助，该数字表示为二进制的等效值 $0.9999999999999999$。
+大于零的最小数字大约是 $0 + 10^{-323}$。小于1的最大数字大约是 $1 - 10^{-15.95}$。当考虑到小于1的最大数字的表示时，不对称性就变得明显了------ 指数没有任何帮助，该数字表示为二进制的等效值 $0.9999999999999999$。
 
 For this reason, the *machine precision* is said to be roughly
 $10^{-15.95}$.  This constant is available as `machine_precision()` in
@@ -309,7 +310,7 @@ this operation is written as `log1p(x)`.  Because `x` itself may be
 close to zero, the function `log1p(x)` can take the logarithm of
 values very close to one, the results of which are close to zero.
 
-对于接近1时数字四舍五入的问题，可以通过一些特殊的操作来减轻。例如，考虑对正数 `x` 进行操作 `log(1 + x)`。当 `x` 很小时（小于双精度浮点数的 $10^{-16}$），参数中的和将会四舍五入为1，结果将会四舍五入为零。为了提供更多的精度，编程语言提供了一个库函数来直接实现 $f(x) = \log (1 + x)$。在 Stan 中（与 C++ 相同），这个操作被写作 `log1p(x)`。由于 `x` 本身可能接近于零，函数 `log1p(x)` 可以取接近于1的值的对数，其结果接近于零。
+有专门的运算可以用来缓解数值接近1时的舍入问题。例如，考虑对正数 `x` 进行 `log(1 + x)` 运算。当 `x` 很小时（对于双精度浮点数小于 $10^{-16}$），参数中的求和会四舍五入为1，结果会四舍五入为零。为了提供更高的精度，编程语言提供了一个直接实现 $f(x) = \log (1 + x)$ 的库函数。在 Stan 中（与 C++ 相同），这个操作被写作 `log1p(x)`。由于 `x` 本身可能接近于零，函数 `log1p(x)` 能够计算非常接近1的数值的对数，其结果接近于零。
 
 Similarly, the complementary cumulative distribution functions (CCDF),
 defined by $F^{\complement}_Y(y) = 1 - F_Y(y)$, where $F_Y$ is the
@@ -329,7 +330,7 @@ subtraction of two numbers close to each other results in a loss of
 precision that depends on how close they are.  This is easy to see in
 practice.  Consider
 
-浮点数表示法的另一个缺点是，当两个接近的数相减时会造成精度损失，这取决于它们的接近程度。这在实践中很容易看出。例如，考虑以下计算：
+浮点数表示的另一个缺点是：相近数值相减会导致精度显著损失，损失程度取决于它们的接近程度。这一问题在实践中表现得尤为明显，例如以下运算：
 \begin{align*}
   1&.23456789012345 \\
 - 1&.23456789012344 \\
@@ -338,7 +339,7 @@ practice.  Consider
 We start with fifteen decimal places of accuracy in the arguments and
 are left with a single decimal place of accuracy in the result.
 
-我们开始时具有15位小数的准确性，结果只剩下一位小数的准确性。
+我们开始时具有15位小数的准确性，结果仅保留了一个有效数字的精度。
 
 Catastrophic cancellation arises in statistical computations whenever
 we calculate variance for a distribution with small standard
@@ -347,7 +348,7 @@ statistics, Stan uses *Welford's algorithm* for computing variances.
 This avoids catastrophic cancellation and may also be carried out in a
 single pass.
 
-在统计计算中，若一个分布具有相对于其位置而言很小的标准差，当我们计算该分布的方差时，会出现抵消灾难。在计算统计量时，Stan 使用 Welford 算法来计算方差。这避免了抵消灾难，并且可以在单次遍历中完成。
+在统计计算中，若一个分布具有相对于其位置而言很小的标准差，当我们计算该分布的方差时，会出现抵消灾难。在计算统计量时，Stan 使用 Welford 算法来计算方差。该算法可避免抵消灾难，并且支持单次遍历完成方差计算。
 
 ### Overflow {-}
 
@@ -358,42 +359,41 @@ point value, there is no finite value large enough to represent `1e200
 * 1e200`.  The result of `1e200 * 1e200` is said to *overflow*.  The
 IEEE 754 standard requires the result to be positive infinity.
 
-即使 `1e200` 可以表示为双精度浮点值，也没有足够大的有限值可以表示 `1e200 * 1e200`。`1e200 * 1e200` 的结果被称为*上溢*。IEEE 754标准要求结果为正无穷大。
+即使 `1e200` 可以表示为双精度浮点值，也没有足够大的有限值可以表示 `1e200 * 1e200`。`1e200 * 1e200` 的结果发生了*上溢*。IEEE 754标准要求结果为正无穷大。
 
 Overflow is rarely a problem in statistical computations.  If it is,
 it's possible to work on the log scale, just as for underflow as
 described below.
 
-在统计计算中，上溢很少是一个问题。如果是的话，可以在对数尺度上进行运算，就像下面描述的下溢一样。
+在统计计算中，上溢一般不是问题。如果是的话，可以在对数尺度上进行运算，就像下面描述的下溢一样。
 
 
 ### Underflow and the log scale {-}
 
-### 下溢和对数尺度
+### 下溢和对数尺度 {-}
 
 When there is no number small enough to represent a result, it is said
 to *underflow*.  For instance, `1e-200` may be represented, but
 `1e-200 * 1e-200` underflows so that the result is zero.
 
-当没有足够小的数字可以表示一个结果时，就称为*下溢*。例如，`1e-200` 可以表示，但是 `1e-200 * 1e-200` 会下溢，结果为零。
+当没有足够小的数字能够表示一个结果时，就称为*下溢*。例如，`1e-200` 可被正常表示，但是 `1e-200 * 1e-200` 会发生下溢，结果变为零。
 
 Underflow is a ubiquitous problem in likelihood calculations,
 For example, if $p(y_n \mid \theta) < 0.1$, then
+
+下溢是似然计算中普遍存在的问题。例如，如果 $p(y_n \mid \theta) < 0.1$，那么一旦 $N > 350$，似然函数
+
 $$
 p(y \mid \theta) = \prod_{n=1}^N p(y_n \mid \theta)
 $$
 will underflow as soon as $N > 350$ or so.
 
-下溢是似然计算中普遍存在的问题。例如，如果 $p(y_n \mid \theta) < 0.1$，那么一旦 $N > 350$ 或出现关于类似的数值
-$$
-p(y \mid \theta) = \prod_{n=1}^N p(y_n \mid \theta)
-$$
 就会发生下溢。
 
 To deal with underflow, work on the log scale.  Even though $p(y \mid
 \theta)$ can't be represented, there is no problem representing
 
-为了处理下溢，可以在对数尺度上进行运算。尽管无法表示 $p(y \mid
+为了处理下溢，可以在对数尺度上进行运算。虽然无法表示 $p(y \mid
 \theta)$，但我们可以表示
 $$
 \begin{array}{rcl}
@@ -407,11 +407,11 @@ $$
 This is why all of Stan's probability functions operate on the log
 scale.
 
-这就是为什么所有 Stan 中的概率函数都在对数尺度上进行操作。
+这就是为什么 Stan 中所有的概率函数都在对数尺度上进行操作。
 
 ## Log sum of exponentials {#log-sum-of-exponentials}
 
-## 对数求和的指数化 {#log-sum-of-exponentials--cn}
+## 对数求和的指数化 {-#log-sum-of-exponentials--cn}
 
 Working on the log scale, multiplication is converted to addition,
 
@@ -458,7 +458,8 @@ introduced, evaluation does not proceed by evaluating the terms as
 written.  Instead, with a little algebra, the terms are rearranged
 into a stable form,
 
-尽管在引入指数算术时可能会出现上溢的情况，但真正评估时并不按照原始表达式逐项计算。相反，通过一些代数运算，将这些项重新排列成一种稳定的形式，
+虽然看起来一旦引入指数运算就可能发生溢出，但实际计算并不是按照书面形式逐项求值的。相反，通过一些代数变换，这些项被重新排列成稳定的形式，
+
 $$
 \textrm{log-sum-exp}(u, v)
 =
@@ -480,12 +481,12 @@ function `log1p`, there is only limited gain because $\exp(v - u)$ is
 only near zero when $u$ is much larger than $v$, meaning the final
 result is likely to round to $u$ anyway.
 
-尽管内部项本身可以使用内置函数 `log1p` 进行求值，但是这只会带来有限的收益，因为当 $u$ 远远大于 $v$时，$\exp(v - u)$ 会接近零，这意味着最终的结果很可能会四舍五入为 $u$。
+尽管内部项本身可以使用内置函数 `log1p` 进行求值，但这样做的改善很有限，因为只有当 $u$ 远远大于 $v$ 时，$\exp(v - u)$ 才会接近零，这意味着最终的结果很可能还是会四舍五入为 $u$。
 
 To conclude, when evaluating $\log (a + b)$ given $\log a$ and $\log
 b$, and assuming $\log a > \log b$, return
 
-综上所述。当给定 $\log a$ 和 $\log b$ 来求解 $\log (a + b)$ 时，假 设$\log a > \log b$，会返回
+总之，当给定 $\log a$ 和 $\log b$ 来求解 $\log (a + b)$ 时，假设$\log a > \log b$，则返回
 $$
 \log (a + b) =
 \log a + \textrm{log1p}\big(\exp(\log b - \log a)\big).
@@ -493,12 +494,12 @@ $$
 
 ### Applying log-sum-exp to a sequence {-}
 
-### 将 log-sum-exp 应用于序列
+### 将 log-sum-exp 应用于序列 {-}
 
 The log sum of exponentials function may be generalized to sequences
 in the obvious way, so that if $v = v_1, \ldots, v_N$, then
 
-Log-sum-exp 函数能够以明显的方式推广到序列，即如果 $v = v_1, \ldots, v_N$，那么
+Log-sum-exp 函数可以自然地推广到序列形式，即如果 $v = v_1, \ldots, v_N$，那么
 \begin{eqnarray*}
 \textrm{log-sum-exp}(v)
 & = & \log \sum_{n = 1}^N \exp(v_n)
@@ -513,12 +514,12 @@ only $\log u_n$.
 
 ### Calculating means with log-sum-exp {-}
 
-### 使用log-sum-exp计算均值 {-}
+### 使用 log-sum-exp 计算均值 {-}
 
 An immediate application is to computing the mean of a vector $u$ entirely
 on the log scale.  That is, given $\log u$ and returning $\log \textrm{mean}(u)$.
 
-一个很直接的应用是在对向量 $u$ 的均值进行计算时完全使用对数尺度。也就是说，给定 $\log u$ 并返回 $\log \textrm{mean}(u)$。
+一个直接的应用是完全在对数尺度上计算向量 $u$ 的均值。也就是说，给定 $\log u$ 并返回 $\log \textrm{mean}(u)$。
 \begin{eqnarray*}
 \log \left( \frac{1}{N} \sum_{n = 1}^N u_n \right)
 & = & \log \frac{1}{N} + \log \sum_{n = 1}^N \exp(\log u_n)
@@ -532,19 +533,19 @@ where $\log u = (\log u_1, \ldots, \log u_N)$ is understood elementwise.
 
 ## Comparing floating-point numbers
 
-## 浮点数的比较
+## 浮点数的比较 {-}
 
 Because floating-point representations are inexact, it is rarely a
 good idea to test exact inequality.  The general recommendation is
 that rather than testing `x == y`, an approximate test may be used
 given an absolute or relative tolerance.
 
-由于浮点数表示是不精确的，因此测试精确不等式并不是一个好的提议。一般的建议是，在测试 `x == y` 时，可以使用一个给定的绝对或相对容差进行近似测试。
+由于浮点数表示本身并不精确，因此进行精确相等性测试通常并不是一个好主意。一般的建议是，与其判断 `x == y`，不如基于绝对容差或相对容差进行近似比较。
 
 Given a positive *absolute tolerance* of `epsilon`, `x` can be compared
 to `y` using the conditional
 
-给定一个正的*绝对容差* `epsilon`，可以使用条件语句将 `x` 与 `y` 进行比较
+给定一个正的*绝对容差* `epsilon`，可以使用条件语句比较 `x` 与 `y` 
 
 ```
 abs(x - y) <= epsilon.
@@ -553,12 +554,12 @@ abs(x - y) <= epsilon.
 Absolute tolerances work when the scale of `x` and `y` and the
 relevant comparison is known.
 
-当 `x` 和 `y` 的尺度以及相关的比较已知时，绝对容差可以起作用。
+当 `x` 和 `y` 的数量级以及相关比较的尺度已知时，绝对容差是有效的。
 
 Given a positive *relative tolerance* of `epsilon`, a typical
 comparison is
 
-给定一个正的*相对容差* `epsilon`，一个典型的比较方法是
+给定一个正的*相对容差* `epsilon`，常见的比较方式是
 
 ```
 2 * abs(x - y) / (abs(x) + abs(y)) <= epsilon.
