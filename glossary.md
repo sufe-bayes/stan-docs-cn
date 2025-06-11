@@ -78,17 +78,21 @@
 |18 浮点数算术                       | not-a-number (NaN)         | 非数字（NaN） |                            |               |                   |
 |18 浮点数算术                       | positive/negative infinity | 正/负无穷    |                            |               |                   |
 |18 浮点数算术                       | scientific notation        | 科学计数法    |                            |               |                   |
-|18 浮点数算术                       | significand                | 尾数       |                            |               |                   |
+|18 浮点数算术                       | significand figures        | 有效数字       |    尾数                        |               |                   |
 |18 浮点数算术                       | exponent (in IEEE 754)     | 指数       |                            |               |                   |
 |18 浮点数算术                       | arithmetic precision      | 算术精度       |                           | IEEE 754 中尾数所决定的有效位数          |                 |
 |18 浮点数算术                       | machine precision         | 机器精度       |                           | 即 double 精度中能区分 1 和 1+ε 的最小 ε |                 |
 |18 浮点数算术                       | rounding error            | 舍入误差       |                           | 数值计算中常见误差类型之一                 |                 |
 |18 浮点数算术                       | catastrophic cancellation | 抵消灾难       |                           | 常用于描述相近数值相减时的精度问题             |                 |
-|18 浮点数算术                       | overflow                  | 上溢         |                           | 计算结果超出可表示最大浮点数                |                 |
+|18 浮点数算术                       | overflow                  | 上溢         |     溢出                      | 计算结果超出可表示最大浮点数                |                 |
 |18 浮点数算术                       | underflow                 | 下溢         |                           | 计算结果小于最小非零浮点数                 |                 |
 |18 浮点数算术                       | log scale                 | 对数尺度       |                           | 常用于避免下溢                       |                 |
 |18 浮点数算术                       | Welford’s algorithm       | Welford 算法 |                           | 用于方差估计的在线算法                   |                 |
-|18 浮点数算术                       | log1p                     | log1p      |                           | \$\log(1+x)\$ 的稳定实现方式         |                 |
 |18 浮点数算术                       | CCDF                      | 互补累积分布函数   |                           | \$1 - F(x)\$，用于稳定计算尾概率        |                 |
-|18 浮点数算术                       | CCDF                      | 互补累积分布函数   |                           | \$1 - F(x)\$，用于稳定计算尾概率        |                 |
+|20  多重索引和范围索引                       | Multiple Indexing                      | 多重索引   |                           |         |                 |
+|20  多重索引和范围索引                       | Range Indexing                     | 范围索引   |                           |         |                 |
+|20  多重索引和范围索引                       | container                      | 容器   |                           |  （即数组、向量和矩阵）       |                 |
+|20  多重索引和范围索引                       | Lower/upper bound                     | 下界/上界   |    下限/上限                       |         |                 |
+|20  多重索引和范围索引                       | prefixes                     | 前若干个元素   | 开头部分                      | 表示向量或数组的前若干个元素        |    意译             |
+|20  多重索引和范围索引                       | suffixes                     | 后若干个元素   | 末尾部分                      | 表示向量或数组的后若干个元素        |    意译             |
 
