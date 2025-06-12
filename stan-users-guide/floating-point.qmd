@@ -2,7 +2,7 @@
 pagetitle: Floating Point Arithmetic
 ---
 
-# 浮点数算术 {#floating-point.chapter--cn}
+# 浮点数运算 {#floating-point.chapter--cn}
 
 # Floating Point Arithmetic {-#floating-point.chapter}
 
@@ -43,7 +43,7 @@ IEEE 754标准中的双精度部分指定使用64位（8字节）的固定模式
 
 * *significand* (53 bits): base value representing significant digits
 
-* *尾数* （53位）：表示有效数字的基值
+* *有效数字* （53位）：表示有效数字的基值
 
 * *exponent* (11 bits): power of two multiplied by the base
 
@@ -66,7 +66,7 @@ A *normal* floating-point value does not use any leading zeros in
 its significand;  *subnormal* numbers may use leading zeros.  Not all
 I/O systems support subnormal numbers.
 
-*正规*浮点数的尾数部分不会以零开头；而*次正规*数第一位可能会使用零。并非所有的 输入/输出（I/O）系统都支持次正规数。
+*正规*浮点数的有效数字部分不会以零开头；而*次正规*数第一位可能会使用零。并非所有的 输入/输出（I/O）系统都支持次正规数。
 
 ### Ranges and extreme values {-}
 
@@ -86,7 +86,7 @@ small values.  Some extreme values are
 
 * *smallest positive subnormal number*: $\approx 4.9 \times 10^{-324}$
 
-指数的某些取值被保留，因此合法指数的范围是 $-(2^{10}) + 2 = -1022$ 和 $2^{10} - 1 = 1023$ 之间。合法的尾数值介于 $-2^{52}$ 和 $2^{52} - 1$ 之间。浮点数允许表示非常大和非常小的值。一些极端值包括：
+指数的某些取值被保留，因此合法指数的范围是 $-(2^{10}) + 2 = -1022$ 和 $2^{10} - 1 = 1023$ 之间。合法的有效数值介于 $-2^{52}$ 和 $2^{52} - 1$ 之间。浮点数允许表示非常大和非常小的值。一些极端值包括：
 
 * *最大的正规有限数*：$\approx 1.8 \times 10^{308}$
 
