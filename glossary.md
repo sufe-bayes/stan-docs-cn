@@ -9,10 +9,8 @@
 |                                        | improper flat prior                  | 非正规的均匀先验   |                |                                          |        |
 |                                        | informative prior                    | 有信息的先验       |                |                                          |        |
 |                                        | noninformative prior                 | 无信息的先验       |                |                                          |        |
-|                                        | weakly informative prior             | 弱信息先验         |                |                                          |        |
 |                                        | meta analysis                        | 元分析             |                |                                          |        |
 |                                        | cluster                              | 聚类               |                |              | 作为名词使用时，不翻译为“簇”       |
-|                                        | multimodality                        | 多峰性             |                |                       |不翻译为“多模态性”         |
 | 1 回归模型                             | multilevel generalized linear models | 多层次广义线性模型 |                |                                          |        |
 | 1.1 线性回归                           | predictor                            | 自变量             |                |                                          |        |
 | 1.1 线性回归                           | outcome                              | 因变量             |                |                                          |        |
@@ -95,4 +93,13 @@
 |20  多重索引和范围索引                       | Lower/upper bound                     | 下界/上界   |    下限/上限                       |         |                 |
 |20  多重索引和范围索引                       | prefixes                     | 前若干个元素   | 开头部分                      | 表示向量或数组的前若干个元素        |    意译             |
 |20  多重索引和范围索引                       | suffixes                     | 后若干个元素   | 末尾部分                      | 表示向量或数组的后若干个元素        |    意译             |
-
+|24  有问题的后验分布                         | weakly informative prior             | 弱信息先验         |                |                                          |        |
+|24  有问题的后验分布                         | ridge                                | 岭        |                |                                          |        |
+|24  有问题的后验分布                         | proper posterior                     | 正规的后验分布        |                |                                          |        |
+|24  有问题的后验分布                         | improper posterior                   | 非正规的后验分布         |                |                                          |        |
+|24  有问题的后验分布                         | improper uniform prior               | 非正规的均匀先验        |                |                                          |        |
+|24  有问题的后验分布                         | impropriety                          | 非正规性        |                |                                          |        |
+|24  有问题的后验分布                         | proper                               | 正规的         |                |                                          |        |
+|24  有问题的后验分布                         | improper                              | 非正规的        |                |                                          |        |
+|24  有问题的后验分布                         | simplex                              | 单纯形        |                |                                          |        |
+|24  有问题的后验分布                         | multimodality                        | 多峰性             |                |                       |不翻译为“多模态性”         |
