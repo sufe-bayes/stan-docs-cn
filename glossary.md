@@ -9,10 +9,8 @@
 |                                        | improper flat prior                  | 非正规的均匀先验   |                |                                          |        |
 |                                        | informative prior                    | 有信息的先验       |                |                                          |        |
 |                                        | noninformative prior                 | 无信息的先验       |                |                                          |        |
-|                                        | weakly informative prior             | 弱信息先验         |                |                                          |        |
 |                                        | meta analysis                        | 元分析             |                |                                          |        |
 |                                        | cluster                              | 聚类               |                |              | 作为名词使用时，不翻译为“簇”       |
-|                                        | multimodality                        | 多峰性             |                |                       |不翻译为“多模态性”         |
 | 1 回归模型                             | multilevel generalized linear models | 多层次广义线性模型 |                |                                          |        |
 | 1.1 线性回归                           | predictor                            | 自变量             |                |                                          |        |
 | 1.1 线性回归                           | outcome                              | 因变量             |                |                                          |        |
@@ -73,26 +71,35 @@
 |15  复数                       | Cholesky factor                           | Cholesky 因子 |                            | 协方差矩阵的 Cholesky 分解 |        |
 |15  复数                       | multivariate normal                       | 多元正态分布      |                            | 用于建模相关的随机变量        |        |
 |15  复数                       | promotion                                 | 类型提升        |                            | 实数/整数自动转为复数        |        |
-|18 浮点数算术                       | subnormal number           | 次正规数      |                            |               |                   |
-|18 浮点数算术                       | signed zero                | 符号零      |                            |               |                   |
-|18 浮点数算术                       | not-a-number (NaN)         | 非数字（NaN） |                            |               |                   |
-|18 浮点数算术                       | positive/negative infinity | 正/负无穷    |                            |               |                   |
-|18 浮点数算术                       | scientific notation        | 科学计数法    |                            |               |                   |
-|18 浮点数算术                       | significand figures        | 有效数字       |    尾数                        |               |                   |
-|18 浮点数算术                       | exponent (in IEEE 754)     | 指数       |                            |               |                   |
-|18 浮点数算术                       | arithmetic precision      | 算术精度       |                           | IEEE 754 中尾数所决定的有效位数          |                 |
-|18 浮点数算术                       | machine precision         | 机器精度       |                           | 即 double 精度中能区分 1 和 1+ε 的最小 ε |                 |
-|18 浮点数算术                       | rounding error            | 舍入误差       |                           | 数值计算中常见误差类型之一                 |                 |
-|18 浮点数算术                       | catastrophic cancellation | 抵消灾难       |                           | 常用于描述相近数值相减时的精度问题             |                 |
-|18 浮点数算术                       | overflow                  | 上溢         |     溢出                      | 计算结果超出可表示最大浮点数                |                 |
-|18 浮点数算术                       | underflow                 | 下溢         |                           | 计算结果小于最小非零浮点数                 |                 |
-|18 浮点数算术                       | log scale                 | 对数尺度       |                           | 常用于避免下溢                       |                 |
-|18 浮点数算术                       | Welford’s algorithm       | Welford 算法 |                           | 用于方差估计的在线算法                   |                 |
-|18 浮点数算术                       | CCDF                      | 互补累积分布函数   |                           | \$1 - F(x)\$，用于稳定计算尾概率        |                 |
+|18 浮点数运算                       | subnormal number           | 次正规数      |                            |               |                   |
+|18 浮点数运算                       | signed zero                | 符号零      |                            |               |                   |
+|18 浮点数运算                       | not-a-number (NaN)         | 非数字（NaN） |                            |               |                   |
+|18 浮点数运算                       | positive/negative infinity | 正/负无穷    |                            |               |                   |
+|18 浮点数运算                       | scientific notation        | 科学计数法    |                            |               |                   |
+|18 浮点数运算                       | significand figures        | 有效数字       |    尾数                        |               |                   |
+|18 浮点数运算                       | exponent (in IEEE 754)     | 指数       |                            |               |                   |
+|18 浮点数运算                       | arithmetic precision      | 算术精度       |                           | IEEE 754 中尾数所决定的有效位数          |                 |
+|18 浮点数运算                       | machine precision         | 机器精度       |                           | 即 double 精度中能区分 1 和 1+ε 的最小 ε |                 |
+|18 浮点数运算                       | rounding error            | 舍入误差       |                           | 数值计算中常见误差类型之一                 |                 |
+|18 浮点数运算                       | catastrophic cancellation | 抵消灾难       |                           | 常用于描述相近数值相减时的精度问题             |                 |
+|18 浮点数运算                       | overflow                  | 上溢         |     溢出                      | 计算结果超出可表示最大浮点数                |                 |
+|18 浮点数运算                       | underflow                 | 下溢         |                           | 计算结果小于最小非零浮点数                 |                 |
+|18 浮点数运算                       | log scale                 | 对数尺度       |                           | 常用于避免下溢                       |                 |
+|18 浮点数运算                       | Welford’s algorithm       | Welford 算法 |                           | 用于方差估计的在线算法                   |                 |
+|18 浮点数运算                       | CCDF                      | 互补累积分布函数   |                           | \$1 - F(x)\$，用于稳定计算尾概率        |                 |
 |20  多重索引和范围索引                       | Multiple Indexing                      | 多重索引   |                           |         |                 |
 |20  多重索引和范围索引                       | Range Indexing                     | 范围索引   |                           |         |                 |
 |20  多重索引和范围索引                       | container                      | 容器   |                           |  （即数组、向量和矩阵）       |                 |
 |20  多重索引和范围索引                       | Lower/upper bound                     | 下界/上界   |    下限/上限                       |         |                 |
 |20  多重索引和范围索引                       | prefixes                     | 前若干个元素   | 开头部分                      | 表示向量或数组的前若干个元素        |    意译             |
 |20  多重索引和范围索引                       | suffixes                     | 后若干个元素   | 末尾部分                      | 表示向量或数组的后若干个元素        |    意译             |
-
+|24  有问题的后验分布                         | weakly informative prior             | 弱信息先验         |                |                                          |        |
+|24  有问题的后验分布                         | ridge                                | 岭        |                |                                          |        |
+|24  有问题的后验分布                         | proper posterior                     | 正规的后验分布        |                |                                          |        |
+|24  有问题的后验分布                         | improper posterior                   | 非正规的后验分布         |                |                                          |        |
+|24  有问题的后验分布                         | improper uniform prior               | 非正规的均匀先验        |                |                                          |        |
+|24  有问题的后验分布                         | impropriety                          | 非正规性        |                |                                          |        |
+|24  有问题的后验分布                         | proper                               | 正规的         |                |                                          |        |
+|24  有问题的后验分布                         | improper                              | 非正规的        |                |                                          |        |
+|24  有问题的后验分布                         | simplex                              | 单纯形        |                |                                          |        |
+|24  有问题的后验分布                         | multimodality                        | 多峰性             |                |                       |不翻译为“多模态性”         |

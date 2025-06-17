@@ -2,22 +2,23 @@
 pagetitle: Custom Probability Functions
 ---
 
-# Custom Probability Functions  {#custom-probability-functions.chapter}
-
 # 自定义概率函数 {#custom-probability-functions.chapter--cn}
 
+# Custom Probability Functions  {-#custom-probability-functions.chapter}
+
 本节译者：谭朕斯
-本节校审：张梓源
+
+本节校审：张梓源（ChatGPT辅助）
 
 Custom distributions may also be implemented directly within Stan's
 programming language.  The only thing that is needed is to increment
 the total log probability.  The rest of the chapter provides examples.
 
-在 Stan 的编程语言中也可以直接实现自定义分布。唯一需要的就是增加总的对数概率。本章的其余部分提供了一些示例。
+在 Stan 的编程语言中也可以直接实现自定义分布。实现时仅需增加总体的对数概率即可。本章的后续内容给出了一些示例。
 
 ## Examples
 
-## 示例
+## 示例 {-}
 
 ### Triangle distribution {-}
 
@@ -30,7 +31,7 @@ density integrate to 1.  If $\alpha \in \mathbb{R}$ and $\beta \in \mathbb{R}$
 are the bounds, with $\alpha < \beta$, then $y \in (\alpha,\beta)$ has
 a density defined as follows.
 
-一个简单的例子是三角分布，其密度函数呈现出一个等腰三角形的形状，角点位于指定的边界上，高度由密度函数积分为1的约束确定。如果 $\alpha \in \mathbb{R}$ 和 $\beta \in \mathbb{R}$ 是边界，其中 $\alpha < \beta$，那么 $y \in (\alpha,\beta)$ 的密度函数定义如下。
+一个简单的例子是三角分布，其密度函数的形状像一个等腰三角形，三角形的底边由指定的边界确定，高度由密度函数积分为1的约束条件决定。$\alpha \in \mathbb{R}$ 和 $\beta \in \mathbb{R}$ 是边界，其中 $\alpha < \beta$，那么 $y \in (\alpha,\beta)$ 的密度函数定义如下。
 
 $$
 \textsf{triangle}(y \mid \alpha,\beta)
@@ -55,7 +56,7 @@ $$
 Consider the following Stan implementation of
 $\textsf{triangle}(-1,1)$ for sampling.
 
-请考虑以下用于抽样的 Stan 实现，用于从 $\textsf{triangle}(-1,1)$ 分布中进行抽样。
+考虑以下用于从 $\textsf{triangle}(-1,1)$ 采样的 Stan 实现。
 
 ```stan
 parameters {
@@ -74,7 +75,8 @@ $\log \mathsf{Triangle}(y \mid -1,1)$.  This value is coded in Stan as
 that `log1m(x)` has the same value as $\log(1-x)$, but the
 computation is faster, more accurate, and more stable.
 
-单一的标量参数 `y` 被声明为位于区间 `(-1,1)` 内。总的对数概率会根据所有参数的联合对数概率进行累加，即 $\log \mathsf{Triangle}(y \mid -1,1)$。在 Stan 中，这个值被编码为 `log1m(fabs(y))`。函数 `log1m` 被定义为使得 `log1m(x)` 具有与 $\log(1-x)$ 相同值的函数，但计算速度更快、更准确、更稳定。
+单一的标量参数 `y` 被声明为位于区间 `(-1,1)` 内。总的对数概率会根据所有参数的联合对数概率进行累加，即 $\log \mathsf{Triangle}(y \mid -1,1)$。在 Stan 中，这个值被编码为 `log1m(abs(y))`。函数 `log1m` 被定义为使得 `log1m(x)` 具有与 $\log(1-x)$ 相同值的函数，但计算速度更快、更准确、更稳定。
+
 
 The constrained type `real<lower=-1, upper=1>` declared for `y` is
 critical for correct sampling behavior.  If the constraint on `y`
@@ -101,7 +103,7 @@ original program.  But if the constraint on `y` is removed,
 the model will compile and run without arithmetic errors, but will not
 sample properly.^[The problem is the (extremely!) light tails of the triangle distribution.  The standard HMC and NUTS samplers can't get into the corners of the triangle properly.  Because the Stan code declares `y` to be of type `real<lower=-1, upper=1>`, the inverse logit transform is applied to the unconstrained variable and its log absolute derivative added to the log probability.  The resulting distribution on the logit-transformed `y` is well behaved.]
 
-如果保留了 `y` 的约束条件，那么这只是原始程序的一个效率更低、速度更慢、数学计算稳定性较差的版本。但是如果移除了 `y` 的约束条件，模型将能够编译和运行，但是采样结果将不正确。^[问题在于三角形分布的尾部非常轻。标准的 HMC 和 NUTS 采样器无法正确地进入三角形的角落。因为 Stan 代码声明了 `y` 的类型为 `real<lower=-1, upper=1>`，因此将逆 logit 变换应用于无约束变量，并将其对数绝对导数添加到对数概率中。logit 变换后的 `y` 得到的分布是良好的。]
+如果保留了 `y` 的约束条件，那么这只是原始程序的一个效率更低、速度更慢、数学计算稳定性较差的版本。但是如果移除了 `y` 的约束条件，模型将能够编译和运行，但是采样结果将不正确。^[问题在于三角形分布的尾部极其轻。标准的 HMC 和 NUTS 采样器无法正确地进入三角形的角落。因为 Stan 代码声明了 `y` 的类型为 `real<lower=-1, upper=1>`，因此将逆 logit 变换应用于无约束变量，并将其对数绝对导数添加到对数概率中。logit 变换后的 `y` 得到的分布是良好的。]
 
 ### Exponential distribution {-}
 
@@ -138,7 +140,7 @@ check the inputs to make sure both `lambda` is positive and
 `y` is non-negative (which includes checking that neither is the
 special not-a-number value).
 
-有两个显著的区别。首先，采样语句会检查输入，确保 `lambda` 为正数且 `y` 为非负数（这包括检查两者是否为特殊的非数字值）。
+这里有两个显著的区别。首先，采样语句会检查输入，确保 `lambda` 为正数且 `y` 为非负数（这包括检查两者是否为特殊的非数字值）。
 
 The second difference is that if `lambda` is not a parameter,
 transformed parameter, or local model variable, the distribution statement
@@ -159,7 +161,8 @@ definition of the bivariate normal cumulative distribution function
 (CDF) with location zero, unit variance, and correlation `rho`.
 That is, it computes
 
-作为用户定义函数的另一个例子，考虑以下定义的双变量正态累积分布函数（CDF），其中均值为零，方差为单位，并且具有相关性 `rho`。也就是说，它计算的是以下概率：
+作为用户定义函数的另一个例子，考虑以下定义的双变量正态累积分布函数（CDF），其中均值为零，方差为单位，并且具有相关系数 `rho`。也就是说，它计算的是以下概率：
+
 
 $$
 \texttt{binormal}\mathtt{\_}\texttt{cdf}(z_1, z_2, \rho) = \Pr[Z_1 \leq z_1 \text{ and } Z_2 \leq z_2]
