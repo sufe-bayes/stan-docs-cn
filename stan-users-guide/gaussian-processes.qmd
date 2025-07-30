@@ -135,7 +135,7 @@ $f_2$ 的核函数为
 $$
   K_2(x \mid \sigma)_{i, j}
 =
- \delta_{i, j} \sigma^2,
+ \delta_{i, j} \sigma^2.
 $$
 
 The addition of $\sigma^2$ on the diagonal is important
@@ -167,7 +167,7 @@ $K(x \mid \theta) = K(x + \epsilon \mid \theta)$.
 指数二次协方差函数中唯一涉及输入 $x_i$ 和 $x_j$ 的项是它们的向量差，即 $x_i - x_j$。这产生了一个具有平稳协方差的过程，也就是说，如果将输入向量 $x$ 沿着向量 $\epsilon$ 移动到 $x+\epsilon$，任意两个成对输出的协方差将保持不变，因为 $K(x \mid \theta) = K(x + \epsilon \mid \theta)$。
 
 The summation involved is just the squared Euclidean distance between
-$x_i$ and $x_j$ (i.e., the $L_2$ norm of their difference, $x_i -
+$x_i$ and $x_j$ (i.e., the squared $L_2$ norm of their difference, $x_i -
 x_j$). This results in support for smooth functions in the process.
 The amount of variation in the function is controlled by the free
 hyperparameters $\alpha$, $\rho$, and $\sigma$.
@@ -307,9 +307,9 @@ normal variate.  Suppose $\eta$ is an an isotropic standard normal variate
 通过平移、缩放和旋转各向同性标准正态变量，可在 Stan 中实现更高效的模拟模型。假设 $\eta$ 是一个标准多元正态变量
 
 $$
-\eta \sim \textsf{normal}(\textbf{0}, \textbf{1}),
+\eta \sim \textsf{normal}(\textbf{0}, \textrm{I}),
 $$
-where $\textbf{0}$ is an $N$-vector of 0 values and $\textbf{1}$ is the $N
+where $\textbf{0}$ is an $N$-vector of 0 values and $\textrm{I}$ is the $N
 \times N$ identity matrix.  Let $L$ be the Cholesky decomposition of
 $K(x \mid \theta)$, i.e., the lower-triangular matrix $L$ such that $LL^{\top} =
 K(x \mid \theta)$.  Then the transformed variable $\mu + L\eta$ has the intended
@@ -850,7 +850,7 @@ If we have high-frequency covariates in our fixed effects, we may wish to
 further regularize the GP away from high-frequency functions, which means we'll
 need to penalize smaller length-scales. Luckily, we have a useful way of
 thinking about how length-scale affects the frequency of the functions
-supported the GP. If we were to repeatedly draw from a zero-mean GP with a
+supported by the GP. If we were to repeatedly draw from a zero-mean GP with a
 length-scale of $\rho$ in a fixed-domain $[0,T]$, we would get a distribution
 for the number of times each draw of the GP crossed the zero axis. The
 expectation of this random variable, the number of zero crossings, is $T / \pi

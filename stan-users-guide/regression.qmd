@@ -684,9 +684,10 @@ In a Bayesian setting, a proper prior on each of the $\beta$ is enough
 to identify the model.  Unfortunately, this can lead to inefficiency
 during sampling as the model is still only weakly identified through
 the prior---there is a very simple example of the difference in
-the discussion of collinearity in @collinearity.section.
+the discussion of collinearity in the
+[collinearity section](problematic-posteriors.qmd#collinearity.section).
 
-在贝叶斯框架中，为每个 $\beta$ 设置适当的先验分布足以识别模型。然而，这可能会导致采样效率低下，因为模型仅通过先验分布弱识别——在讨论共线性的章节中有一个非常简单的例子来说明这种差异。
+在贝叶斯框架中，为每个 $\beta$ 设置适当的先验分布足以识别模型。然而，这可能会导致采样效率低下，因为模型仅通过先验分布弱识别——在[共线性章节](problematic-posteriors.qmd#collinearity.section)中有一个非常简单的例子来说明这种差异。
 
 An alternative identification strategy that allows a symmetric prior
 is to enforce a sum-to-zero constraint on the varying effects, i.e.,

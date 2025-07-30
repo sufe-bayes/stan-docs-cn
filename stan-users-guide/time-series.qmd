@@ -574,9 +574,9 @@ A halfway point would be to vectorize just `err`.
 
 MA and ARMA models are not identifiable if the roots of the
 characteristic polynomial for the MA part lie inside the unit circle,
-so it's necessary to add the following constraint^[This subsection is a lightly edited comment of Jonathan Gilligan's on GitHub; see \url{https://github.com/stan-dev/stan/issues/1617\#issuecomment-160249142}]
+so it's necessary to add the following constraint^[This subsection is a lightly edited comment of Jonathan Gilligan's on GitHub; see [https://github.com/stan-dev/stan/issues/1617\#issuecomment-160249142](https://github.com/stan-dev/stan/issues/1617\#issuecomment-160249142).]
 
-如果 MA 部分的特征多项式的根位于单位圆内，则 MA 和 ARMA 模型是不可识别的，因此需要添加以下约束^[这一小节是 Jonathan Gilligan 在 GitHub 上的评论; 见 \url{https://github.com/stan-dev/stan/issues/1617#issuecomment-160249142}]
+如果 MA 部分的特征多项式的根位于单位圆内，则 MA 和 ARMA 模型是不可识别的，因此需要添加以下约束^[这一小节是 Jonathan Gilligan 在 GitHub 上的评论; 见 [https://github.com/stan-dev/stan/issues/1617\#issuecomment-160249142](https://github.com/stan-dev/stan/issues/1617\#issuecomment-160249142)。]
 
 ```stan
 real<lower=-1, upper=1> theta;
