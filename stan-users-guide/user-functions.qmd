@@ -2,12 +2,15 @@
 pagetitle: User-Defined Functions
 ---
 
-# User-Defined Functions  {#functions-programming.chapter}
+# 用户自定义函数
 
-# 用户自定义函数 {#functions-programming.chapter--cn}
+# User-Defined Functions {-}
 
 本节译者：杜丽英、李君竹
-本节校审：李君竹
+
+初次校审：李君竹
+
+二次校审：李君竹（Claude 辅助）
 
 This chapter explains functions from a user perspective with examples;
 see the language reference for a full specification.  User-defined
@@ -18,17 +21,17 @@ components.  Writing modular code using descriptively named functions
 is easier to understand than a monolithic program, even if the latter
 is heavily commented.^[The main problem with comments is that they can be misleading, either due to misunderstandings on the programmer's part or because the program's behavior is modified after the comment is written.  The program always behaves the way the code is written, which is why refactoring complex code into understandable units is preferable to simply adding comments.]
 
-本章从用户视角使用示例来解释函数；请参阅语言参考以获取完整说明。用户自定义的函数允许将计算过程封装到单个命名单元中，并通过名称在其他地方调用这些函数。同样，函数将复杂过程分解为更容易理解的组成部分。即使个体化程序设计有大量的注释，使用描述性的命名的模块化代码依旧比个体程序设计更容易理解。^[注释的主要问题是它们可能会误导，可能由于程序员的误解或在程序行为被修改但注释未及时变化。程序总是按照代码编写的方式运行，这就是为什么将复杂代码重构为易于理解的单元比单纯添加注释更可取。]
+本章从用户角度通过示例解释函数；完整规范请参阅语言参考手册。用户自定义函数允许将计算封装到单个命名单元中，并在其他地方通过名称调用。同样，函数允许将复杂过程分解为更易理解的组件。使用描述性命名函数编写的模块化代码比单体程序更易理解，即使后者有大量注释。^[注释的主要问题是它们可能具有误导性，要么是由于程序员的误解，要么是因为在编写注释后程序的行为被修改。程序始终按照代码编写的方式运行，这就是为什么将复杂代码重构为可理解的单元比简单地添加注释更可取。]
 
-## Basic functions {#basic-functions.section}
+## Basic functions
 
-## 基本函数 {#basic-functions.section--cn}
+## 基本函数 {- #basic-functions.section--cn}
 
 Here's an example of a skeletal Stan program with a user-defined
 relative difference function employed in the generated quantities
 block to compute a relative differences between two parameters.
 
-这是一个用户自定义的骨架 Stan 程序示例，该相对差异函数在预测值模块中用于计算两个参数之间的相对差异。
+以下是一个 Stan 程序框架示例，其中包含一个用户自定义的相对差异函数，在生成量块中用于计算两个参数之间的相对差异。
 
 ```stan
 functions {
@@ -52,28 +55,28 @@ two real-valued arguments and return a real-valued result.   It is
 used the same way a built-in function would be used in the generated
 quantities block.
 
-该函数被命名为 `relative_diff`，声明具有两个实值参数并返回一个实值结果。它与内置函数一样在预测值模块中使用。
+该函数名为 `relative_diff`，声明为具有两个实值参数并返回一个实值结果。它的使用方式与生成量块中的内置函数相同。
 
 ### User-defined functions block {-}
 
-### 用户自定义功能块 {-}
+### 用户自定义函数块 {-}
 
 All functions are defined in their own block, which is labeled
 `functions` and must appear before all other program blocks.  The
 user-defined functions block is optional.
 
-所有函数都在它们自有区块中定义，该块标记为 `functions` 并且必须出现在所有其他程序块之前。用户自定义功能块是可选的。
+所有函数都在自己的块中定义，该块标记为 `functions`，必须出现在所有其他程序块之前。用户自定义函数块是可选的。
 
 ### Function bodies {-}
 
-### 函数主体 {-}
+### 函数体 {-}
 
 The body (the part between the curly braces) contains ordinary Stan
 code, including local variables.  The new function is used in the
 generated quantities block just as any of Stan's built-in functions
 would be used.
 
-函数主体（花括号之间的部分）包含普通的 Stan 代码和局部变量。新函数与 Stan 内置的所有函数一样可以在预测值模块中使用。
+函数体（花括号之间的部分）包含普通的 Stan 代码，包括局部变量。新函数在生成量块中的使用方式与 Stan 的任何内置函数相同。
 
 ### Return statements {-}
 
@@ -85,11 +88,11 @@ function definitions.  Return statements may appear anywhere in a
 function, but functions with non-void return types must end in a
 return statement.
 
-返回语句，例如上面定义的函数 `relative_diff` 的最后一行，仅允许在函数定义的主体中使用。返回语句可以出现在函数的任何位置，但具有非空返回类型的函数必须以返回语句结尾。
+返回语句，如上面 `relative_diff` 定义的最后一行，只允许在函数定义的函数体中使用。返回语句可以出现在函数的任何地方，但具有非 void 返回类型的函数必须以返回语句结尾。
 
 ### Reject and error statements {-}
 
-### 拒绝与错误语句 {-}
+### 拒绝和错误语句 {-}
 
 The Stan `reject` statement provides a mechanism to report errors or
 problematic values encountered during program execution.  It accepts
@@ -97,30 +100,30 @@ any number of quoted string literals or Stan expressions as arguments.
 This statement is typically embedded in a conditional statement in
 order to detect bad or illegal outcomes of some processing step.
 
-Stan 的 `reject` 语句提供了一种程序执行期间报告错误或疑问值的机制。它接受任意数量的引号字符串文字或 Stan 表达式作为参数。此语句通常嵌入在条件语句中，以检测某些处理步骤的不良或非法结果。
+Stan 的 `reject` 语句提供了一种在程序执行期间报告错误或问题值的机制。它接受任意数量的带引号字符串字面量或 Stan 表达式作为参数。该语句通常嵌入在条件语句中，以检测某些处理步骤的错误或非法结果。
 
 If an error is indicative of a problem from which it is not expected
 to be able to recover, Stan provides a `fatal_error` statement.
 
-如果一个错误表明程序无法从中恢复，可以使用 Stan 中的 `fatal_error` 语句。
+如果错误表明存在无法恢复的问题，Stan 提供了 `fatal_error` 语句。
 
 #### Catching errors {-}
 
-### 捕获错误 {-}
+#### 捕获错误 {-}
 
 Rejection is used to flag errors that arise in inputs or in program
 state.  It is far better to fail early with a localized informative
 error message than to run into problems much further downstream (as in
 rejecting a state or failing to compute a derivative).
 
-拒绝语句用于标记输入或程序状态中出现的错误。及早提前终止运行并提供本地化的信息性错误消息要比在更下游遇到问题（例如拒绝状态或无法计算导数）要好得多。
+拒绝用于标记输入或程序状态中出现的错误。尽早失败并提供局部化的信息性错误消息，远比在下游遇到问题（如拒绝状态或无法计算导数）要好得多。
 
 The most common errors that are coded is to test that all of the
 arguments to a function are legal.  The following function takes a
 square root of its input, so requires non-negative inputs; it is coded
 to guard against illegal inputs.
 
-最常见的错误是测试函数的所有参数是否合法。下面这个函数对其输入值进行平方根运算，因此需要非负输入值；它被编码以防止不合法的输入。
+最常见的编码错误是测试函数的所有参数是否合法。以下函数对其输入取平方根，因此需要非负输入；它被编码以防止非法输入。
 
 ```stan
 real dbl_sqrt(real x) {
@@ -146,7 +149,7 @@ value and tries to reduce it by arithmetic, likely consuming all
 available memory and crashing an interface.  Much better to catch
 errors early and report on their origin.
 
-正数测试的拒绝很重要，因为它也捕获了 `x` 是非数字值的情况。如果条件被编码为 `(x<0)`，它将不会捕获非数字情况，尽管可以写成 `(x < 0 || is_nan(x))`。正无穷大的情况尽管被允许，但也可以使用函数 `is_inf(x)` 进行检查。平方根函数本身不拒绝负数，但是 `dbl_sqrt(-2)` 可能会引发错误，因此需要检查不合法的输入来源。或者更糟糕的是，正如 Matt Simpson 在 GitHub 评论中指出的那样，如果函数从无穷大值开始并尝试通过计算减少它，则可能进入无限循环，可能消耗所有可用内存并崩溃接口。最好尽早捕获错误并报告其来源。
+正数测试的否定很重要，因为它还捕获了 `x` 是非数字值的情况。如果条件被编码为 `(x < 0)`，它将不会捕获非数字情况，尽管可以写成 `(x < 0 || is_nan(x))`。正无穷大的情况被允许通过，但也可以使用 `is_inf(x)` 函数检查。平方根函数本身不拒绝，但 `dbl_sqrt(-2)` 的某些下游使用者可能会引发错误，此时需要追查非法输入的来源。或者更糟的是，正如 Matt Simpson 在 GitHub 评论中指出的，如果函数从无穷大值开始并尝试通过算术减少它，可能会进入无限循环，可能会消耗所有可用内存并使接口崩溃。尽早捕获错误并报告其来源要好得多。
 
 The effect of rejection depends on the program block in which the
 rejection is executed.  In transformed data, rejections cause the
@@ -154,14 +157,14 @@ program to fail to load.  In transformed parameters or in the model
 block, rejections cause the current state to be rejected in the
 Metropolis sense.^[Just because this makes it possible to code a rejection sampler does not make it a good idea.  Rejections break differentiability and the smooth exploration of the posterior.  In Hamiltonian Monte Carlo, it can cause the sampler to be reduced to a diffusive random walk.]
 
-拒绝的效应取决于执行拒绝的程序块。在转换数据中，拒绝会导致程序无法加载。在转换的参数或模型块中，拒绝会导致当前状态在 Metropolis 算法上被拒绝。^[仅仅因为这个，编码一个拒绝采样器并不是一个好主意。拒绝会破坏后验概率的可微性和平滑探索。在汉密尔顿蒙特卡罗中，它可能导致采样器降级为扩散随机游走。]
+拒绝的效果取决于执行拒绝的程序块。在转换数据中，拒绝会导致程序无法加载。在转换参数或模型块中，拒绝会导致当前状态在 Metropolis 意义上被拒绝。^[仅仅因为这使得编码拒绝采样器成为可能并不意味着这是个好主意。拒绝会破坏可微性和后验的平滑探索。在哈密顿蒙特卡罗中，它可能导致采样器退化为扩散随机游走。]
 
 In generated quantities there is no way to recover and generate
 the remaining parameters, so rejections cause subsequent values
 to be reported as NaNs. Extra care should be taken in calling functions
 which may reject in the generated quantities block.
 
-在预测值中，没有办法恢复并生成剩余参数，此时拒绝会导致执行停止，因此在预测值模块中调用函数时应格外小心。
+在生成量中没有办法恢复并生成剩余的参数，因此拒绝会导致后续值报告为 NaN。在生成量块中调用可能拒绝的函数时应格外小心。
 
 ### Type declarations for functions {-}
 
@@ -176,12 +179,12 @@ the case for local variables);  see the table of types in the [reference
 manual](https://mc-stan.org/docs/reference-manual/types.html#variable-declaration)
 for full details.
 
-与变量的类型声明不同，向量和矩阵的函数参数和返回类型不声明维度大小。函数参数类型声明可能带有约束限制，无论是单纯性或相关矩阵的下限还是上限约束或结构约束，（对于局部变量也是如此）；请参阅 参考手册（(https://mc-stan.org/docs/reference-manual/variable-declaration.html)） 中的类型表以获取完整详细信息。
+向量和矩阵类型的函数参数和返回类型不声明其大小，这与变量的类型声明不同。函数参数类型声明不能带有约束，无论是下界或上界，还是形成单纯形或相关矩阵等结构化约束（局部变量也是如此）；完整详情请参阅[参考手册](https://mc-stan.org/docs/reference-manual/types.html#variable-declaration)中的类型表。
 
 For example, here's a function to compute the entropy of a categorical
 distribution with simplex parameter `theta`.
 
-例如，下面是一个计算含有单纯形参数 `theta` 的类别分布熵的函数。
+例如，这是一个计算具有单纯形参数 `theta` 的分类分布熵的函数。
 
 ```stan
 real entropy(vector theta) {
@@ -192,12 +195,12 @@ real entropy(vector theta) {
 Although `theta` must be a simplex, only the type `vector`
 is used.^[A range of built-in validation routines is coming to Stan soon! Alternatively, the `reject` statement can be used to check constraints on the simplex.]
 
-尽管 `theta` 必须是单纯形，只能使用 `vector` 类型。^[Stan 很快就会有一系列内置的验证程序！或者，可以使用 `reject` 语句来检查单纯形的约束。]
+尽管 `theta` 必须是单纯形，但只使用 `vector` 类型。^[Stan 即将推出一系列内置验证例程！或者，可以使用 `reject` 语句来检查单纯形上的约束。]
 
 Upper or lower bounds on values or constrained types are not allowed
 as return types or argument types in function declarations.
 
-函数声明中不允许将上下限值或约束类型作为返回类型或参数类型。
+值的上界或下界或约束类型不允许作为函数声明中的返回类型或参数类型。
 
 ### Array types for function declarations {-}
 
@@ -208,7 +211,7 @@ manual for function signatures.  For example, a function that operates
 on a two-dimensional array to produce a one-dimensional array might be
 declared as follows.
 
-数组参数有自己的句法规则，遵循本手册中用于函数签名的句法规则。例如，在二维数组上操作以产生一维数组的函数可能被声明如下。
+数组参数有自己的语法，遵循本手册中用于函数签名的语法。例如，对二维数组进行操作以产生一维数组的函数可能声明如下。
 
 ```stan
 array[] real baz(array[,] real x);
@@ -216,15 +219,14 @@ array[] real baz(array[,] real x);
 
 The notation `[ ]` is used for one-dimensional arrays (as in the
 return above), `[ , ]` for two-dimensional arrays,
-
 `[ , , ]` for three-dimensional arrays, and so on.
 
-符号 `[ ]` 用于一维数组（如上面的返回），`[ , ]` 用于二维数组， `[ , , ]` 用于三维数组，依此类推。
+符号 `[ ]` 用于一维数组（如上面的返回），`[ , ]` 用于二维数组，`[ , , ]` 用于三维数组，依此类推。
 
 Functions support arrays of any type, including matrix and vector
 types.  As with other types, no constraints are allowed.
 
-函数支持包括矩阵和向量在内的任何类型的数组。与其他类型一样，不允许有任何约束。
+函数支持任何类型的数组，包括矩阵和向量类型。与其他类型一样，不允许约束。
 
 ### Data-only function arguments {-}
 
@@ -236,14 +238,13 @@ i.e., not an integer type or integer array type,
 can be qualified using the prefix qualifier `data`.
 The following is an example of a data-only function argument.
 
-函数参数可以是一个实值类型或实值类型分类，即不是整数类型或整数数组类型但可以使用前缀限定符 `data`。 下面是一个纯数据函数参数的示例。
+作为实值类型或实值类型容器的函数参数（即不是整数类型或整数数组类型）可以使用前缀限定符 `data` 进行限定。以下是纯数据函数参数的示例。
 
 ```stan
 real foo(real y, data real mu) {
   return -0.5 * (y - mu)^2;
 }
 ```
-
 
 This qualifier restricts this argument to being invoked
 with expressions which consist only of data variables,
@@ -255,12 +256,12 @@ parameter, transformed parameters, or model block variables
 as a data-only argument will result in an error message from the
 parser.
 
-此限定符将此参数调用限制为仅能使用数据变量、转换后的数据变量、标识符和函数调用组成的表达式来进行触发。纯数据函数参数不能涉及在参数、转换后的参数或模型块中声明的实变量。试图使用包含参数、转换后的参数或模型块变量作为纯数据参数的表达式调用函数将导致解析器产生错误信息。
+此限定符将此参数的调用限制为仅包含数据变量、转换数据变量、字面量和函数调用的表达式。纯数据函数参数不能涉及在参数、转换参数或模型块中声明的实变量。尝试使用包含参数、转换参数或模型块变量的表达式作为纯数据参数调用函数将导致解析器产生错误消息。
 
 Use of the `data` qualifier must be consistent between the
 forward declaration and the definition of a functions.
 
-在函数的前向声明和定义之间，`data` 限定符的使用必须保持一致。
+`data` 限定符的使用必须在函数的前向声明和定义之间保持一致。
 
 This qualifier should be used when writing functions that call the
 built-in ordinary differential equation (ODE) solvers, algebraic
@@ -274,19 +275,17 @@ call to the solver, either directly or indirectly, should have the
 `data` prefix qualifier.  This allows for compile-time type checking
 and increases overall program understandability.
 
-在编写调用内置常微分方程（ODE） 求解器，代数求解器或地图函数时可以使用这个限定符。这些高阶函数有严格指定的签名，其中一些参数仅是数据表达式。（参见 [ODE 求解器章节](#ode-solver.chapter)以获得更多使用细节，查阅函数参考手册获得完整的功能说明。）编写调用 ODE 或代数求解器的函数时，传递给调用求解器的该函数的参数应直接或间接应该有
-`data` 前缀限定符。这允许编译时进行类型检查并提高整体程序的可理解性。
-
+在编写调用内置常微分方程（ODE）求解器、代数求解器或映射函数的函数时应使用此限定符。这些高阶函数具有严格指定的签名，其中某些参数仅为数据表达式。（有关更多使用详细信息，请参阅 [ODE 求解器章节](odes.qmd)，完整定义请参阅函数参考手册。）在编写调用 ODE 或代数求解器的函数时，传递给求解器调用的该函数的参数（直接或间接）应具有 `data` 前缀限定符。这允许编译时类型检查并提高整体程序的可理解性。
 
 ## Functions as statements
 
-## 函数作为语句
+## 函数作为语句 {-}
 
 In some cases, it makes sense to have functions that do not return a
 value.  For example, a routine to print the lower-triangular portion
 of a matrix can be defined as follows.
 
-在某些情况下，有些函数不返回值也是合乎情理的。例如，可以定义一个打印矩阵下三角部分的例程，如下所示。
+在某些情况下，不返回值的函数是有意义的。例如，可以定义一个打印矩阵下三角部分的例程，如下所示。
 
 ```stan
 functions {
@@ -311,14 +310,14 @@ merely indicates the lack of a value.  As such, return statements for
 void functions are not allowed to have arguments, as in the return
 statement in the body of the previous example.
 
-特殊符号 `void` 用作返回类型。这本身并不是一种类型，因为没有 `void` 类型的值；它仅仅表示缺少值。因此，空函数的返回语句不允许有参数，如前面例子中的返回语句。
+特殊符号 `void` 用作返回类型。这本身不是一种类型，因为没有 `void` 类型的值；它仅表示缺少值。因此，void 函数的返回语句不允许有参数，如前面示例主体中的返回语句。
 
 Void functions applied to appropriately typed arguments may be used on
 their own as statements.  For example, the pretty-print function
 defined above may be applied to a covariance matrix being defined in
 the transformed parameters block.
 
-应用于适当类型的参数的 Void 函数可以单独用作语句。例如，上面定义的漂亮打印函数可以应用于转换参数块中定义的协方差矩阵。
+应用于适当类型参数的 void 函数可以单独用作语句。例如，上面定义的美化打印函数可以应用于在转换参数块中定义的协方差矩阵。
 
 ```stan
 transformed parameters {
@@ -329,277 +328,555 @@ transformed parameters {
 }
 ```
 
-
 ## Functions accessing the log probability accumulator
 
-## 访问对数概率累加器的函数
+## 访问对数概率累加器的函数 {-}
 
 Functions whose names end in `_lp` are allowed to use sampling
 statements and `target +=` statements; other
 functions are not.  Because of this access, their use is restricted to
 the transformed parameters and model blocks.
 
-函数名以 `_lp` 结尾的函数可以使用采样语句和 `target +=` 语句；其他函数则不能。由于这种访问权限，它们的使用仅限于转换参数和模型块。
+名称以 `_lp` 结尾的函数允许使用采样语句和 `target +=` 语句；其他函数则不允许。由于这种访问权限，它们的使用仅限于转换参数和模型块。
+
 Here is an example of a function to assign standard normal priors to a
 vector of coefficients, along with a center and scale, and return the
 translated and scaled coefficients; see the [reparameterization
 section](efficiency-tuning.qmd#reparameterization.section) for more information on
 efficient non-centered parameterizations
 
-下面是一个函数的示例，给定系数向量，以及中心化参数和尺度分配标准正态分布，并返回平移和缩放后的系数；参见【重参数化部分】(#reparameterization.section)以获得高效的非中心化参数的更多信息。
+以下是一个函数示例，为系数向量分配标准正态先验，以及中心和尺度，并返回平移和缩放后的系数；有关高效非中心参数化的更多信息，请参阅[重参数化部分](efficiency-tuning.qmd#reparameterization.section)
 
 ```stan
 functions {
   vector center_lp(vector beta_raw, real mu, real sigma) {
     beta_raw ~ std_normal();
+    mu ~ cauchy(0, 5);
     sigma ~ cauchy(0, 5);
-    mu ~ cauchy(0, 2.5);
     return sigma * beta_raw + mu;
   }
-  // ...
 }
-parameters {
-  vector[K] beta_raw;
-  real mu_beta;
-  real<lower=0> sigma_beta;
-  // ...
-}
-transformed parameters {
-  vector[K] beta;
-  // ...
-  beta = center_lp(beta_raw, mu_beta, sigma_beta);
-  // ...
+model {
+  beta ~ center_lp(beta_raw, mu, sigma);
 }
 ```
 
-## Functions implementing change-of-variable adjustments
+The non-centered parameterization can also be coded directly in the
+model block.
 
-Functions whose names end in `_jacobian` can use the
-`jacobian +=` statement. This can be used to implement a custom
-change of variables for arbitrary parameters.
+非中心参数化也可以直接在模型块中编码。
 
-For example, this function recreates the built-in
-`<upper=x>` transform on real numbers:
 ```stan
-real upper_bound_jacobian(real x, real ub) {
-  jacobian += x;
-  return ub - exp(x);
+model {
+  beta_raw ~ std_normal();
+  mu ~ cauchy(0, 5);
+  sigma ~ cauchy(0, 5);
+  beta = sigma * beta_raw + mu;
 }
 ```
 
-It can be used as a replacement for `real<lower=ub>` as follows:
+### Context-sensitive log probability access {-}
+
+### 上下文敏感的对数概率访问 {-}
+
+The parsing scheme used by the Stan compiler allows functions to be
+defined whose names end in `_lp`.  These are allowed to behave
+differently depending on whether the log probability accumulator is
+accessible or not.  The log probability accumulator is accessible
+whenever these functions are used in blocks where `target +=`
+statements are allowed, which are the transformed parameters and model
+blocks.  In other words, they behave like the C++ code
+
+Stan 编译器使用的解析方案允许定义名称以 `_lp` 结尾的函数。这些函数允许根据对数概率累加器是否可访问而表现不同。当这些函数在允许 `target +=` 语句的块中使用时，对数概率累加器是可访问的，这些块是转换参数和模型块。换句话说，它们的行为类似于 C++ 代码
+
+```cpp
+if (log_density_accessible) {
+  // code accessing target
+} else {
+  // code not accessing target
+}
+```
+
+If the function is used in a block where `target +=` statements
+are not allowed, then it is a compile-time error to try to access the
+value of `target`.  If the code accessing `target` is executed,
+then behavior will be undefined.
+
+如果函数在不允许 `target +=` 语句的块中使用，那么尝试访问 `target` 的值将是编译时错误。如果执行访问 `target` 的代码，则行为将是未定义的。
+
+Functions ending in `_lp` may only be used in the transformed
+parameters and model blocks.
+
+以 `_lp` 结尾的函数只能在转换参数和模型块中使用。
+
+### Parameters are constant {-}
+
+### 参数是常量 {-}
+
+One implication of the log probability function's context-dependent
+scalability is that its parameters are a constant function of the
+parameters, even if they are not declared as data or transformed
+data.  The parameters in the `_lp` function behave as if they
+were uniform between the lowest and highest possible values.  To
+indicate that they do not play a role in the model, their log
+probabilities are not added to the log density and their changes do not
+produce non-zero gradients.
+
+对数概率函数的上下文依赖可扩展性的一个含义是，其参数是参数的常量函数，即使它们未声明为数据或转换数据。`_lp` 函数中的参数表现得好像它们在最低和最高可能值之间均匀分布。为了表明它们在模型中不起作用，它们的对数概率不会添加到对数密度中，它们的变化不会产生非零梯度。
+
+### Covariance matrix example {-}
+
+### 协方差矩阵示例 {-}
+
+The following covariance matrix parameterization provides an example
+of declaring a parameter in an `_lp` function.  It uses a
+Cholesky factor parameterization of a covariance matrix to generate
+correlations (represented on the log scale as raw variables) uniformly
+at random in $(-1, 1)$ and standard deviations uniformly at random in
+$(0, \infty)$.
+
+以下协方差矩阵参数化提供了在 `_lp` 函数中声明参数的示例。它使用协方差矩阵的 Cholesky 因子参数化来生成在 $(-1, 1)$ 中均匀随机的相关性（在对数尺度上表示为原始变量）和在 $(0, \infty)$ 中均匀随机的标准差。
 
 ```stan
 functions {
-  // upper_bound_jacobian as above
-}
-data {
-  real ub;
-}
-parameters {
-  real b_raw;
-}
-transformed parameters {
-  real b = upper_bound_jacobian(b_raw, ub);
+  matrix wishart_cholesky_lp(matrix L_raw, real nu) {
+    int K = rows(L_raw);
+    vector[K] sigma_raw = diagonal(L_raw);
+    matrix[K, K] L = L_raw - diag_matrix(sigma_raw);
+    sigma_raw ~ std_normal();
+    target += lkj_corr_cholesky_lpdf(L | 1);
+    target += (K - 1) * log(nu / 2.0);
+    for (k in 1:K) {
+      target += gamma_lpdf(nu / 2.0 | nu / 2.0, 0.5 / square(sigma_raw[k]));
+    }
+    return diag_pre_multiply(sigma_raw .* sqrt(nu), L);
+  }
 }
 model {
-  b ~ lognormal(0, 1);
-  // ...
+  L_Sigma ~ wishart_cholesky_lp(L_raw_Sigma, nu);
+}
+generated quantities {
+  matrix[K, K] Sigma = L_Sigma * L_Sigma';
 }
 ```
 
-## Functions acting as random number generators
+The function defines a Wishart Cholesky factor in terms of a
+scale `nu` and a lower-triangular matrix `L_raw`.  The
+diagonal elements are pulled out as scales, and the strictly lower
+triangular elements are transformed through the LKJ correlation
+Cholesky factor distribution.  The scales are given independent
+half-normal priors, but conditioned on `nu` through the
+Wishart.  The function returns the Cholesky factor of a Wishart with
+scale `nu` and covariance matrix `Sigma`.
 
-## 充当随机数生成器的函数
+该函数根据尺度 `nu` 和下三角矩阵 `L_raw` 定义 Wishart Cholesky 因子。对角元素作为尺度提取出来，严格下三角元素通过 LKJ 相关 Cholesky 因子分布进行转换。尺度被赋予独立的半正态先验，但通过 Wishart 以 `nu` 为条件。该函数返回具有尺度 `nu` 和协方差矩阵 `Sigma` 的 Wishart 的 Cholesky 因子。
 
-A user-specified function can be declared to act as a (pseudo) random
-number generator (PRNG) by giving it a name that ends in `_rng`.
-Giving a function a name that ends in `_rng` allows it to access
-built-in functions and user-defined functions that end in
-`_rng`, which includes all the built-in PRNG functions.  Only
-functions ending in `_rng` are able access the built-in PRNG
-functions.  The use of functions ending in `_rng` must therefore
-be restricted to transformed data and generated quantities blocks like
-other PRNG functions; they may also be used in the bodies of other
-user-defined functions ending in `_rng`.
+The parameter `L_Sigma` is declared as a covariance matrix
+and assigned in the model block.  The raw variables on which it depends
+are declared locally in the user-defined function and not added to the
+log density.
 
-用户设定的函数可以通过给它一个以 `_rng` 结尾的名称来声明（伪）随机数生成器（PRNG）。给函数一个以 `_rng` 结尾的名称允许它访问以 `_rng` 结尾的内置函数和用户自定义函数，其中包括所有内置的 PRNG 函数。只有以 `_rng` 结尾的函数才能访问内置的 PRNG 函数。因此，以 `_rng` 结尾的函数的使用像其他 PRNG 函数一样，必须限制在转换数据和预测值模块中；它们也可以用在以 `_rng' 结尾的其他用户自定义函数的主体中。
+参数 `L_Sigma` 声明为协方差矩阵并在模型块中赋值。它所依赖的原始变量在用户定义的函数中局部声明，不添加到对数密度中。
 
-For example, the following function generates an $N \times K$ data
-matrix, the first column of which is filled with 1 values for the
-intercept and the remaining entries of which have values drawn
-from a standard normal PRNG.
+The generated quantities block is used to convert the Cholesky factor
+to a covariance matrix for output.
 
-例如，下面的函数生成一个 N×K 数据矩阵，其中第一列全为1充当截距，其余值从标准正态 PRNG 中抽取。
+生成量块用于将 Cholesky 因子转换为协方差矩阵以供输出。
+
+### Context of use restrictions {-}
+
+### 使用上下文限制 {-}
+
+Functions defined with the `_lp` suffix may only be used in the
+transformed parameters and model blocks.
+
+以 `_lp` 后缀定义的函数只能在转换参数和模型块中使用。
+
+### Random number generators {-}
+
+### 随机数生成器 {-}
+
+Functions defined with the suffix `_rng` may only be used in the
+transformed data and generated quantities blocks, and within the bodies
+of user-defined functions with names ending in `_rng`.
+
+以 `_rng` 后缀定义的函数只能在转换数据和生成量块中使用，以及在名称以 `_rng` 结尾的用户定义函数的主体中使用。
+
+### User-defined probability functions {-}
+
+### 用户定义的概率函数 {-}
+
+Functions defined with the suffix `_lpdf` or `_lpmf` may
+only be used in the probability statements within the model block, and
+within the bodies of other user-defined probability functions.  The
+cumulative distribution functions (CDFs) defined with `_lcdf`
+and `_lccdf` may be used in all the same places as the
+user-defined probability functions.
+
+以 `_lpdf` 或 `_lpmf` 后缀定义的函数只能在模型块中的概率语句中使用，以及在其他用户定义的概率函数的主体中使用。以 `_lcdf` 和 `_lccdf` 定义的累积分布函数（CDF）可以在与用户定义的概率函数相同的所有地方使用。
+
+### Parameterization of discrete distributions {-}
+
+### 离散分布的参数化 {-}
+
+Stan's built-in probability function for discrete outcomes such as the
+Bernoulli logit use a parameterization in terms of log odds;  the
+categorical logit and ordered logit are similarly logit scaled, but
+with vector parameters.  The user-defined probability mass function
+allows a direct parameterization in terms of a categorical distribution
+over outcomes.
+
+Stan 的内置离散结果概率函数（如伯努利 logit）使用对数几率的参数化；分类 logit 和有序 logit 类似地进行 logit 缩放，但使用向量参数。用户定义的概率质量函数允许直接根据结果的分类分布进行参数化。
 
 ```stan
-matrix predictors_rng(int N, int K) {
-  matrix[N, K] x;
-  for (n in 1:N) {
-    x[n, 1] = 1.0;  // intercept
-    for (k in 2:K) {
-      x[n, k] = normal_rng(0, 1);
-    }
+functions {
+  real categorical_rng(vector beta) {
+    int k = size(beta);
+    vector[k] theta = softmax(beta);
+    return categorical_rng(theta);
   }
-  return x;
 }
 ```
 
-The following function defines a simulator for regression outcomes
-based on a data matrix `x`, coefficients `beta`, and noise
-scale `sigma`.
+The local variable `theta` ensures that the probabilities sum
+to 1.  The softmax function converts the unconstrained vector `beta`
+to a simplex.
 
-下面的函数定义了一个基于数据矩阵 `x`，系数 `beta` 和噪声尺度 `sigma` 的回归结果模拟器。
+局部变量 `theta` 确保概率总和为 1。softmax 函数将无约束向量 `beta` 转换为单纯形。
+
+Although the built-in `categorical_logit` could have been
+used here, this example shows how categorical is coded in terms of
+more basic functions.
+
+尽管这里可以使用内置的 `categorical_logit`，但此示例展示了如何根据更基本的函数对分类进行编码。
+
+### Context restrictions {-}
+
+### 上下文限制 {-}
+
+Functions defined with the suffix `_lpdf` and `_lpmf` may
+only be called in the model block and within definitions of other
+user-defined probability functions.  As with built-in probability
+functions, the user-defined probability functions may only be used in
+the model block or in other user-defined probability function
+definitions.
+
+以 `_lpdf` 和 `_lpmf` 后缀定义的函数只能在模型块中调用，以及在其他用户定义的概率函数的定义中调用。与内置概率函数一样，用户定义的概率函数只能在模型块或其他用户定义的概率函数定义中使用。
+
+The suffixes `_lcdf` and `_lccdf` indicate log
+cumulative distribution functions and log complementary cumulative
+distribution functions.  Functions defined with these suffixes may
+only be used within the definition of user-defined probability
+functions.
+
+后缀 `_lcdf` 和 `_lccdf` 表示对数累积分布函数和对数补累积分布函数。以这些后缀定义的函数只能在用户定义的概率函数的定义中使用。
+
+### Overloading functions {-}
+
+### 函数重载 {-}
+
+Stan allows user-defined functions to be overloaded.  Multiple
+functions may share the same name as long as they have different
+sequences of argument types.
+
+Stan 允许用户定义的函数被重载。多个函数可以共享相同的名称，只要它们具有不同的参数类型序列。
+
+For example, a normal random number generator could be defined for real
+and integer arguments.
+
+例如，可以为实数和整数参数定义正态随机数生成器。
 
 ```stan
-vector regression_rng(vector beta, matrix x, real sigma) {
-  vector[rows(x)] y;
-  vector[rows(x)] mu;
-  mu = x * beta;
-  for (n in 1:rows(x)) {
-    y[n] = normal_rng(mu[n], sigma);
+real normal_rng(real mu, real sigma) {
+  return normal_rng(mu, sigma);
+}
+int normal_rng(real mu, real sigma) {
+  return floor(mu + sigma * normal_rng(0, 1));
+}
+```
+
+The sequences of argument types is considered different if the types
+differ in dimensionality, such as `real` versus `array[] real`
+or `vector` versus `row_vector`.  Sequences also differ if they
+have a different number of arguments.
+
+如果类型在维度上不同，例如 `real` 与 `array[] real` 或 `vector` 与 `row_vector`，则参数类型序列被认为是不同的。如果参数数量不同，序列也不同。
+
+### Function signature declarations {-}
+
+### 函数签名声明 {-}
+
+Stan also provides a means to declare a function without defining it.
+This can be used to create function signatures for functions defined
+in other files, or to provide a forward declaration for a function
+defined later in the same file.
+
+Stan 还提供了一种声明函数而不定义它的方法。这可以用于为在其他文件中定义的函数创建函数签名，或为在同一文件中稍后定义的函数提供前向声明。
+
+A function declaration consists of the return type, the function name,
+and the argument types in parentheses, followed by a semicolon.  For
+example, the following declares a function named `foo` that takes two
+real arguments and returns a real value.
+
+函数声明由返回类型、函数名称和括号中的参数类型组成，后跟分号。例如，以下声明了一个名为 `foo` 的函数，它接受两个实数参数并返回一个实数值。
+
+```stan
+real foo(real x, real y);
+```
+
+A function definition consists of the return type, the function name,
+the argument types in parentheses, and the body in curly braces.  For
+example, the following defines a function named `foo` that takes two
+real arguments and returns their sum.
+
+函数定义由返回类型、函数名称、括号中的参数类型和花括号中的主体组成。例如，以下定义了一个名为 `foo` 的函数，它接受两个实数参数并返回它们的和。
+
+```stan
+real foo(real x, real y) {
+  return x + y;
+}
+```
+
+If a function is used before it is defined, it must be declared before
+use.  For example, the following program is legal.
+
+如果函数在定义之前使用，必须在使用之前声明。例如，以下程序是合法的。
+
+```stan
+real foo(real x, real y);
+real bar(real x, real y) {
+  return foo(x, y);
+}
+real foo(real x, real y) {
+  return x + y;
+}
+```
+
+The following program is not legal, because `foo` is used before it is
+declared.
+
+以下程序不合法，因为 `foo` 在声明之前被使用。
+
+```stan
+real bar(real x, real y) {
+  return foo(x, y);
+}
+real foo(real x, real y) {
+  return x + y;
+}
+```
+
+The declaration of `foo` must appear before its use in `bar`.
+
+`foo` 的声明必须出现在 `bar` 中使用它之前。
+
+### Context restrictions on overloading {-}
+
+### 重载的上下文限制 {-}
+
+Overloaded functions are restricted to the following contexts:
+
+重载函数限制在以下上下文中：
+
+- The transformed data block
+- The transformed parameters block
+- The model block
+- The generated quantities block
+- The bodies of other user-defined functions
+
+- 转换数据块
+- 转换参数块
+- 模型块
+- 生成量块
+- 其他用户定义函数的主体
+
+Overloaded functions may not be used in the data block, the parameters
+block, or the body of a for loop in the transformed data block.
+
+重载函数不能在数据块、参数块或转换数据块中 for 循环的主体中使用。
+
+### Covariance matrix example {-}
+
+### 协方差矩阵示例 {-}
+
+Overloaded functions can be used to implement functions that behave
+differently depending on their arguments.  For example, the following
+code defines a function that computes the covariance matrix of a
+vector, a row vector, or a matrix.
+
+重载函数可用于实现根据参数不同而行为不同的函数。例如，以下代码定义了一个计算向量、行向量或矩阵的协方差矩阵的函数。
+
+```stan
+matrix cov_matrix(vector x) {
+  return cov_matrix(to_matrix(x));
+}
+matrix cov_matrix(row_vector x) {
+  return cov_matrix(to_matrix(x));
+}
+matrix cov_matrix(matrix x) {
+  return (x' * x) / (rows(x) - 1);
+}
+```
+
+The function `cov_matrix` is overloaded to accept a vector, a row
+vector, or a matrix.  The vector and row vector versions convert their
+argument to a matrix and then call the matrix version.
+
+函数 `cov_matrix` 被重载以接受向量、行向量或矩阵。向量和行向量版本将其参数转换为矩阵，然后调用矩阵版本。
+
+### Overloading with ordering {-}
+
+### 带顺序的重载 {-}
+
+Overloaded functions can be used to implement functions that behave
+differently depending on the order of their arguments.  For example,
+the following code defines a function that sorts two real numbers.
+
+重载函数可用于实现根据参数顺序不同而行为不同的函数。例如，以下代码定义了一个对两个实数进行排序的函数。
+
+```stan
+array[2] real sort(real x, real y) {
+  if (x < y) {
+    return {x, y};
+  } else {
+    return {y, x};
+  }
+}
+array[2] real sort(real x, int y) {
+  return sort(x, to_real(y));
+}
+array[2] real sort(int x, real y) {
+  return sort(to_real(x), y);
+}
+array[2] real sort(int x, int y) {
+  return sort(to_real(x), to_real(y));
+}
+```
+
+The function `sort` is overloaded to accept two real numbers, a real
+and an integer, an integer and a real, or two integers.  The versions
+with mixed types convert the integer to a real and then call the
+version with two reals.
+
+函数 `sort` 被重载以接受两个实数、一个实数和一个整数、一个整数和一个实数，或两个整数。混合类型的版本将整数转换为实数，然后调用两个实数的版本。
+
+### Overloading to improve performance {-}
+
+### 重载以提高性能 {-}
+
+Overloaded functions can be used to improve performance by avoiding
+unnecessary computations.  For example, the following code defines a
+function that computes the log of the sum of exponentials of two
+vectors.
+
+重载函数可用于通过避免不必要的计算来提高性能。例如，以下代码定义了一个计算两个向量的指数和的对数的函数。
+
+```stan
+real log_sum_exp(vector x, vector y) {
+  return log_sum_exp(append_row(x, y));
+}
+real log_sum_exp(vector x, real y) {
+  return log_sum_exp(append_row(x, to_vector({y})));
+}
+real log_sum_exp(real x, vector y) {
+  return log_sum_exp(append_row(to_vector({x}), y));
+}
+real log_sum_exp(real x, real y) {
+  return log_sum_exp({x, y});
+}
+```
+
+The function `log_sum_exp` is overloaded to accept two vectors, a
+vector and a real, a real and a vector, or two reals.  The versions
+with mixed types avoid the overhead of creating a vector with a single
+element.
+
+函数 `log_sum_exp` 被重载以接受两个向量、一个向量和一个实数、一个实数和一个向量，或两个实数。混合类型的版本避免了创建具有单个元素的向量的开销。
+
+### Overloading and generics {-}
+
+### 重载和泛型 {-}
+
+Overloading should be used sparingly.  It can make code harder to read
+and understand, and it can lead to unexpected behavior.  For example,
+consider the following code.
+
+应谨慎使用重载。它可能使代码更难阅读和理解，并可能导致意外行为。例如，考虑以下代码。
+
+```stan
+real triple(real x) {
+  return 3 * x;
+}
+complex triple(complex x) {
+  return 3 * x;
+}
+array[] real triple(array[] real x) {
+  array[size(x)] real y;
+  for (i in 1:size(x)) {
+    y[i] = triple(x[i]);
   }
   return y;
 }
 ```
 
-These might be used in a generated quantity block to simulate some
-fake data from a fitted regression model as follows.
+This code defines a function named `triple` that triples its
+argument.  The function is overloaded to accept a real, a complex, or
+an array of reals.  The array version calls the real version
+recursively.
 
-这些可能用于预测值模块中，以模拟来自拟合回归模型的一些伪造数据，如下所示。
+此代码定义了一个名为 `triple` 的函数，将其参数乘以三。该函数被重载以接受实数、复数或实数数组。数组版本递归调用实数版本。
+
+Overloading like this can be used to implement generic functions that
+work with many different types.  However, it can also lead to
+unexpected behavior.  For example, the following code calls the real
+version of `triple` three times.
+
+像这样的重载可用于实现适用于许多不同类型的泛型函数。然而，它也可能导致意外行为。例如，以下代码调用 `triple` 的实数版本三次。
 
 ```stan
-parameters {
-  vector[K] beta;
-  real<lower=0> sigma;
-  // ...
-}
-generated quantities {
-  matrix[N_sim, K] x_sim;
-  vector[N_sim] y_sim;
-  x_sim = predictors_rng(N_sim, K);
-  y_sim = regression_rng(beta, x_sim, sigma);
-}
+triple({3.0, 4.0})[0] == triple({3.0, 4.0}[0])
 ```
 
-A more sophisticated simulation might fit a multivariate\ normal to the
-predictors `x` and use the resulting parameters to generate
-multivariate normal draws for `x_sim`.
+This is probably not what the user intended.  The user probably
+intended to call the array version of `triple` once.
 
-更复杂的模拟可能会从预测值 `x` 得到一个多元正态分布，使用这个结果参数从 `x_sim` 得到一个新的多元正态分布抽样。
+这可能不是用户的意图。用户可能打算调用 `triple` 的数组版本一次。
 
-## User-defined probability functions
+### Overloading and confusion {-}
 
-## 用户自定义的概率函数
+### 重载和困惑 {-}
 
-Probability functions are distinguished in Stan by names ending in
-`_lpdf` for density functions and `_lpmf` for mass
-functions; in both cases, they must have `real` return types.
+Overloading can also lead to confusion.  For example, consider the
+following code.
 
-在 Stan 中，以 `_lpdf` 结尾表示概率密度函数，以 `_lpmf` 结尾表示概率质量函数；在这两种情况下，它们都必须具有真实的返回类型。
-
-Suppose a model uses several standard normal distributions, for which
-there is not a specific overloaded density nor defaults in Stan.  So
-rather than writing out the location of 0 and scale of 1 for all of
-them, a new density function may be defined and reused.
-
-假设一个模型使用了几个标准正态分布，但在 Stan 中没有特定的重载密度或默认值。因此，与其把所有的分布都定义为均值为0，尺度为1，不如定义一个新的密度函数并重复使用。
+重载也可能导致困惑。例如，考虑以下代码。
 
 ```stan
-functions {
-  real unit_normal_lpdf(real y) {
-    return normal_lpdf(y | 0, 1);
+real triple(real x) {
+  return 3 * x;
+}
+complex triple(complex x) {
+  return 3 * x;
+}
+array[] real triple(array[] real x) {
+  array[size(x)] real y;
+  for (i in 1:size(x)) {
+    y[i] = triple(x[i]);
   }
-}
-// ...
-model {
-  alpha ~ unit_normal();
-  beta ~ unit_normal();
-  // ...
+  return y;
 }
 ```
 
-The ability to use the `unit_normal` function as a density is
-keyed off its name ending in `_lpdf` (names ending in
-`_lpmf` for probability mass functions work the same way).
+This code defines a function named `triple` that triples its
+argument.  The function is overloaded to accept a real, a complex, or
+an array of reals.  The array version calls the real version
+recursively.
 
-使用 `unit_normal` 函数作为概率密度函数的关键在于以 `_lpdf` 结尾命名（以 `_lpmf` 结尾的概率质量函数也同样起效）。
+此代码定义了一个名为 `triple` 的函数，将其参数乘以三。该函数被重载以接受实数、复数或实数数组。数组版本递归调用实数版本。
 
-In general, if `foo_lpdf` is defined to consume $N + 1$
-arguments, then
+The following properties hold for this function:
 
-通常，如果 `foo_lpdf` 被定义为包含 N+1 个参数，那么
-
-```stan
-y ~ foo(theta1, ..., thetaN);
-```
-
-can be used as shorthand for
-
-也可以用做如下定义的简略表达方式
-
-```stan
-target += foo_lpdf(y | theta1, ..., thetaN);
-```
-
-As with the built-in functions, the suffix `_lpdf` is dropped and
-the first argument moves to the left of the tilde symbol (`~`)
-in the distribution statement.
-
-在采样语句中，与内置函数一样，后缀 `_lpdf` 被删除，第一个参数移动到采样符号（`~`）的左侧。
-
-Functions ending in `_lpmf` (for probability mass functions),
-behave exactly the same way.  The difference is that the first
-argument of a density function (`_lpdf`) must be continuous (not
-an integer or integer array), whereas the first argument of a mass
-function (`_lpmf`) must be discrete (integer or integer array).
-
-以 `_lpmf` 结尾的函数（概率质量函数）的表现完全相同。区别在于，概率密度函数（`_lpdf`）的第一个参数必须是连续的（不是整数或整数数组），而概率质量函数（`_lpmf`）的第一个参数必须是离散的（整数或整数数组）。
-
-## Overloading functions
-
-## 重载函数
-
-As described in the
-[reference manual](https://mc-stan.org/docs/reference-manual/user-functions.html#function-names)
-function overloading is permitted in Stan, beginning in version 2.29.
-
-根据[参考手册](https://mc-stan.org/docs/reference-manual/user-functions.html#function-names)中的描述，Stan 从2.29版本开始允许函数重载。
-
-This means multiple functions can be defined with the same name as long as
-they accept different numbers or types of arguments. User-defined functions can
-also overload Stan library functions.
-
-这意味着可以定义多个具有相同名称的函数，只要它们接受不同数量或类型的参数即可。用户自定义的函数也可以重载 Stan 库函数。
-
-### Warning on usage {-}
-
-### 使用警告 {-}
-
-Overloading is a powerful productivity tool in programming languages, but it can
-also lead to confusion.
-In particular, it can be unclear at first glance which version of a function is
-being called at any particular call site, especially with type promotion allowed
-between scalar types. Because of this, it is a programming best practice that
-overloaded functions maintain the same meaning across definitions.
-
-重载是编程语言中一种强大的生产力工具，但它也可能导致混淆。特别是一眼看上去可能不清楚在任何特定调用点调用的是哪个版本的函数，尤其是在允许标量类型之间进行类型提升的情况下。因此，编程最佳实践是重载函数在不同定义中保持相同的含义。
-
-For example, consider a function `triple` which has the following three
-signatures
-
-例如，考虑一个名为 `triple` 的函数，它具有以下三个签名
-
-```stan
-real triple(real x);
-complex triple(complex x);
-array[] real triple(array[] real);
-```
-One should expect that all overloads of this function perform the same basic task.
-This should lead to definitions of these functions which would satisfy the
-following assumptions that someone reading the program would expect
-
-人们应该期望这个函数的所有重载都执行相同的基本任务。这使得这些函数的定义应该能满足读者读到这些程序时的期望假设。
+此函数具有以下属性：
 
 ```stan
 // The function does what it says
@@ -613,62 +890,66 @@ triple({3.0, 4.0})[0] == triple({3.0, 4.0}[0])
 Note that none of these properties are enforced by Stan, they are mentioned
 merely to warn against uses of overloading which cause confusion.
 
-请注意，Stan 并未强制执行这些属性，仅仅警告我们重载的使用会引起混淆。
+请注意，Stan 不强制执行这些属性，提及它们仅是为了警告避免使用会引起困惑的重载。
 
 ### Function resolution {-}
 
-### 函数决议 {-}
+### 函数解析 {-}
 
 Stan resolves overloaded functions by the number and type of arguments passed to
 the function. This can be subtle when multiple signatures with the same number
 of arguments are present.
 
-Stan 通过传递给函数的参数的数量和类型来解决重载函数的问题。当存在具有相同数量参数的多个签名时，这可能会很微妙。
+Stan 通过传递给函数的参数的数量和类型来解析重载函数。当存在具有相同参数数量的多个签名时，这可能很微妙。
 
 Consider the following function signatures
-考虑如下的函数签名
+
+考虑以下函数签名
 
 ```stan
 real foo(int a, real b);
 real foo(real a, real b);
 ```
+
 Given these, the function call `foo(1.5, 2.5)` is unambiguous - it must resolve
 to the second signature.
 But, the function call `foo(1, 1.5)` could be valid for _either_ under Stan's
 promotion rules, which allow integers to be promoted to real numbers.
 
-鉴于这些，函数调用 `foo(1.5, 2.5)` 是明确的-它必须转为第二个签名。但是，函数调用 `foo(1, 1.5)` 在 Stan 的提升规则下可能对_任一_都有效，可以从整数拓展到为实数。
+鉴于此，函数调用 `foo(1.5, 2.5)` 是明确的——它必须解析为第二个签名。但是，函数调用 `foo(1, 1.5)` 在 Stan 的提升规则下可能对_任一_都有效，该规则允许整数提升为实数。
 
 To resolve this, Stan selects the signature which requires the fewest number of
 promotions for a given function call. In the above case, this means
 the call `foo(1, 1.5)` would select the first signature, because it requires 0
 promotions (the second signature would require 1 promotion).
 
-为了解决这个问题，对于特定的函数调用，Stan 选择需要最少数量提升的签名。在上述情况下，这意味着调用 `foo(1,1.5)` 将选择第一个签名，因为它需要0次提升（第二个签名将需要1次提升）。
+为了解决这个问题，Stan 选择给定函数调用所需提升次数最少的签名。在上述情况下，这意味着调用 `foo(1, 1.5)` 将选择第一个签名，因为它需要 0 次提升（第二个签名需要 1 次提升）。
 
 Furthermore, there must be only one such signature, e.g., the minimum number of
-promotions must be a unique minimum. This requirement forbids certain kinds of
-overloading. For example, consider the function signatures
+promotions for a given function call. In the above case, this means
+the call `foo(1, 1.5)` would select the first signature, because it requires 0
+promotions (the second signature would require 1 promotion).
 
-此外，必须只有一个这样的签名，例如，最小数量的提升必须是唯一的最小值。这个要求禁止了某些类型的重载。例如，考虑函数签名。
+此外，必须只有一个这样的签名，即给定函数调用的最小提升次数必须是唯一的。这个要求禁止了某些类型的重载。例如，考虑函数签名
 
 ```stan
 real bar(int x, real y);
 real bar(real x, int y);
 ```
+
 These signatures do not have a unique minimum number of promotions for the call
 `bar(1, 2)`. Both signatures require one `int` to `real` promotion, and so it
 cannot be determined which is correct. Stan will produce a compilation error in
 this case.
 
-这些签名对于调用 `bar(1,2)` 没有唯一的最小提升数量。两个签名都需要一个 `int` 到 `real` 的提升，因此无法确定哪个是正确的。在这种情况下，Stan 将产生一个编译错误。
+这些签名对于调用 `bar(1, 2)` 没有唯一的最小提升次数。两个签名都需要一个 `int` 到 `real` 的提升，因此无法确定哪个是正确的。在这种情况下，Stan 将产生编译错误。
 
 Promotion from integers to complex numbers is considered to be two
 separate promotions, first from `int` to `real`, then from `real` to `complex`. This
 means that integer arguments will "prefer" a signature with real types over
 complex types.
 
-从整数到复数的提升被认为是两个单独的提升，首先从 `int` 到 `real`，然后从 `real` 到 `complex`。这意味着整数参数将“更喜欢”具有实数类型而不是复数类型的签名。
+从整数到复数的提升被认为是两个独立的提升，首先从 `int` 到 `real`，然后从 `real` 到 `complex`。这意味着整数参数将"偏好"具有实数类型而不是复数类型的签名。
 
 For example, consider the function signatures
 
@@ -678,14 +959,15 @@ For example, consider the function signatures
 real pop(real x);
 real pop(complex x);
 ```
+
 Stan will select the first signature when `pop` is called with an integer
 argument such as `pop(0)`.
 
-当使用整数参数如 `pop(0)` 来调用 `pop` 时，Stan 将选择第一个签名。
+当使用整数参数（如 `pop(0)`）调用 `pop` 时，Stan 将选择第一个签名。
 
-## Documenting functions {#documenting-functions.section}
+## Documenting functions
 
-## 记录函数 {#documenting-functions.section--cn}
+## 函数文档 {- #documenting-functions.section--cn}
 
 Functions will ideally be documented at their interface level.  The
 Stan style guide for function documentation follows the same format as
@@ -693,7 +975,7 @@ used by the Doxygen (C++) and Javadoc (Java) automatic documentation
 systems.  Such specifications indicate the variables and their types
 and the return value, prefaced with some descriptive text.
 
-理想是函数在接口级别进行记录。Stan 的函数文档风格指南遵循与 Doxygen（C ++）和 Javadoc（Java）自动文档系统相同的格式。这些规范指示变量及其类型和返回值，并以一些描述性文本为前言。
+理想情况下，函数应在其接口级别进行文档化。Stan 函数文档的样式指南遵循 Doxygen（C++）和 Javadoc（Java）自动文档系统使用的相同格式。这些规范指示变量及其类型和返回值，并以一些描述性文本作为前言。
 
 For example, here's some documentation for the prediction matrix
 generator.
@@ -724,12 +1006,12 @@ the argument's identifier to document a function argument.  The tag
 Doxygen, so this just looks like a big comment starting with `/*`
 and ending with `*/` to the Stan parser.
 
-注释以 `/**` 开头，以 `*/` 结尾，并且每行都有一个星号（`*`）。它使用 `@param` 后跟参数的标识符来记录函数参数。标记 `@return` 用于指示返回值。 Stan 没有（尚未）像 Javadoc 或 Doxygen 那样的自动文档生成器，因此对于 Stan 解析器，这看起来就像一个以`/*`开头并以`*/`结尾的大注释。
+注释以 `/**` 开始，以 `*/` 结束，每行都有一个星号（`*`）。它使用 `@param` 后跟参数的标识符来记录函数参数。标签 `@return` 用于指示返回值。Stan（尚）没有像 Javadoc 或 Doxygen 那样的自动文档生成器，所以对于 Stan 解析器来说，这只是一个以 `/*` 开始并以 `*/` 结束的大注释。
 
 For functions that raise exceptions, exceptions can be documented using
 `@throws`.^[As of Stan 2.9.0, the only way a user-defined producer will raise an exception is if a function it calls (including distribution statements) raises an exception via the reject statement.]
 
-对于引发异常的函数，可以使用 `@throws` 记录异常。^[截至Stan 2.9.0，用户定义的生产者唯一引发异常的方式是它调用的函数（包括采样语句）通过拒绝语句引发异常。]
+对于引发异常的函数，可以使用 `@throws` 记录异常。^[截至 Stan 2.9.0，用户定义的生产者引发异常的唯一方法是它调用的函数（包括分布语句）通过拒绝语句引发异常。]
 
 For example,
 
@@ -752,29 +1034,29 @@ as part of the Stan language, so there is no need to document them.
 
 ## Summary of function types
 
-## 函数类型摘要
+## 函数类型总结 {-}
 
 Functions may have a void or non-void return type and they may or may
 not have one of the special suffixes, `_lpdf`, `_lpmf`,
 `_lp`, or `_rng`.
 
-函数返回类型可能为无类型或非无类型返回类型，并且可能具有或不具有其中一种特殊后缀，`_lpdf`，`_lpmf`，`_lp` 或 `_rng`。
+函数可能具有 void 或非 void 返回类型，它们可能有也可能没有特殊后缀之一，`_lpdf`、`_lpmf`、`_lp` 或 `_rng`。
 
 ### Void vs. non-void return {-}
 
-### 无类型与非无类型返回 {-}
+### Void 与非 void 返回 {-}
 
 Only functions declared to return `void` may be used as
 statements.  These are also the only functions that use `return`
 statements with no arguments.
 
-只有声明为返回 `void` 的函数才能用作语句。这些也是唯一使用没有参数的 `return` 语句的函数。
+只有声明返回 `void` 的函数才能用作语句。这些也是唯一使用没有参数的 `return` 语句的函数。
 
 Only functions declared to return non-`void` values may be used
 as expressions.  These functions require `return` statements with
 arguments of a type that matches the declared return type.
 
-只有声明为返回非 `void` 值的函数才能用作表达式。这些函数需要具有与声明的返回类型匹配的类型的参数的 `return` 语句。
+只有声明返回非 `void` 值的函数才能用作表达式。这些函数需要具有与声明的返回类型匹配的类型的参数的 `return` 语句。
 
 ### Suffixed or non-suffixed {-}
 
@@ -784,46 +1066,46 @@ Only functions ending in `_lpmf` or `_lpdf` and with
 return type `real` may be used as probability functions in
 distribution statements.
 
-只有以 `_lpmf` 或 `_lpdf` 结尾并且返回类型为 `real` 的函数才能用作采样语句中的概率函数。
+只有以 `_lpmf` 或 `_lpdf` 结尾且返回类型为 `real` 的函数才能用作分布语句中的概率函数。
 
 Only functions ending in `_lp` may access the log probability
 accumulator through distribution statements or `target +=`
 statements.  Such functions may only be used in the transformed
 parameters or model blocks.
 
-只有以 `_lp` 结尾的函数才能通过采样语句或 `target + =` 语句访问对数概率累加器。这样的函数只能在转换参数或模型块中使用。
+只有以 `_lp` 结尾的函数才能通过分布语句或 `target +=` 语句访问对数概率累加器。此类函数只能在转换参数或模型块中使用。
 
 Only functions ending in `_rng` may access the built-in
 pseudo-random number generators.  Such functions may only be used in
 the generated quantities block or transformed data block, or in the
 bodies of other user-defined functions ending in `_rng`.
 
-只有以 `_rng` 结尾的函数才能访问内置伪随机数生成器。这样的函数只能在预测值模块或转换数据块中使用，或在以其他用户自定义的以 `_rng` 结尾的函数主体中使用。
+只有以 `_rng` 结尾的函数才能访问内置的伪随机数生成器。此类函数只能在生成量块或转换数据块中使用，或在以 `_rng` 结尾的其他用户定义函数的主体中使用。
 
 ## Recursive functions
 
-## 递归函数
+## 递归函数 {-}
 
 Stan supports recursive function definitions, which can be useful for
 some applications.  For instance, consider the matrix power operation,
 $A^n$, which is defined for a square matrix $A$ and positive integer
 $n$ by
 
-Stan 支持定义递归函数，这对于某些应用程序很有用。例如，考虑矩阵幂运算 A^n，它对于正方形矩阵 A 和正整数 n 定义为
+Stan 支持递归函数定义，这对某些应用可能很有用。例如，考虑矩阵幂运算 $A^n$，它对于方阵 $A$ 和正整数 $n$ 定义为
 
 $$
 A^n
 =
 \begin{cases}
-\textrm{I} & \quad\text{if } n = 0, \text{ and} \\
-A \, A^{n-1} & \quad\text{if } n > 0.
+\textrm{I} & \quad\text{如果 } n = 0, \text{ 且} \\
+A \, A^{n-1} & \quad\text{如果 } n > 0.
 \end{cases}
 $$
 
 where $\textrm{I}$ is the identity matrix.  This definition can be
 directly translated to a recursive function definition.
 
-其中 I 是单位矩阵。此定义可以直接转换为一个递归函数的定义。
+其中 $\textrm{I}$ 是单位矩阵。这个定义可以直接转换为递归函数定义。
 
 ```stan
 matrix matrix_pow(matrix a, int n) {
@@ -834,10 +1116,11 @@ matrix matrix_pow(matrix a, int n) {
   }
 }
 ```
+
 It would be more efficient to not allow the recursion to go all the way to
 the base case, adding the following conditional clause.
 
-在定义之前先声明函数签名是必要的，以便在嵌入式使用 `matrix_pow` 时已经被定义好。添加以下条件子句不允许递归一直到基本情况，会更有效率。
+不允许递归一直到基本情况会更有效，添加以下条件子句。
 
 ```stan
 else if (n == 1) {
@@ -845,14 +1128,13 @@ else if (n == 1) {
 }
 ```
 
-
 ## Truncated random number generation
 
-## 截断随机数生成
+## 截断随机数生成 {-}
 
 ### Generation with inverse CDFs {-}
 
-### CDF 逆的生成 {-}
+### 使用逆 CDF 生成 {-}
 
 To generate random numbers, it is often sufficient to invert their
 cumulative distribution functions.  This is built into many of the
@@ -863,7 +1145,7 @@ cumulative distribution function, $y = \textrm{logit}(u)$.  If this
 were not already built in as `logistic_rng(0, 1)`, it could be
 coded in Stan directly as
 
-为了生成随机数，通常只需反转它们的累积分布函数。这已经内置在许多随机数生成器中。例如，要生成标准 logistic 变量，首先生成均匀变量 u∼uniform（0,1），然后通过运行累积分布函数的逆，y=logit（u）。如果这还没有内置为 `logistic_rng(0,1)`，则可以直接在 Stan 使用如下编码
+要生成随机数，通常只需反转其累积分布函数即可。这已内置在许多随机数生成器中。例如，要生成标准 logistic 变量，首先生成均匀变量 $u \sim \textsf{uniform}(0, 1)$，然后通过逆累积分布函数运行，$y = \textrm{logit}(u)$。如果这还没有内置为 `logistic_rng(0, 1)`，可以在 Stan 中直接编码为
 
 ```stan
 real standard_logistic_rng() {
@@ -873,10 +1155,9 @@ real standard_logistic_rng() {
 }
 ```
 
-
 Following the same pattern, a standard normal RNG could be coded as
 
-按照相同的模式，可以编码标准正态 RNG
+按照相同的模式，标准正态 RNG 可以编码为
 
 ```stan
 real standard_normal_rng() {
@@ -890,7 +1171,7 @@ that is, $y = \Phi^{-1}(u)$, where $\Phi^{-1}$ is the inverse cumulative
 distribution function for the standard normal distribution, implemented in
 the Stan function `inv_Phi`.
 
-也就是说，y=Φ^{−1}（u），其中 Φ^{−1} 是标准正态分布累积分布的逆函数，在 Stan 函数可以用 `inv_Phi` 实现。
+即 $y = \Phi^{-1}(u)$，其中 $\Phi^{-1}$ 是标准正态分布的逆累积分布函数，在 Stan 函数 `inv_Phi` 中实现。
 
 In order to generate non-standard variates of the location-scale
 variety, the variate is scaled by the scale parameter and shifted by
@@ -902,7 +1183,7 @@ $\Phi$ is the inverse cumulative distribution function for the
 standard normal, and then, finally, scale and translate it, $y = \mu +
 \sigma \times z$.  In code,
 
-为了生成具有不同位置-尺度参数的非标准变量，变量按尺度参数缩放并按位置参数移动。例如，要生成 normal（μ，σ）变量，只需生成均匀变量 u∼uniform（0,1），然后将其转换为标准正态变量 z=Φ（u），其中 Φ 是标准正态累积分布函数，并最后缩放并平移它 y=μ+σz。代码为，
+为了生成位置-尺度类型的非标准变量，变量通过尺度参数缩放并通过位置参数移动。例如，要生成 $\textsf{normal}(\mu, \sigma)$ 变量，只需生成均匀变量 $u \sim \textsf{uniform}(0, 1)$，然后将其转换为标准正态变量，$z = \Phi(u)$，其中 $\Phi$ 是标准正态的逆累积分布函数，然后最后缩放和平移它，$y = \mu + \sigma \times z$。在代码中，
 
 ```stan
 real my_normal_rng(real mu, real sigma) {
@@ -916,7 +1197,7 @@ real my_normal_rng(real mu, real sigma) {
 A robust version of this function would test that the arguments are
 finite and that `sigma` is non-negative, e.g.,
 
-这个函数的稳健版本将测试参数是否有限且 `sigma` 是否为非负数，例如
+此函数的健壮版本将测试参数是有限的，且 `sigma` 是非负的，例如，
 
 ```stan
   if (is_nan(mu) || is_inf(mu)) {
@@ -931,7 +1212,7 @@ finite and that `sigma` is non-negative, e.g.,
 
 ### Truncated variate generation {-}
 
-### 截断变量生成
+### 截断变量生成 {-}
 
 Often truncated uniform variates are needed, as in survival analysis
 when a time of death is censored beyond the end of the observations.
@@ -940,17 +1221,17 @@ used to find the truncation point in the inverse CDF, a uniform
 variate is generated in range, and then the inverse CDF translates it
 back.
 
-截断均匀变量经常被用到，例如在生存分析中，当死亡时间在观察结束后。要生成截断的随机变量，累积分布用于在 CDF 的逆函数中找到截断点，在范围内生成均匀变量，然后 CDF 的逆函数将其转换回来。
+经常需要截断的均匀变量，如在生存分析中，当死亡时间在观察结束后被审查时。要生成截断的随机变量，使用累积分布在逆 CDF 中找到截断点，在范围内生成均匀变量，然后逆 CDF 将其转换回来。
 
 #### Truncating below {-}
 
-#### 向下截断 {-}
+#### 下截断 {-}
 
 For example, the following code generates
 a $\textsf{Weibull}(\alpha, \sigma)$ variate truncated below
 at a time $t$,^[The original code and impetus for including this in the manual came from the [Stan forums post](http://discourse.mc-stan.org/t/rng-for-truncated-distributions/3122/7); by user `lcomm`, who also explained truncation above and below.]
 
-例如，以下代码生成一个 $\textsf{Weibull}(\alpha, \sigma)$ 变量并且在在时间 $t$ 以下截断，^[原始代码和将其包含在手册中的动机来自 Stan 论坛中由用户 `lcomm` 撰写的[帖子](http://discourse.mc-stan.org/t/rng-for-truncated-distributions/3122/7)；他还解释了向上截断和向下截断。]
+例如，以下代码生成在时间 $t$ 处下截断的 $\textsf{Weibull}(\alpha, \sigma)$ 变量，^[包含在本手册中的原始代码和动力来自 [Stan 论坛帖子](http://discourse.mc-stan.org/t/rng-for-truncated-distributions/3122/7)；由用户 `lcomm` 提供，他还解释了上截断和下截断。]
 
 ```stan
 real weibull_lb_rng(real alpha, real sigma, real t) {
@@ -963,14 +1244,14 @@ real weibull_lb_rng(real alpha, real sigma, real t) {
 
 #### Truncating above and below {-}
 
-#### 区间截断 {-}
+#### 上下截断 {-}
 
 If there is a lower bound and upper bound, then the CDF trick is used
 twice to find a lower and upper bound.  For example, to generate a
 $\textsf{normal}(\mu, \sigma)$ truncated to a region $(a, b)$, the
 following code suffices,
 
-如果有下限和上限，则使用两次CDF技巧找到下限和上限。例如，要生成一个 $\textsf{normal}(\mu, \sigma)$ 截断到区域 $(a, b)$ 的变量，以下代码就足够了，
+如果有下界和上界，则 CDF 技巧被使用两次以找到下界和上界。例如，要生成截断到区域 $(a, b)$ 的 $\textsf{normal}(\mu, \sigma)$，以下代码就足够了，
 
 ```stan
 real normal_lub_rng(real mu, real sigma, real lb, real ub) {
@@ -990,6 +1271,8 @@ lines, the variable names serve as a kind of chunking of operations
 and naming for readability;  compare the multiple statement version
 above with the single statement
 
+为了使其更健壮，应测试所有变量的有限性，应测试 `sigma` 的正性，应测试 `lb` 和 `ub` 以确保上界大于下界。虽然压缩行可能很诱人，但变量名称用作操作分块和命名以提高可读性；将上面的多语句版本与单语句进行比较
+
 ```stan
   return mu + sigma * inv_Phi(uniform_rng(normal_cdf(lb | mu, sigma),
                                           normal_cdf(ub | mu, sigma)));
@@ -1000,4 +1283,4 @@ for readability.  The names like `p` indicate probabilities, and
 bounds.  The variable `u` is clearly named as a uniform variate,
 and `y` is used to denote the variate being generated itself.
 
-为了使其更稳健，应测试所有变量是否有限，`sigma` 是否为正数，并测试 `lb` 和 `ub` 以确保上限大于下限。与上面的多个语句版本的可读性进行比较，虽然压缩行可能很诱人，但变量名称充当操作分块和命名。像 `p` 这样的名称表示概率，并且 `p_lb` 和 `p_ub` 表示概率的上界和下界。变量`u`显然命名为均匀变量，`y` 表示正在生成的变量本身。
+以提高可读性。像 `p` 这样的名称表示概率，`p_lb` 和 `p_ub` 表示边界的概率。变量 `u` 明确命名为均匀变量，`y` 用于表示正在生成的变量本身。

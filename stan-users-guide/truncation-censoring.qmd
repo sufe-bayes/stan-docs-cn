@@ -10,7 +10,7 @@ pagetitle: Truncated or Censored Data
 
 初次校审：李君竹
 
-二次校审：邱怡轩（DeepSeek 辅助）
+二次校审：李君竹（Claude 辅助）
 
 Data in which measurements have been truncated or censored can be
 coded in Stan following their respective probability models.

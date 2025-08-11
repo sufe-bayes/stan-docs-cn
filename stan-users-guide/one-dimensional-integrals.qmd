@@ -2,31 +2,34 @@
 pagetitle: Computing One Dimensional Integrals
 ---
 
-# Computing One Dimensional Integrals {#integrate-1d}
+# 计算一维积分
 
-# 计算一维积分 {#integrate-1d--cn}
+# Computing One Dimensional Integrals {-}
 
 本节译者：李君竹
+
+初次校审：李君竹
+
+二次校审：李君竹（Claude 辅助）
 
 Definite and indefinite one dimensional integrals can be performed in Stan
 using the [`integrate_1d` function](https://mc-stan.org/docs/functions-reference/higher-order_functions.html#functions-1d-integrator)
 
-在 Stan 中可以使用 [`integrate_1d` 函数](https://mc-stan.org/docs/functions-reference/functions-1d-integrator.html) 生成一维定积分和一维不定积分。
+在 Stan 中可以使用 [`integrate_1d` 函数](https://mc-stan.org/docs/functions-reference/functions-1d-integrator.html) 来计算一维定积分和不定积分。
 
 As an example, the normalizing constant of a left-truncated normal distribution is
 
-例如，左截断正态分布的标准化常量（normalizing constant）为
+例如，左截断正态分布的标准化常量为
 
 $$
   \int_a^\infty \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{1}{2}\frac{(x - \mu)^2}{\sigma^2}}
 $$
 
-
 To compute this integral in Stan, the integrand must first be defined as a Stan function
 (see the Stan Reference Manual chapter on User-Defined Functions
 for more information on coding user-defined functions).
 
-要在 Stan 中计算该积分，必须先将积分定义为 Stan 函数（有关用户定义函数的更多信息，请参阅《 Stan 参考手册》中的用户定义函数一章）。
+要在 Stan 中计算此积分，首先必须将被积函数定义为 Stan 函数（有关编写用户定义函数的更多信息，请参阅《Stan 参考手册》中的用户定义函数一章）。
 
 ```stan
 real normal_density(real x,             // Function argument
@@ -42,7 +45,6 @@ real normal_density(real x,             // Function argument
 }
 ```
 
-
 This function is expected to return the value of the integrand evaluated at point `x`. The
 argument `xc` is used in definite integrals to avoid loss of precision near
 the limits of integration and is set to NaN when either limit is infinite
@@ -54,7 +56,7 @@ that are a function of the parameters in our model. The arguments `x_r`
 and `x_i` are used to pass in real and integer arguments of the integral that are
 not a function of our parameters.
 
-此函数将返回 `x` 点的积分值。实参 `xc` 用于定积分以避免积分极限附近的精度损失，其在任一极限为无穷时设置为 NaN（详情请参阅《Stan 函数参考》高阶函数一章中有关精度/损失的部分）。实参 `theta` 被用于传递是模型形参的函数的实参。实参 `x_r` 和 `x_i` 用于传递不是形参函数的积分的实数和整数实参。
+此函数应返回在点 `x` 处计算得到的被积函数值。参数 `xc` 在定积分中用于避免积分限附近的精度损失，当任一积分限为无穷时设为 NaN（详情请参阅《Stan 函数参考》高阶函数章节中关于精度/损失的部分）。参数 `theta` 用于传递积分中依赖于模型参数的参数。参数 `x_r` 和 `x_i` 用于传递积分中不依赖于模型参数的实数和整数参数。
 
 The function defining the integrand must have exactly the argument types and
 return type of `normal_density` above, though argument naming is not important.
@@ -65,11 +67,11 @@ or vector, which can be created with rep_array(0, 0) and rep_vector(0, 0), respe
 Other options include an uninitialized variable declared with size 0, which is equivalent
 to the above, or any easy value, such as size 1 array created with {0}.
 
-定义积分的函数必须与上述 normal_density 的实参类型和返回类型完全一致，但实参的命名并不重要。即使 `x_r` 和 `x_i` 在积分中未使用，也必须包含在函数签名中。假如积分不涉及数据或形参，也可能需要传递零长度的数据数组或零长度的形参向量。
+定义被积函数的函数必须与上述 `normal_density` 具有完全相同的参数类型和返回类型，虽然参数名称并不重要。即使 `x_r` 和 `x_i` 在被积函数中未使用，也必须包含在函数签名中。即使积分不涉及这些参数中的某些，仍需要为它们提供某个值。最高效的做法是使用零长度数组或向量，可分别用 rep_array(0, 0) 和 rep_vector(0, 0) 创建。其他选择包括声明大小为 0 的未初始化变量（等价于上述做法），或任何简单值，如用 {0} 创建的大小为 1 的数组。
 
 ## Calling the integrator
 
-## 调用积分器
+## 调用积分器 {-}
 
 Suppose that our model requires evaluating the lpdf of a left-truncated normal, but
 the truncation limit is to be estimated as a parameter. Because the truncation
@@ -78,12 +80,12 @@ computing our model's log density. Note this is just an example of how to use th
 1D integrator. The more efficient way to perform the correct normalization in Stan
 is described in the chapter on Truncated or Censored Data of this guide.
 
-假设模型需要求解左截断正态分布的 lpdf，但截断极限需要作为参数来估计。因为截断点是一个参数，所以在计算模型的对数密度时，必须包含截断 pdf 的归一化项。请注意，这只是一个介绍如何使用一维积分器的例子。在 Stan 中执行正确归一化更有效的方法将在本指南的 "截断或删减数据 "一章中介绍。
+假设我们的模型需要计算左截断正态分布的 lpdf，但截断限需要作为参数进行估计。由于截断点是参数，在计算模型对数密度时必须包含截断 pdf 的标准化项。请注意这只是使用一维积分器的示例。在 Stan 中执行正确标准化的更高效方法在本指南的"截断或删失数据"章节中描述。
 
 Such a model might look like (include the function defined at the beginning of this
 chapter to make this code compile):
 
-模型可能如下（包括本章开头定义的函数，以便编译代码）：
+这样的模型可能如下所示（包含本章开头定义的函数以使代码可编译）：
 
 ```stan
 data {
@@ -114,22 +116,22 @@ model {
 }
 ```
 
-### Limits of integration {-}
+### Limits of integration
 
-### 积分的极限
+### 积分的极限 {-}
 
 The limits of integration can be finite or infinite. The infinite limits are
 made available via the Stan calls `negative_infinity()` and
 `positive_infinity()`.
 
-积分的极限可以是有限的，也可以是无限的。无穷极限通过 Stan 调用 `negative_infinity()` 和 `positive_infinity()` 来实现。
+积分限可以是有限的或无限的。无限积分限可通过 Stan 函数 `negative_infinity()` 和 `positive_infinity()` 来表示。
 
 If both limits are either `negative_infinity()` or
 `positive_infinity()`, the integral and its gradients are set to zero.
 
-如果两个极限都是 `negative_infinity()` 或 `positive_infinity( )`，则积分及其梯度都设为零。
+如果两个积分限都是 `negative_infinity()` 或 `positive_infinity()`，则积分及其梯度设为零。
 
-### Data vs. parameters {-}
+### Data vs. parameters
 
 ### 数据与参数 {-}
 
@@ -138,24 +140,24 @@ must be expressions that only involve data or transformed data variables.
 `theta`, on the other hand, can be a function of data, transformed data,
 parameters, or transformed parameters.
 
-实数数据 `x_r` 和整数数据 `x_i` 的实参必须是只涉及数据或转换后数据变量的表达式。另一方面，θ 可以是数据、转换后数据、形参或转换后形参的函数。
+实数数据 `x_r` 和整数数据 `x_i` 的参数必须是仅涉及数据或转换数据变量的表达式。而 `theta` 则可以是数据、转换数据、参数或转换参数的函数。
 
 The endpoints of integration can be data or parameters (and internally the
 derivatives of the integral with respect to the endpoints are handled
 with the Leibniz integral rule).
 
-积分的端点可以是数据或形参（在内部，与端点相对的积分导数用莱布尼兹积分规则处理）。
+积分的端点可以是数据或参数（内部使用莱布尼茨积分法则处理积分关于端点的导数）。
 
 ## Integrator convergence
 
-## 积分器的收敛
+## 积分器的收敛 {-}
 
 The integral is performed with the iterative 1D double exponential quadrature methods implemented
 in the Boost library [@BoostQuadrature:2017]. If the $n$th estimate of the
 integral is denoted $I_n$ and the $n$th estimate of the norm of the integral is
 denoted $|I|_n$, the iteration is terminated when
 
-积分采用 Boost 库 [@BoostQuadrature:2017] 中的迭代式一维双指数求积方法。如果积分的第 n 次估计值用 $I_n$ 表示，积分的第 n 次估计值的范数用 $|I|_n$ 表示，则迭代在下列条件下结束
+积分采用 Boost 库 [@BoostQuadrature:2017] 中实现的迭代一维双指数求积方法。如果积分的第 $n$ 次估计记为 $I_n$，积分范数的第 $n$ 次估计记为 $|I|_n$，则当满足以下条件时迭代终止
 
 $$
   \frac{{|I_{n + 1} - I_n|}}{{|I|_{n + 1}}} < \text{relative tolerance}.
@@ -174,54 +176,51 @@ of the current proposal in MCMC samplers and adjustment of search parameters in 
 If `integrate_1d` causes an exception in generated quantities block, the returned output from
 `integrate_1d` is NaN. In these cases, a bigger `relative_tolerance` value can be specified.
 
-可以在 `integrate_1d` 的最后一个实参中选择性指定 `relative_tolerance` 形参。默认情况下，integrate_1d 遵循 Boost 库的建议，将 relative_tolerance 设置为双精度浮点数的机械极小值的平方根（约 `1e-8`）。
-如果 Boost 积分器无法达到相对误差，就会出现异常，提示信息如下："Exception: integrate: error
-estimate of integral 4.25366e-13 exceeds the given relative tolerance times norm of integral"。如果 `integrate_1d` 在转换参数块或模型块中导致异常，其结果与分配 $-\infty$ 对数概率的效果相同，这会导致在 MCMC 采样器中拒绝当前提议，以及在优化中调整搜索参数。如果 `integrate_1d` 在生成的数量块中导致异常，则 `integrate_1d` 返回的输出为 NaN。在这种情况下，可以指定一个更大的 `relative_tolerance` 值。
+`relative_tolerance` 参数可作为 `integrate_1d` 的最后一个参数可选指定。默认情况下，`integrate_1d` 遵循 Boost 库的建议，将 `relative_tolerance` 设为双精度浮点数机器精度的平方根（约 `1e-8`）。如果 Boost 积分器无法达到相对容差，将抛出异常，消息类似"Exception: integrate: error estimate of integral 4.25366e-13 exceeds the given relative tolerance times norm of integral"。如果 `integrate_1d` 在转换参数块或模型块中引发异常，结果等同于指定 $-\infty$ 对数概率，这会导致 MCMC 采样器拒绝当前提议并在优化中调整搜索参数。如果 `integrate_1d` 在生成量块中引发异常，`integrate_1d` 返回 NaN。在这些情况下，可以指定更大的 `relative_tolerance` 值。
 
-### Zero-crossing integrals {- #zero-crossing}
+### Zero-crossing integrals {#zero-crossing}
 
-### 过零积分 {- #zero-crossing--cn}
+### 过零积分 {-#zero-crossing--cn}
 
 Integrals on the (possibly infinite) interval $(a, b)$ that cross zero are
 split into two integrals, one from $(a, 0)$ and one from $(0, b)$. This is
 because the quadrature methods employed internally can have difficulty near
 zero.
 
-经过零点的区间 $(a, b)$ 上的积分（可能是无穷的）被分成两个部分，一个是 $(a, 0)$ 上的积分，另一个是 $(0, b)$ 上的积分。这是因为内部采用的求积法在零点附近可能会有困难。
+跨越零点的（可能无限）区间 $(a, b)$ 上的积分被分为两个积分，一个从 $(a, 0)$，另一个从 $(0, b)$。这是因为内部采用的求积方法在零点附近可能遇到困难。
 
 In this case, each integral is separately integrated to the given
 `relative_tolerance`.
 
-在这种情况下，每个积分都会按照给定的 `relative_tolerance` 分别积分。
+在这种情况下，每个积分都分别按给定的 `relative_tolerance` 进行积分。
 
-### Avoiding precision loss near limits of integration in definite integrals {- #integral-precision}
+### Avoiding precision loss near limits of integration in definite integrals {#integral-precision}
 
-### 避免定积分中积分极限附近的精度损失 {- #integral-precision--cn}
+### 避免定积分中积分极限附近的精度损失 {-#integral-precision--cn}
 
 If care is not taken, the quadrature can suffer from numerical loss of
 precision near the endpoints of definite integrals.
 
-如果不加注意，求积法就会在定积分的端点附近出现数值精度下降的问题。
+如果不加注意，求积法可能在定积分端点附近出现数值精度损失。
 
 For instance, in integrating the pdf of a beta distribution when the values of
 $\alpha$ and $\beta$ are small, most of the probability mass is lumped near zero
 and one.
 
-例如，在求 $\alpha$ 和 $\beta$ 很小的贝塔分布的 pdf 积分时，大部分概率质量都集中在 0 和 1 附近。
+例如，当 $\alpha$ 和 $\beta$ 值较小时，在对 beta 分布的 pdf 进行积分时，大部分概率质量集中在 0 和 1 附近。
 
 The pdf of a beta distribution is proportional to
 
-贝塔分布的 pdf 正比于
+beta 分布的 pdf 正比于
 
 $$
 p(x) \propto x^{\alpha - 1}(1 - x)^{\beta - 1}
 $$
 
-
 Normalizing this distribution requires computing the integral of $p(x)$ from
 zero to one. In Stan code, the integrand might look like:
 
-对这种分布进行归一化处理需要计算 $p(x)$ 从 0 到 1 的积分。在 Stan 代码中，积分可能如下所示：
+对此分布进行标准化需要计算 $p(x)$ 从 0 到 1 的积分。在 Stan 代码中，被积函数可能如下：
 
 ```stan
 real beta(real x, real xc, array[] real theta, array[] real x_r, array[] int x_i) {
@@ -237,10 +236,14 @@ The issue is that there will be numerical breakdown in the precision of
 precision of double precision floating numbers. This integral will fail to
 converge for values of `alpha` and `beta` much less than one.
 
-问题在于，当 x 接近 1 时，`1.0 - x` 的精度会出现数值崩溃。这是因为双精度浮点数的精度有限。当 `alpha` 和 `beta` 的值远小于 1 时，这个积分将无法收敛。
+问题在于当 `x` 接近 1 时，`1.0 - x` 的精度会出现数值崩溃。这是由于双精度浮点数的精度有限。当 `alpha` 和 `beta` 的值远小于 1 时，此积分将无法收敛。
 
 This is where `xc` is useful. It is defined, for definite integrals, as a high
 precision version of the distance from `x` to the nearest endpoint --- `a - x`
+or `b - x` for a lower endpoint `a` and an upper endpoint `b`. To make use of
+this for the beta integral, the integrand can be re-coded:
+
+这里 `xc` 就很有用。对于定积分，它被定义为从 `x` 到最近端点距离的高精度版本——对于下端点 `a` 和上端点 `b`，为 `a - x` 或 `b - x`。要在 beta 积分中利用这一点，可以重新编写被积函数： endpoint --- `a - x`
 or `b - x` for a lower endpoint `a` and an upper endpoint `b`. To make use of
 this for the beta integral, the integrand can be re-coded:
 
@@ -266,24 +269,24 @@ In this case, as we approach the upper limit of integration $a = 1$, `xc` will
 take on the value of $a - x = 1 - x$. This version of the integrand will
 converge for much smaller values of `alpha` and `beta` than otherwise possible.
 
-在这种情况下，当接近积分上限 $a = 1$ 时，`xc` 的值将为 $a - x = 1 - x$。这个积分将在 `alpha` 和 `beta` 值小得多的情况下收敛。
+在这种情况下，当我们接近积分上限 $a = 1$ 时，`xc` 将取值 $a - x = 1 - x$。这个版本的被积函数能够在 `alpha` 和 `beta` 取值远小于原先可能收敛值的情况下收敛。
 
 Consider another example: let's say we have a log-normal distribution that is
 both shifted away from zero by some amount $\delta$, and truncated at some
 value $b$. If we were interested in calculating the expectation of a variable
 $X$ distributed in this way, we would need to calculate
 
-再看一个例子：假设有一个对数正态分布，它既偏离零点定量 δ，又在定值 b 处截断。
-如果想计算服从该分布的变量 X 的期望值，需要计算
+考虑另一个例子：假设我们有一个对数正态分布，它既偏移零点某个量 $\delta$，又在某个值 $b$ 处截断。如果我们想要计算以这种方式分布的变量 $X$ 的期望，需要计算
 
 $$
 \int_a^b xf(x)\,dx = \int_{\delta}^b xf(x)\,dx
 $$
+
 in the numerator, where $f(x)$ is the probability density function for the
 shifted log-normal distribution. This probability density function can be
 coded in Stan as:
 
-式中，f(x) 是移位对数正态分布的概率密度函数。这个概率密度函数可以用 Stan 编码为：
+分子中，其中 $f(x)$ 是偏移对数正态分布的概率密度函数。此概率密度函数可以在 Stan 中编码为：
 
 ```stan
 real shift_lognormal_pdf(real x,
@@ -301,7 +304,7 @@ real shift_lognormal_pdf(real x,
 
 Therefore, the function that we want to integrate is:
 
-因此，待积分的函数是：
+因此，我们想要积分的函数是：
 
 ```stan
 real integrand(real x,
@@ -330,11 +333,11 @@ $\delta$, when we then try to integrate the numerator, our `x` starts at
 values just above `delta`. This, in turn, causes the `x - delta` term to be
 near zero, leading to a breakdown.
 
-此情况为，对数正态分布移动了 $\delta$ ，当我们试图对该式进行积分时，`x` 的起始值刚好高于 `delta`。这相应地导致 `x - delta` 项接近于零，从而导致崩溃。
+此情况为，对数正态分布移动了 $\delta$，当我们试图对该式进行积分时，`x` 的起始值刚好高于 `delta`。这相应地导致 `x - delta` 项接近于零，从而导致崩溃。
 
 We can use `xc`, and define the `integrand` as:
 
-可以使用 `xc`，并将 `integrand` 定义为：
+我们可以使用 `xc`，将 `integrand` 定义为：
 
 ```stan
 real integrand(real x,
@@ -371,13 +374,13 @@ the lower endpoint in that case. The `delta` terms cancel out, and we are left
 with a high-precision version of `x`. We don't encounter the same problem at
 the upper limit $b$ so we don't adjust the code for that case.
 
-为什么会这样呢？当 `x` 小于 `delta + 1` 时（当它们接近 `delta` 时，考虑到积分下限等于 `delta`）， `xc` 作为实参传递给 `shift_lognormal_pdf` 函数。这样，在 `shift_lognormal_pdf` 中处理的不是 `x - delta`，而是 `xc - delta`，它等于 `delta - x - delta`，因为在这种情况下 `delta` 是下限。`delta` 项抵消后，我们就得到了高精度版本的 `x`。在上限 $b$ 的情况下不存在该问题，因此没有针对这种情况调整代码。
+为什么这样有效？当我们的 `x` 值小于 `delta + 1` 时（也就是说，当它们接近 `delta` 时，考虑到我们的积分下限等于 $\delta$），我们将 `xc` 作为参数传递给 `shift_lognormal_pdf` 函数。这样，我们在 `shift_lognormal_pdf` 中处理的不是 `x - delta`，而是 `xc - delta`，在这种情况下等于 `delta - x - delta`，因为 `delta` 是下端点。`delta` 项相消，我们得到了 `x` 的高精度版本。在上限 $b$ 处我们不会遇到同样的问题，所以不需要为那种情况调整代码。
 
 Note, `xc` is only used for definite integrals. If either the left endpoint
 is at negative infinity or the right endpoint is at positive infinity, `xc`
 will be NaN.
 
-注意，`xc` 只用于定积分。如果左端点为负无穷或右端点为正无穷，`xc` 将为 NaN。
+注意，`xc` 仅用于定积分。如果左端点为负无穷或右端点为正无穷，`xc` 将为 NaN。
 
 For zero-crossing definite integrals (see section [Zero Crossing](#zero-crossing)) the
 integrals are broken into two pieces ($(a, 0)$ and $(0, b)$ for endpoints
@@ -386,4 +389,4 @@ to the limits of each of the two integrals separately. This means `xc` will
 be a high precision version of `a - x`, `x`, or `b - x`,
 depending on the value of x and the endpoints.
 
-对于过零定积分（参见 [Zero Crossing](#zero-crossing) 一节），积分被分成两部分（ $(a, 0)$ 和 $(0, b)$，端点 $a < 0$ 和 $b > 0$），`xc` 是两个积分中每个积分极限的距离的高精度版本。这意味着 `xc` 将是 `a - x`、`x` 或 `b - x` 的高精度版本，具体取决于 x 的值和端点。
+对于过零定积分（参见 [Zero Crossing](#zero-crossing) 一节），积分被分成两部分（$(a, 0)$ 和 $(0, b)$，端点 $a < 0$ 和 $b > 0$），`xc` 是两个积分中每个积分极限的距离的高精度版本。这意味着 `xc` 将是 `a - x`、`x` 或 `b - x` 的高精度版本，具体取决于 x 的值和端点。

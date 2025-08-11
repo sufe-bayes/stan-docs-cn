@@ -2,12 +2,15 @@
 pagetitle: Simulation-Based Calibration
 ---
 
-# Simulation-Based Calibration
-
 # 基于模拟的校准
 
+# Simulation-Based Calibration {-}
+
 本节译者：郭鑫
-本节校审：李君竹
+
+初次校审：李君竹
+
+二次校审：李君竹（Claude 辅助）
 
 A Bayesian posterior is calibrated if the posterior intervals have
 appropriate coverage.  For example, 80% intervals are expected to
@@ -22,25 +25,25 @@ calibration of the inference algorithm over independently simulated
 data sets.  This chapter follows @TaltsEtAl:2018, which improves on
 the original approach developed by @CookGelmanRubin:2006.
 
-如果后验区间具有合适的覆盖范围，那么就校准贝叶斯后验。例如，80%的区间预计在80%的时间内包含真实参数。如果数据是由模型生成的，则通过构建贝叶斯后验推理来校准有关该模型。 基于仿真的校准（SBC）利用贝叶斯推理的这一特性来评估后验采样器的合理性。粗略地说，它的工作方式是根据先验模拟参数，然后模拟以模拟参数为条件的数据，然后在独立模拟的数据集上测试推理算法的后验校准。本章遵循 @TaltsEtAl:2018 ，它改进了 @CookGelmanRubin:2006 开发的原始方法。
+如果贝叶斯后验区间具有适当的覆盖率，则称该贝叶斯后验是校准的。例如，80% 的区间预期在 80% 的时间内包含真实参数。如果数据是根据模型生成的，那么基于该模型的贝叶斯后验推断天然就是校准的。基于模拟的校准（Simulation-based calibration，SBC）利用贝叶斯推断的这一特性来评估后验采样器的合理性。大体而言，其工作原理是根据先验模拟参数，然后基于模拟的参数生成数据，再通过独立模拟的数据集测试推断算法的后验校准。本章遵循 @TaltsEtAl:2018，该文改进了 @CookGelmanRubin:2006 开发的原始方法。
 
 ## Bayes is calibrated by construction
 
-## 由构建校准贝叶斯
+## 贝叶斯天然具有校准性 {-}
 
 Suppose a Bayesian model is given in the form of a prior density
 $p(\theta)$ and sampling density $p(y \mid \theta).$  Now consider
 a process that first simulates
 parameters from the prior,
 
-假设贝叶斯模型以先验密度的形式给出 $p(\theta)$ 和采样密度 $p(y\mid\theta).$ 现在考虑首先模拟先验参数的过程，
+假设贝叶斯模型由先验密度 $p(\theta)$ 和抽样密度 $p(y \mid \theta)$ 组成。现在考虑一个过程，首先从先验中模拟参数，
 
 $$
 \theta^{\textrm{sim}} \sim p(\theta),
 $$
 and then simulates data given the parameters,
 
-然后模拟给定参数的数据，
+然后基于参数模拟数据，
 
 $$
 y^{\textrm{sim}} \sim p(y \mid \theta^{\textrm{sim}}).
@@ -49,14 +52,14 @@ By the definition of conditional densities, the simulated data and
 parameters constitute an independent draw from the model's joint
 distribution,
 
-根据条件密度的定义，模拟数据和参数构成模型联合分布的独立抽样，
+根据条件密度的定义，模拟的数据和参数构成了模型联合分布的独立抽样，
 
 $$
 (y^{\textrm{sim}}, \theta^{\textrm{sim}}) \sim p(y, \theta).
 $$
 From Bayes's rule, it follows that for any observed (fixed) data $y$,
 
-根据贝叶斯规则，对于任何观察到的(固定)数据 $y$，
+根据贝叶斯定理，对于任何观测到的（固定的）数据 $y$，
 
 $$
 p(\theta \mid y) \propto p(y, \theta).
@@ -64,7 +67,7 @@ $$
 Therefore, the simulated parameters constitute a
 draw from the posterior for the simulated data,
 
-因此，模拟参数构成了模拟数据的后验抽样，
+因此，模拟的参数构成了基于模拟数据的后验抽样，
 
 $$
 \theta^{\textrm{sim}} \sim p(\theta \mid y^{\textrm{sim}}).
@@ -72,7 +75,7 @@ $$
 Now consider an algorithm that produces a
 sequence of draws from the posterior given this simulated data,
 
-现在考虑一种算法，该算法在给定此模拟数据的情况下从后验生成一系列抽样，
+现在考虑一种算法，基于这些模拟数据产生一系列后验抽样，
 
 $$
 \theta^{(1)}, \ldots, \theta^{(M)}
@@ -82,7 +85,7 @@ Because $\theta^{\textrm{sim}}$ is also distributed as a draw from the
 posterior, the rank statistics of $\theta^{\textrm{sim}}$ with respect
 to $\theta^{(1)}, \ldots \theta^{(M)}$ should be uniform.
 
-因为 $\theta^{\textrm{sim}}$ 也是从后验中抽取的，所以 $\theta^{\textrm{sim}}$ 相对于 $\theta^{(1)}, \ldots \theta^{(M)}$ 的秩统计量应该是一致的。
+因为 $\theta^{\textrm{sim}}$ 也服从后验分布，所以 $\theta^{\textrm{sim}}$ 相对于 $\theta^{(1)}, \ldots \theta^{(M)}$ 的秩统计量应该是均匀分布的。
 
 This is one way to define calibration, because it follows that
 posterior intervals will have appropriate coverage [@Dawid:1982;
@@ -92,13 +95,13 @@ any 90% interval selected, the probability the true value
 $\theta^{\textrm{sim}}$ falls in it will also be 90%.  The same goes
 for any other posterior interval.
 
-这是定义校准的一种方法，因为后验区间将具有适当的覆盖范围 [@Dawid:1982;
-@GneitingEtAl:2007]。 如果 $\theta^{\textrm{sim}}$ 的秩在抽取 $\theta^{(1)}, \ldots, \theta^{(M)},$ 中是一致的，那么对于任何被选择的90%区间，真实值 $\theta^{\textrm{sim}}$ 落入其中的概率也将是90%。任何其他后验区间也是如此。
+这是定义校准的一种方式，因为由此可得后验区间将具有适当的覆盖率 [@Dawid:1982;
+@GneitingEtAl:2007]。如果 $\theta^{\textrm{sim}}$ 的秩在抽样 $\theta^{(1)}, \ldots, \theta^{(M)}$ 中是均匀分布的，那么对于任何选定的 90% 区间，真实值 $\theta^{\textrm{sim}}$ 落在其中的概率也是 90%。其他任何后验区间也是如此。
 
 
 ## Simulation-based calibration
 
-## 基于模拟的校准
+## 基于模拟的校准 {-}
 
 Suppose the Bayesian model to test has joint density
 
@@ -111,7 +114,7 @@ with data $y$ and parameters $\theta$ (both are typically
 multivariate).  Simulation-based calibration works by generating $N$
 simulated parameter and data pairs according to the joint density,
 
-数据 $y$ 和参数 $\theta$（两者都通常是多变量的）。基于模拟的校准根据联合密度生成 $N$ 个模拟参数和数据对，
+其中数据 $y$ 和参数 $\theta$（两者通常都是多元的）。基于模拟的校准通过根据联合密度生成 $N$ 个模拟的参数和数据对来工作，
 
 $$
 (y^{\textrm{sim}(1)}, \theta^{\textrm{sim}(1)}),
@@ -122,7 +125,7 @@ For each simulated data set $y^{\textrm{sim}(n)}$, use the algorithm
 to be tested to generate $M$ posterior draws, which if everything is
 working properly, will be distributed marginally as
 
-对于每个模拟数据集 $y^{\textrm{sim}(n)}$，使用要测试的算法生成 $M$ 个后验抽样，如果一切正常，它将边际分布为
+对于每个模拟数据集 $y^{\textrm{sim}(n)}$，使用待测试的算法生成 $M$ 个后验抽样，如果一切正常，它们的边际分布为
 
 $$
 \theta^{(n, 1)}, \ldots, \theta^{(n, M)}
@@ -146,13 +149,13 @@ r_{n, k}
 That is, the rank is the number of posterior draws $\theta^{(n,m)}_k$
 that are less than the simulated draw $\theta^{\textrm{sim}(n)}_k.$
 
-也就是说，秩是小于模拟抽样 $\theta^{(n,m)}_k$ 的后验抽样数 $\theta^{\textrm{sim}(n)}_k.$
+也就是说，秩是小于模拟抽样 $\theta^{\textrm{sim}(n)}_k$ 的后验抽样 $\theta^{(n,m)}_k$ 的数量。
 
 If the algorithm generates posterior draws according to the posterior,
 the ranks should be uniformly distributed from $0$ to $M$, so that
 the ranks plus one are uniformly distributed from $1$ to $M + 1$,
 
-如果算法根据后验生成后验抽样，则秩应从 $0$ 均匀分布到 $M$，这样秩加一从 $1$ 均匀分布到 $M+1$，
+如果算法根据后验生成后验抽样，则秩应该从 $0$ 到 $M$ 均匀分布，因此秩加一从 $1$ 到 $M + 1$ 均匀分布，
 
 $$
 r_{n, k} + 1
@@ -165,11 +168,11 @@ calibration of each parameter of a model on simulated data.
 k}$ for different parameters $k$;  @CookGelmanRubin:2006
 automate the process with a hypothesis test for uniformity.
 
-基于模拟的校准使用此预期行为来测试模型每个参数在模拟数据上的校准。 @TaltsEtAl:2018 建议为不同的参数绘制 $r_{1:N,k}$ 的分箱计数 $k$; @CookGelmanRubin:2006 通过均匀性假设检验使流程自动化。
+基于模拟的校准使用这种预期行为来测试模型每个参数在模拟数据上的校准。@TaltsEtAl:2018 建议绘制不同参数 $k$ 的 $r_{1:N,k}$ 的分箱计数图；@CookGelmanRubin:2006 通过均匀性假设检验实现了该过程的自动化。
 
 ## SBC in Stan
 
-## Stan 中的 SBC
+## Stan 中的 SBC {-}
 
 Running simulation-based calibration in Stan will test whether Stan's
 sampling algorithm can sample from the posterior associated with data
@@ -179,7 +182,7 @@ program.  Then Stan's posterior sampler has to be run multiple times.
 Each run produces a rank for each parameter being assessed for
 uniformity.  The total set of ranks can then be tested for uniformity.
 
-在 Stan 中运行基于模拟的校准将测试 Stan 的采样算法是否可以从与根据模型生成的数据相关的后验中采样。数据模拟、后验拟合和秩计算都可以在单个 Stan 程序中完成。然后 Stan 的后验采样器必须多次运行。每次运行都会为要评估一致性的每个参数生成一个等级，从而可以测试整个等级集的一致性。
+在 Stan 中运行基于模拟的校准将测试 Stan 的采样算法是否能够从与根据模型生成的数据相关的后验中采样。数据模拟、后验拟合和秩计算都可以在单个 Stan 程序中完成。然后需要多次运行 Stan 的后验采样器。每次运行都会为每个待评估均匀性的参数产生一个秩。然后可以测试整个秩集合的均匀性。
 
 ### Example model {-}
 
@@ -188,7 +191,7 @@ uniformity.  The total set of ranks can then be tested for uniformity.
 For illustration, a very simple model will suffice.  Suppose there are
 two parameters $(\mu, \sigma)$ with independent priors,
 
-为了说明，一个非常简单的模型就足够了。 假设有两个参数 $(\mu, \sigma)$ 具有独立的先验，
+为了说明，一个非常简单的模型就足够了。假设有两个参数 $(\mu, \sigma)$ 具有独立的先验，
 
 $$
 \mu \sim \textrm{normal}(0, 1),
@@ -203,14 +206,14 @@ $$
 The data $y = y_1, \ldots, y_N$ is drawn conditionally independently
 given the parameters,
 
-数据 $y = y_1, \ldots, y_N$ 是条件独立采样的，给定参数，
+数据 $y = y_1, \ldots, y_N$ 在给定参数的条件下独立抽取，
 
 $$
 y_n \sim \textrm{normal}(\mu, \sigma).
 $$
 The joint prior density is thus
 
-因此，联合先验密度为
+因此联合先验密度为
 
 $$
 p(\mu, \sigma)
@@ -219,7 +222,7 @@ p(\mu, \sigma)
 $$
 and the sampling density is
 
-并且，采样密度为
+采样密度为
 
 $$
 p(y \mid \mu, \sigma)
@@ -229,7 +232,7 @@ $$
 For example, suppose the following two parameter values are drawn from
 the prior in the first simulation,
 
-例如，假设以下两个参数的值是在第一次模拟中从先验中采样而来，
+例如，假设在第一次模拟中从先验中抽取了以下两个参数值，
 
 $$
 (\mu^{\textrm{sim(1)}}, \sigma^{\textrm{sim(1)}}) = (1.01, 0.23).
@@ -239,7 +242,7 @@ Then data $y^{\textrm{sim}(1)} \sim p(y \mid \mu^{\textrm{sim(1)}},
 distribution.  Next, $M = 4$ draws are taken from the posterior
 $\mu^{(1,m)}, \sigma^{(1,m)} \sim p(\mu, \sigma \mid y^{\textrm{sim}(1)})$,
 
-然后根据抽样分布绘制数据 $y^{\textrm{sim}(1)} \sim p(y \mid \mu^{\textrm{sim(1)}}, \sigma^{\textrm{sim(1)}})$ 。 接下来，$M = 4$ 的抽样取自后验 $\mu^{(1,m)}, \sigma^{(1,m)} \sim p(\mu, \sigma \mid y^{\textrm{sim}(1)})$，
+然后根据抽样分布抽取数据 $y^{\textrm{sim}(1)} \sim p(y \mid \mu^{\textrm{sim(1)}}, \sigma^{\textrm{sim(1)}})$。接下来，从后验 $\mu^{(1,m)}, \sigma^{(1,m)} \sim p(\mu, \sigma \mid y^{\textrm{sim}(1)})$ 中抽取 $M = 4$ 个样本，
 
 $$
 \begin{array}{r|rr}
@@ -256,7 +259,7 @@ m & \mu^{(1,m)} & \sigma^{(1,m)}
 $$
 Then the comparisons on which ranks are based look as follows,
 
-然后，基于秩的比较如下所示，
+然后基于秩的比较如下所示，
 
 $$
 \begin{array}{r|cc}
@@ -277,11 +280,11 @@ Because the simulated parameters are distributed according to the posterior,
 these ranks should be distributed uniformly between $0$ and $M$, the
 number of posterior draws.
 
-秩是列的总和，$r_{1,1} = 2$ 和 $r_{1,2} = 1$。由于模拟参数是按照后验分布的，所以这些秩应均匀分布在 $0$ 和 $M$ 之间，即后验抽奖的次数。
+秩是列和，$r_{1,1} = 2$ 和 $r_{1,2} = 1$。因为模拟参数是根据后验分布的，这些秩应该在 $0$ 和 $M$（后验抽样的数量）之间均匀分布。
 
 ### Testing a Stan program with simulation-based calibration {-}
 
-### 利用基于模拟的校准检验 Stan 程序 {-}
+### 使用基于模拟的校准测试 Stan 程序 {-}
 
 To code simulation-based calibration in a Stan program,
 the transformed data block can be used to simulate parameters
@@ -291,7 +294,7 @@ the generated quantities block, the program records an indicator for
 whether each parameter is less than the simulated value.  As shown
 above, the rank is then the sum of the simulated indicator variables.
 
-要在 Stan 程序中编写基于模拟的校准代码，转换后的数据块可用模拟模型中的参数和数据。 然后，参数、转换后的参数和模型块在模拟数据上定义模型。然后，在生成的数量块中，程序利用一个指标记录每个参数是否小于模拟值。 如上所示，秩是模拟指标变量的总和。
+要在 Stan 程序中编码基于模拟的校准，可以使用 transformed data 块从模型中模拟参数和数据。然后，parameters、transformed parameters 和 model 块在模拟数据上定义模型。然后，在 generated quantities 块中，程序记录每个参数是否小于模拟值的指示器。如上所示，秩就是模拟指示变量的总和。
 
 ```stan
 transformed data {
@@ -321,7 +324,7 @@ To avoid confusion with the number of simulated data sets used
 for simulation-based calibration, `J` is used for the number of
 simulated data points.
 
-为了避免与用于基于模拟的校准的模拟数据集的数量混淆，“J” 用于表示模拟数据点的数量。
+为了避免与用于基于模拟的校准的模拟数据集数量混淆，`J` 用于表示模拟数据点的数量。
 
 The model is implemented twice---once as a data generating process
 using random number generators in the transformed data block, then
@@ -331,7 +334,7 @@ chance for errors.  The blessing is that by implementing the model
 twice and comparing results, the chance of there being a mistake
 in the model is reduced.
 
-该模型实现了两次——一次作为数据生成过程，在转换后的数据块中使用随机数生成器，然后在参数和模型块中再次实现。这种重复是福也是祸。坏处是会有更多的工作和两倍出错的可能性。 好处是，通过两次实现模型并比较结果，可以减少模型中出错的可能性。
+该模型实现了两次——一次作为数据生成过程在 transformed data 块中使用随机数生成器，然后在 parameters 和 model 块中再次实现。这种重复既是福也是祸。祸的是工作量更多，出错的可能性加倍。福的是，通过两次实现模型并比较结果，可以减少模型中出错的可能性。
 
 ### Pseudocode for simulation-based calibration {-}
 
@@ -343,23 +346,23 @@ The entire simulation-based calibration process is as follows, where
 
 * `p(theta)` is the prior density
 
-`p(theta)` 是先验密度
+* `p(theta)` 是先验密度
 
 * `p(y | theta)` is the sampling density
 
-`p(y | theta)` 是样本密度
+* `p(y | theta)` 是抽样密度
 
 * `K` is the number of parameters
 
-`K` 参数数量
+* `K` 是参数的数量
 
 * `N` is the total number of simulated data sets and fits
 
-`N` 是模拟数据集和拟合的总数
+* `N` 是模拟数据集和拟合的总数
 
 * `M` is the number of posterior draws per simulated data set
 
-`M` 是每个模拟数据集上后验抽取的数量
+* `M` 是每个模拟数据集的后验抽样数
 
 ```
 SBC(p(theta), p(y | theta), K, N, M)
@@ -386,7 +389,7 @@ for (k in 1:K) {
 
 ### The importance of thinning {-}
 
-### 细化的重要性
+### 细化的重要性 {-}
 
 The draws from the posterior are assumed to be roughly independent.
 If they are not, artifacts may arise in the uniformity tests due to
@@ -399,11 +402,11 @@ put into a loop that doubles the number of iterations until all
 parameters have an effective sample size of `M`, then thinning down to
 `M` draws.
 
-假设来自后验的抽样大致独立。否则，由于后验抽样中的相关性，均匀性测试中可能会出现伪影。 因此，最好将后验抽样精确到有效样本数量与细化抽样次数大致相同的地方。这可能需要运行几次代码，以判断生成目标有效样本量所需的抽样次数。此操作可以放入一个循环中，该循环将迭代次数加倍，直到所有参数的有效样本大小为 “M”，然后细化为 “M” 抽样。
+假设来自后验的抽样大致是独立的。如果不是，由于后验抽样中的相关性，均匀性测试中可能会出现伪影。因此，最好将后验抽样细化到有效样本量与细化抽样数大致相同的程度。这可能需要运行几次代码来判断产生目标有效样本量所需的抽样数。这个操作可以放入一个循环中，该循环将迭代次数加倍，直到所有参数的有效样本量为 `M`，然后细化到 `M` 个抽样。
 
 ## Testing uniformity
 
-## 正态性检验
+## 均匀性检验 {-}
 
 A simple, though not very highly powered, $\chi^2$-squared test for
 uniformity can be formulated by binning the ranks $0:M$ into $J$
@@ -414,14 +417,14 @@ using the inverse cumulative distribution function for the standard
 normal and then perform a test for normality.  @TaltsEtAl:2018
 recommend visual inspection of the binned plots.
 
-一个简单的，虽然效用不是很高的检验，$\chi^2$ 均匀性检验可以通过将秩 $0:M$ 分箱到 $J$ 箱中并测试箱中都有大致预期的抽样次数来制定。许多其他均匀性测试也是可能的。例如，@CookGelmanRubin:2006 使用标准正态的可逆累积分布函数变换秩，然后执行正态性检验。@TaltsEtAl:2018 建议可视化检查分箱图。
+一个简单但功效不是很高的 $\chi^2$ 均匀性检验可以通过将秩 $0:M$ 分箱到 $J$ 个箱中，并检验所有箱中都有大致期望数量的抽样来制定。许多其他均匀性检验也是可能的。例如，@CookGelmanRubin:2006 使用标准正态的逆累积分布函数转换秩，然后执行正态性检验。@TaltsEtAl:2018 建议对分箱图进行视觉检查。
 
 The bins don't need to be exactly the same size.  In general, if $b_j$
 is the number of ranks that fall into bin $j$ and $e_j$ is the number
 of ranks expected to fall into bin $j$ (which will be proportional to
 its size under uniformity), the test statistic is
 
-分箱不需要完全相同的大小。 通常，如果 $b_j$ 是落入分箱 $j$ 的行列数，$e_j$ 是预期落入分箱 $j$ 的行列数（在均匀性下与其大小成正比），则检验统计量为
+箱不需要完全相同的大小。一般来说，如果 $b_j$ 是落入箱 $j$ 的秩数，$e_j$ 是期望落入箱 $j$ 的秩数（在均匀性下与其大小成比例），则检验统计量为
 
 $$
 X^2 = \sum_{j = 1}^J \frac{(b_j - e_j)^2}{e_j}.
@@ -440,24 +443,24 @@ to $X^2$.  Because this test relies on the binomial being
 approximately normal, the traditional advice is to make sure the
 expected count in each bin is at least five, i.e., $e_j \geq 5.$
 
-由 $\textrm{chiSquared}(J - 1)$ 的互补累积分布函数（CCDF）给出的相应 $p$-值应用于 $X^2$。由于此测试依赖于二项近似正态，因此传统建议是确保每个箱中的预期计数至少为 5，即 $e_j \geq 5$。
+相应的 $p$ 值由应用于 $X^2$ 的 $\textrm{chiSquared}(J - 1)$ 的互补累积分布函数（CCDF）给出。因为这个检验依赖于二项分布近似正态，传统建议是确保每个箱中的期望计数至少为五，即 $e_j \geq 5$。
 
 ### Indexing to simplify arithmetic {-}
 
-### 利用索引简化算法 {-}
+### 使用索引简化算术 {-}
 
 Because there are $M + 1$ possible ranks, with $J$ bins, it is
 easiest to have $M + 1$ be divisible by $J$.  For instance, if
 $J = 20$ and $M = 999$, then there are $1000$ possible ranks and an
 expected count in each bin of $\frac{M + 1}{J} = 50.$
 
-因为有 $M + 1$ 可能的秩，有 $J$ 个分箱，它是最容易让 $M + 1$ 被 $J$ 整除。 例如，如果 $J = 20$ 且 $M = 999$，则每个箱中都有 $1000$ 的可能秩和预期计数 $\frac{M + 1}{J} = 50$。
+因为有 $M + 1$ 个可能的秩，有 $J$ 个箱，最简单的是让 $M + 1$ 能被 $J$ 整除。例如，如果 $J = 20$ 且 $M = 999$，则有 $1000$ 个可能的秩，每个箱中的期望计数为 $\frac{M + 1}{J} = 50$。
 
 Distributing the ranks into bins is another fiddly operation
 that can be done with integer arithmetic or the floor operation.
 Using floor, the following function determines the bin for a rank,
 
-将秩分配到分箱中是另一个繁琐的操作这可以通过整数算术或分层操作来完成。使用分层操作，以下函数确定秩的分箱，
+将秩分配到箱中是另一个繁琐的操作，可以使用整数算术或向下取整操作完成。使用向下取整，以下函数确定秩的箱，
 
 $$
 \textrm{bin}(r_{n, m}, M, J)
@@ -466,33 +469,33 @@ $$
 For example, with $M = 999$ and $J = 20$, $(M + 1) / J = 50$.
 The lowest rank checks out,
 
-例如，当 $M = 999$ 且 $J = 20$ 时，$(M + 1) / J = 50$。最低的秩出现，
+例如，当 $M = 999$ 且 $J = 20$ 时，$(M + 1) / J = 50$。最低秩的验证，
 
 $$
 \textrm{bin}(0, 999, 20) = 1 + \lfloor 0 / 50 \rfloor = 1,
 $$
 as does the 50th rank,
 
-和第 50 级一样，
+第 50 个秩也是如此，
 
 $$
 \textrm{bin}(49, 999, 20) = 1 + \lfloor 49 / 50 \rfloor = 1,
 $$
 and the 51st is appropriately put in the second bin,
 
-第51个适当地放在第二个分箱中，
+第 51 个适当地放在第二个箱中，
 
 $$
 \textrm{bin}(50, 999, 20) = 1 + \lfloor 50 / 50 \rfloor = 2.
 $$
 The highest rank also checks out, with $\textrm{bin}(1000, 999, 20) = 50.$
 
-最高排名也出现，$\textrm{bin}(1000, 999, 20) = 50.$
+最高秩也验证通过，$\textrm{bin}(1000, 999, 20) = 50$。
 
 To summarize, the following pseudocode computes the $b_j$ values for
 the $\chi^2$ test or for visualization in a histogram.
 
-总而言之，以下伪代码计算 $\chi^2$ 测试或直方图中可视化的 $b_j$ 值。
+总之，以下伪代码计算 $\chi^2$ 检验或直方图可视化中的 $b_j$ 值。
 
 ```
 Inputs: M draws, J bins, N parameters, ranks r[n, m]
@@ -504,19 +507,19 @@ for (m in 1:M) {
 where the `++b[n]` notation is a common form of syntactic sugar
 for `b[n] = b[n] + 1.`
 
-其中“++b[n]”是对于 `b[n] = b[n] + 1`简化表达的常见形式.
+其中 `++b[n]` 符号是 `b[n] = b[n] + 1` 的常见语法糖形式。
 
 In general, a great deal of care must be taken in visualizing discrete
 data because it's easy to introduce off-by-one errors and artifacts at
 the edges because of the way boundaries are computed by default.
 That's why so much attention must be devoted to indexing and binning.
 
-通常，在处理可视化离散数据时必须格外小心，因为由于默认情况下计算边界的方式，很容易在边缘引入逐个错误和伪影。这就是为什么必须对索引和分箱投入如此多的关注。
+一般来说，在可视化离散数据时必须非常小心，因为由于默认计算边界的方式，很容易在边缘引入差一错误和伪影。这就是为什么必须对索引和分箱投入如此多的注意力。
 
 
 ## Examples of simulation-based calibration
 
-## 基于模拟的校准示例
+## 基于模拟的校准示例 {-}
 
 This section will show what the results look like when the tests pass
 and then when they fail.  The passing test will compare a normal model
@@ -524,17 +527,17 @@ and normal data generating process, whereas the second will compare a
 normal model with a Student-t data generating process.  The first will
 produce calibrated posteriors, the second will not.
 
-本节将显示测试通过时和失败时的结果。通过测试将比较正常模型和正常数据生成过程，而第二个测试将比较正常模型与 Student-t 数据生成过程。第一个将产生校准的后验，第二个不会。
+本节将展示测试通过和失败时的结果。通过的测试将比较正态模型和正态数据生成过程，而第二个测试将比较正态模型与 Student-t 数据生成过程。第一个将产生校准的后验，第二个不会。
 
 ### When things go right {-}
 
-### 正确测试 {-}
+### 当一切正常时 {-}
 
 Consider the following simple model for a normal distribution with
 standard normal and lognormal priors on the location and scale
 parameters.
 
-请考虑以下简单模型，该模型具有位置和尺度参数的标准正态和对数正态先验的正态分布。
+考虑以下简单模型，该模型为正态分布，位置和尺度参数具有标准正态和对数正态先验。
 
 \begin{eqnarray*}
 \mu & \sim & \textrm{normal}(0, 1)
@@ -545,7 +548,7 @@ y_{1:10} & \sim & \textrm{normal}(\mu, \sigma).
 \end{eqnarray*}
 The Stan program for evaluating SBC for this model is
 
-用于评估此模型的 SBC 的 Stan 程序是
+用于评估该模型 SBC 的 Stan 程序为
 
 ```stan
 transformed data {
@@ -578,44 +581,44 @@ After running this for enough iterations so that the effective sample
 size is larger than $M$, then thinning to $M$ draws (here $M = 999$),
 the ranks are computed and binned, and then plotted.
 
-在运行此进行足够的迭代后，使有效样本的大小大于 $M$，然后细化为 $M$ 个抽样(此处 $M = 999$)，计算秩并分箱，然后绘制。
+在运行足够的迭代使有效样本量大于 $M$ 后，然后细化到 $M$ 个抽样（这里 $M = 999$），计算并分箱秩，然后绘图。
 
 ::: {#fig-sbc-good}
 
 ![](./img/sbc-normal-normal.png){width=90%}
 
-Simulation based calibration plots for location and scale of a normal model with standard normal prior on the location, standard lognormal prior on the scale.  Both histograms appear uniform, which is consistent with inference being well calibrated.
+基于模拟的校准图，用于正态模型的位置和尺度参数，位置参数具有标准正态先验，尺度参数具有标准对数正态先验。两个直方图都显示均匀，这与推断被良好校准一致。
 :::
 
 
 ### When things go wrong {-}
 
-### 错误测试 {-}
+### 当出现问题时 {-}
 
 Now consider using a Student-t data generating process with a normal model.
 Compare the apparent uniformity of the well specified model with the
 ill-specified situation with Student-t generative process and normal
 model.
 
-现在考虑将 Student-t 数据生成过程与普通模型一起使用。将良好指定模型表观的均匀性与 Student-t 生成过程和正态模型的未指定情况进行比较。
+现在考虑使用 Student-t 数据生成过程与正态模型。比较良好指定模型的表观均匀性与 Student-t 生成过程和正态模型的错误指定情况。
 
 ::: {#fig-sbc-bad}
 
 ![](./img/sbc-student-t-normal.png){width=90%}
 
-Simulation based calibration plots for location and scale of a normal model with standard normal prior on the location standard lognormal prior on the scale with mismatched generative model using a Student-t data model with 4 degrees of freedom.  The mean histogram appears uniform, but the scale parameter shows simulated values much smaller than fit values, clearly signaling the lack of calibration.
+基于模拟的校准图，用于正态模型的位置和尺度参数，位置参数具有标准正态先验，尺度参数具有标准对数正态先验，但生成模型不匹配，使用自由度为 4 的 Student-t 数据模型。均值直方图显示均匀，但尺度参数显示模拟值远小于拟合值，清楚地表明缺乏校准。
 :::
 
 
 ### When Stan's sampler goes wrong {-}
 
-### Stan 采样器出错
+### 当 Stan 的采样器出错时 {-}
 
 The example in the previous sections show hard-coded pathological
 behavior.  The usual application of SBC is to diagnose problems with a
 sampler.
 
-前面部分中的示例显示了生硬编码的病理行为。 SBC 的通常应用是诊断采样器的问题。
+前面章节中的示例显示了硬编码的病理行为。SBC 的通常应用是诊断采样器的问题。
 
 This can happen in Stan with well-specified models if the posterior
 geometry is too difficult (usually due to extreme stiffness that
@@ -629,14 +632,14 @@ standard parameterization and weak priors, this model has very
 challenging posterior geometry, as shown by @TaltsEtAl:2018; this
 section replicates their results.
 
-如果后验几何形状太难(通常是由于极端刚度变化)，则在具有明确指定模型 Stan 中可能会发生这种情况。一个简单的例子是八所学校问题，其数据由样本均值 $y_j$ 和标准差 $\sigma_j$ 组成,这些标准差是不同学校采用同一干预后考试成绩的差异 $J = 8$。 @Rubin:1981  采用分层模型对结果进行 meta 分析，估计平均干预效果和每所学校的不同效果。该模型具有标准的参数化和弱先验，具有非常具有挑战性的后验几何形状，如 @TaltsEtAl:2018  所示;本部分复制其结果。
+如果后验几何形状太困难（通常是由于极端的刚度变化），这可能会在 Stan 中发生在良好指定的模型上。一个简单的例子是八所学校问题，其数据包括 $J = 8$ 所不同学校相同干预后测试分数差异的样本均值 $y_j$ 和标准差 $\sigma_j$。@Rubin:1981 应用分层模型对结果进行元分析，估计平均干预效果和每所学校的变化效果。具有标准参数化和弱先验，该模型具有非常具有挑战性的后验几何形状，如 @TaltsEtAl:2018 所示；本节复制了他们的结果。
 
 The meta-analysis model has parameters for a population mean $\mu$ and
 standard deviation $\tau > 0$ as well as the effect $\theta_j$ of the
 treatment in each school.  The model has weak normal and half-normal
 priors for the population-level parameters,
 
-meta 分析模型具有总体均值 $\mu$ 和标准差 $\tau > 0$ 的参数，以及每所学校治疗的效果 $\theta_j$ 的参数。该模型在总体水平参数方面具有弱正态和半正态先验，
+元分析模型具有总体均值 $\mu$ 和标准差 $\tau > 0$ 的参数，以及每所学校治疗效果 $\theta_j$。该模型对总体水平参数具有弱正态和半正态先验，
 
 \begin{eqnarray*}
 \mu & \sim & \textrm{normal}(0, 5)
@@ -646,7 +649,7 @@ meta 分析模型具有总体均值 $\mu$ 和标准差 $\tau > 0$ 的参数，�
 School level effects are modeled as normal given the population
 parameters,
 
-在给定人口参数的情况下，学校水平效应被建模为正态，
+学校水平效应在给定总体参数的情况下建模为正态，
 
 $$
 \theta_j \sim \textrm{normal}(\mu, \tau).
@@ -654,7 +657,7 @@ $$
 The data is modeled as in a meta-analysis, given the school effect and
 sample standard deviation in the school,
 
-数据建模为 meta 分析，给定学校效应和学校样本标准差，
+数据按元分析建模，给定学校效应和学校中的样本标准差，
 
 $$
 y_j \sim \textrm{normal}(\theta_j, \sigma_j).
@@ -664,7 +667,7 @@ This model can be coded in Stan with a data-generating process that
 simulates the parameters and then simulates data according to the
 parameters.
 
-该模型可以在 Stan 中使用数据生成过程进行编码，该过程模拟参数，然后根据参数模拟数据。
+该模型可以在 Stan 中编码，使用数据生成过程模拟参数，然后根据参数模拟数据。
 
 ```stan
 transformed data {
@@ -703,7 +706,7 @@ statements.  The generated quantities block includes indicators for
 parameter comparisons, saving only $\theta_1$ because the schools are
 exchangeable in the simulation.
 
-像往常一样基于模拟的校准，转换后的数据使用随机数生成器对数据生成过程进行编码。在这里，首先模拟总体参数 $\mu$ 和 $\tau$，然后模拟学校级效应 $\theta$，最后是观测数据 $\sigma_j$ 和 $y_j$。参数和模型是使用矢量化抽样语句对数学表示的直接编码。生成的数量块包括用于参数比较的指标，仅节省 $\theta_1$，因为学校可以在模拟中交换。
+像往常一样，对于基于模拟的校准，transformed data 使用随机数生成器编码数据生成过程。这里，首先模拟总体参数 $\mu$ 和 $\tau$，然后是学校水平效应 $\theta$，最后是观测数据 $\sigma_j$ 和 $y_j$。参数和模型是使用向量化采样语句对数学表示的直接编码。generated quantities 块包括参数比较的指示器，仅保存 $\theta_1$，因为学校在模拟中是可交换的。
 
 When fitting the model in Stan, multiple warning messages are
 provided that the sampler has diverged.  The divergence warnings are
@@ -711,13 +714,13 @@ in Stan's sampler precisely to diagnose the sampler's inability
 to follow the curvature in the posterior and provide independent
 confirmation that Stan's sampler cannot fit this model as specified.
 
-在 Stan 中拟合模型时，会提供多条警告消息，指出采样器已发散。Stan 的采样器中出现离散警告精确地诊断采样器无法跟随后验曲率，并提供独立认证，证明 Stan 的采样器无法按照指定拟合此模型。
+在 Stan 中拟合模型时，会提供多个警告消息，表明采样器已发散。Stan 采样器中的发散警告正是为了诊断采样器无法跟随后验中的曲率，并提供独立确认，Stan 的采样器无法按指定拟合此模型。
 
 SBC also diagnoses the problem. Here's the rank plots for running $N =
 200$ simulations with 1000 warmup iterations and $M = 999$ draws per
 simulation used to compute the ranks.
 
-SBC 还会诊断问题。以下是运行 $N = 200$ 模拟的秩图，其中包含 1000 次预迭代和用于计算秩的 $M = 999$ 绘制模拟。
+SBC 也诊断出了问题。这是运行 $N = 200$ 次模拟的秩图，其中有 1000 次预热迭代和每次模拟用于计算秩的 $M = 999$ 个抽样。
 
 ::: {#fig-8schools layout-ncol=3}
 
@@ -727,8 +730,7 @@ SBC 还会诊断问题。以下是运行 $N = 200$ 模拟的秩图，其中包�
 
 ![${\theta}_1$](img/sbc-ctr-8-schools-theta1.png){#fig-theta1}
 
-Simulation based calibration plots for the eight-schools model with centered parameterization in Stan.
-The geometry is too difficult for the NUTS sampler to handle, as indicated by the plot for $\theta_1$ (@fig-theta1).
+Stan 中使用中心参数化的八所学校模型的基于模拟的校准图。几何形状对于 NUTS 采样器来说太困难了，如 $\theta_1$ 的图所示（@fig-theta1）。
 :::
 
 
@@ -742,4 +744,4 @@ zero and the $\theta_j$ become highly constrained.  The [chapter on
 reparameterization](reparameterization.qmd) explains how to
 remedy this problem and fit this kind of hierarchical model with Stan.
 
-尽管总体均值和标准差 $\mu$ 和 $\tau$ 似乎校准得很好，但 $\theta_1$ 讲述了一个非常不同的故事。模拟值远小于从数据拟合的值。这是因为 Stan 的无返回采样器无法使用在中心参数化中制定的模型进行采样---当 $\tau$ 接近零并且 $\theta_j$ 变得高度约束时，后验几何具有极高的曲率区域。 [重新参数化](#change-of-variables.chapter) 这一章节解释了如何解决这个问题，并将这种分层模型与 Stan 配合。
+尽管总体均值和标准差 $\mu$ 和 $\tau$ 看起来校准良好，但 $\theta_1$ 讲述了一个完全不同的故事。模拟值远小于从数据拟合的值。这是因为 Stan 的 no-U-turn 采样器无法使用中心参数化制定的模型进行采样——当 $\tau$ 接近零且 $\theta_j$ 变得高度受限时，后验几何形状具有极高曲率的区域。[重参数化章节](reparameterization.qmd)解释了如何解决这个问题并使用 Stan 拟合这种分层模型。
