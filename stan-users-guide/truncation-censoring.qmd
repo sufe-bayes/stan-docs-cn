@@ -68,6 +68,9 @@ when the data are loaded into the model before sampling begins.
 
 该模型将上限 `U` 声明为数据，并要求 `y` 的取值满足相应约束；在开始采样之前将数据加载到模型中时，将对此进行检查。
 
+See the Stan Reference Manual's
+[Statements chapter](https://mc-stan.org/docs/reference-manual/statements.html#truncated-distributions) for how to use truncated distributions with the log probability increment statements (`target += ...`).
+
 This model implicitly uses an improper flat prior on the scale and
 location parameters; these could be given priors in the model using
 distribution statements.

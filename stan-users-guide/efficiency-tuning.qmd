@@ -378,26 +378,33 @@ the neck of the funnel, where $y$ is small and thus $x$ is constrained
 to be near 0.  This is due to the fact that the density's scale
 changes with $y$, so that a step size that works well in the body will
 be too large for the neck, and a step size that works in the neck will be
-inefficient in the body.  This can be seen in the following plot.
+inefficient in the body.  This can be seen in the following plots.
 
 当模型以这种方式表达时，Stan 很难从漏斗的颈部取样，因为那里的 $y$ 很小，因此 $x$ 被限制在0附近。这是由于密度的尺度随着 $y$ 的变化而变化，因此在主体中效果好的步长对颈部来说会过大，而在颈部效果好的步长在主体中会效率低下。这可以从下面的图中看出。
 
-4000 draws are taken from a run of Stan's sampler with default settings.  Both
-plots are restricted to the shown window of $x_1$ and $y$ values; some
-draws fell outside of the displayed area as would be expected given
-the density.  The samples are consistent with the marginal density
-$p(y) = \textsf{normal}(y \mid 0,3)$, which has mean 0 and standard
-deviation 3.
+::: {#fig-funnel layout="[55, 45]"}
 
-4000次抽样取自 Stan 采样器的默认设置。两幅图都限制在所显示的 $x_1$ 和 $y$ 值的窗口内；有些抽样在所显示的区域之外，这是考虑到密度而预期的。这些样本与边际密度 $p(y)=\textsf{normal}(y \mid 0,3)$ 一致，其平均值为0，标准差为3。
+![](img/funnel.png)
 
 ![](img/funnel-fit.png)
 
+
+Neal's funnel.  (Left) The marginal density of Neal's funnel for the upper-level variable $y$ and one lower-level variable $x_1$ (see the text for the formula).  The blue region has log density greater than -8, the yellow region density greater than -16, and the gray background a density less than -16.
+(Right) 4000 draws are taken from a run of Stan's sampler with default settings.
+Both plots are restricted to the shown window of $x_1$ and $y$ values;
+some draws fell outside of the displayed area as would be expected given
+the density.  The draws are consistent with the marginal density
+$p(y) = \textsf{normal}(y \mid 0,3)$, which has mean 0 and standard
+deviation 3.
+
+Neal 的漏斗分布。（右图）4000次抽样取自 Stan 采样器的默认设置。两幅图都限制在所显示的 $x_1$ 和 $y$ 值的窗口内；有些抽样在所显示的区域之外，这是考虑到密度而预期的。这些样本与边际密度 $p(y)=\textsf{normal}(y \mid 0,3)$ 一致，其平均值为0，标准差为3。
+:::
+
 In this particular instance, because the analytic form of the density
-from which samples are drawn is known, the model can be converted to
+is known, the model can be converted to
 the following more efficient form.
 
-在这个特殊的例子中，由于抽样的密度的分析形式是已知的，模型可以转换为以下更有效的形式。
+在这个特殊的例子中，由于密度函数的解析形式是已知的，因此模型可以转换为以下更有效的形式。
 
 ```stan
 parameters {
@@ -419,15 +426,15 @@ model {
 
 In this second model, the parameters `x_raw` and `y_raw` are
 sampled as independent standard normals, which is easy for Stan.  These
-are then transformed into samples from the funnel.  In this case, the
-same transform may be used to define Monte Carlo samples directly
-based on independent standard normal samples; Markov chain Monte Carlo
+are then transformed into draws from the funnel.  In this case, the
+same transform may be used to define Monte Carlo directly
+based on independent standard normal draws; Markov chain Monte Carlo
 methods are not necessary. If such a reparameterization were used in
 Stan code, it is useful to provide a comment indicating what the
 distribution for the parameter implies for the distribution of the
 transformed parameter.
 
-在这里的第二个模型中，参数 `x_raw` 和 `y_raw` 是按照独立标准正态采样的，这对 Stan 来说很容易。然后这些被转换为漏斗的样本。在这种情况下，同样的转换可以用来直接定义基于独立标准正态样本的蒙特卡洛样本；马尔科夫链蒙特卡洛方法不是必要的。如果在 Stan 代码中使用这样的重新参数化，那么提供一个说明参数分布对于转化后参数的分布的意义的注释是很有用的。
+在这里的第二个模型中，参数 `x_raw` 和 `y_raw` 是按照独立标准正态采样的，这对 Stan 来说很容易。然后这些被转换为漏斗的采样样本。在这种情况下，同样的转换可以用来直接定义基于独立标准正态采样样本的蒙特卡洛样本；马尔科夫链蒙特卡洛方法不是必要的。如果在 Stan 代码中使用这样的重新参数化，那么提供一个说明参数分布对于转化后参数的分布的意义的注释是很有用的。
 
 ### Reparameterizing the Cauchy {-}
 

@@ -25,6 +25,7 @@ $$
   \int_a^\infty \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{1}{2}\frac{(x - \mu)^2}{\sigma^2}}
 $$
 
+
 To compute this integral in Stan, the integrand must first be defined as a Stan function
 (see the Stan Reference Manual chapter on User-Defined Functions
 for more information on coding user-defined functions).
@@ -44,6 +45,7 @@ real normal_density(real x,             // Function argument
   return 1 / (sqrt(2 * pi()) * sigma) * exp(-0.5 * ((x - mu) / sigma)^2);
 }
 ```
+
 
 This function is expected to return the value of the integrand evaluated at point `x`. The
 argument `xc` is used in definite integrals to avoid loss of precision near
@@ -109,14 +111,14 @@ model {
   sigma ~ normal(0, 1);
   left_limit ~ normal(0, 1);
   target += normal_lpdf(y | mu, sigma);
-  target += log(integrate_1d(normal_density,
-                             left_limit,
-                             positive_infinity(),
-                             { mu, sigma }, x_r, x_i));
+  target += -log(integrate_1d(normal_density,
+                              left_limit,
+                              positive_infinity(),
+                              { mu, sigma }, x_r, x_i));
 }
 ```
 
-### Limits of integration
+### Limits of integration {-}
 
 ### 积分的极限 {-}
 
@@ -131,7 +133,7 @@ If both limits are either `negative_infinity()` or
 
 如果两个积分限都是 `negative_infinity()` 或 `positive_infinity()`，则积分及其梯度设为零。
 
-### Data vs. parameters
+### Data vs. parameters {-}
 
 ### 数据与参数 {-}
 
@@ -178,7 +180,7 @@ If `integrate_1d` causes an exception in generated quantities block, the returne
 
 `relative_tolerance` 参数可作为 `integrate_1d` 的最后一个参数可选指定。默认情况下，`integrate_1d` 遵循 Boost 库的建议，将 `relative_tolerance` 设为双精度浮点数机器精度的平方根（约 `1e-8`）。如果 Boost 积分器无法达到相对容差，将抛出异常，消息类似"Exception: integrate: error estimate of integral 4.25366e-13 exceeds the given relative tolerance times norm of integral"。如果 `integrate_1d` 在转换参数块或模型块中引发异常，结果等同于指定 $-\infty$ 对数概率，这会导致 MCMC 采样器拒绝当前提议并在优化中调整搜索参数。如果 `integrate_1d` 在生成量块中引发异常，`integrate_1d` 返回 NaN。在这些情况下，可以指定更大的 `relative_tolerance` 值。
 
-### Zero-crossing integrals {#zero-crossing}
+### Zero-crossing integrals {- #zero-crossing}
 
 ### 过零积分 {-#zero-crossing--cn}
 
@@ -194,7 +196,7 @@ In this case, each integral is separately integrated to the given
 
 在这种情况下，每个积分都分别按给定的 `relative_tolerance` 进行积分。
 
-### Avoiding precision loss near limits of integration in definite integrals {#integral-precision}
+### Avoiding precision loss near limits of integration in definite integrals {- #integral-precision}
 
 ### 避免定积分中积分极限附近的精度损失 {-#integral-precision--cn}
 
@@ -216,6 +218,7 @@ beta 分布的 pdf 正比于
 $$
 p(x) \propto x^{\alpha - 1}(1 - x)^{\beta - 1}
 $$
+
 
 Normalizing this distribution requires computing the integral of $p(x)$ from
 zero to one. In Stan code, the integrand might look like:

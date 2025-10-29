@@ -22,36 +22,55 @@ the total log probability.  The rest of the chapter provides examples.
 
 ### Triangle distribution {-}
 
-### 三角分布 {-}
-
-A simple example is the triangle distribution,
+A simple example is the symmetric triangle distribution,
 whose density is shaped like an isosceles triangle with corners at
 specified bounds and height determined by the constraint that a
 density integrate to 1.  If $\alpha \in \mathbb{R}$ and $\beta \in \mathbb{R}$
 are the bounds, with $\alpha < \beta$, then $y \in (\alpha,\beta)$ has
-a density defined as follows.
+a density defined as
 
-一个简单的例子是三角分布，其密度函数的形状像一个等腰三角形，三角形的底边由指定的边界确定，高度由密度函数积分为1的约束条件决定。$\alpha \in \mathbb{R}$ 和 $\beta \in \mathbb{R}$ 是边界，其中 $\alpha < \beta$，那么 $y \in (\alpha,\beta)$ 的密度函数定义如下。
+一个简单的例子是对称三角分布，其密度函数的形状像一个等腰三角形，三角形的底边由指定的边界确定，高度由密度函数积分为1的约束条件决定。$\alpha \in \mathbb{R}$ 和 $\beta \in \mathbb{R}$ 是边界，其中 $\alpha < \beta$，那么 $y \in (\alpha,\beta)$ 的密度函数定义为
 
 $$
 \textsf{triangle}(y \mid \alpha,\beta)
 =
-\frac{2}{\beta - \alpha}
-\
-\left(
-1 -
-\left|
-y - \frac{\alpha + \beta}{\beta - \alpha}
-\right|
-\right)
+\frac{1}{(\beta - \alpha)^2}
+\cdot
+\textrm{min}(y - \alpha, \beta - y).
 $$
 
-If $\alpha = -1$, $\beta = 1$, and $y \in (-1,1)$, this reduces to
+The general form of triangle can be coded in Stan as follows.
 
-如果 $\alpha = -1$，$\beta = 1$，且 $y \in (-1,1)$，那么这可以简化为以下形式：
+三角分布的一般形式可以在 Stan 中进行如下编程实现。
+
+```stan
+data {
+  real alpha;
+  real<lower=alpha> beta;
+}
+parameters {
+  real<lower=alpha, upper=beta> y;
+}
+model {
+  target += -2 * log(beta - alpha)
+    + log(fmin(y - alpha, beta - y));
+}
+```
+
+Because the bounds are specified as data here, the term `-2 * log(beta
+- alpha)` could be dropped from the log density.  If either of the
+bounds depends on a parameter, then this term must be included.
+
+由于此处分布的边界被指定为数据，因此 `-2 * log(beta - alpha)` 这一项可以从对数密度中移除。如果边界中的任意一个依赖于额外的参数，那么这一项就必须保留。
+
+If $\alpha = -1$, $\beta = 1$, and $y \in (-1,1)$, then
+`fmin(y - alpha, beta - y)` is `fmin(y + 1, -1 - y)`, which is `fmin(y + 1, -(y + 1))`, which reduces to `1 - abs(y)`.  Therfore, the density, dropping constants, reduces to
+
+如果 $\alpha = -1$，$\beta = 1$，且 $y \in (-1,1)$，那么
+`fmin(y - alpha, beta - y)` 即为 `fmin(y + 1, -1 - y)`，也就是 `fmin(y + 1, -(y + 1))`，它可以进一步化简为 `1 - abs(y)`。因此，在忽略了常数倍数后，密度函数可以表达为
 
 $$
-\textsf{triangle}(y \mid -1,1) = 1 - |y|.
+\textsf{triangle}(y \mid -1, 1) \propto 1 - |y|.
 $$
 Consider the following Stan implementation of
 $\textsf{triangle}(-1,1)$ for sampling.
@@ -68,14 +87,14 @@ model {
 ```
 
 The single scalar parameter `y` is declared as lying in the
-interval `(-1,1)`.  The total log probability is
+interval `(-1, 1)`.  The total log probability is
 incremented with the joint log probability of all parameters, i.e.,
-$\log \mathsf{Triangle}(y \mid -1,1)$.  This value is coded in Stan as
+$\log \mathsf{Triangle}(y \mid -1, 1)$.  This value is coded in Stan as
 `log1m(abs(y))`.  The function `log1m` is defined so
-that `log1m(x)` has the same value as $\log(1-x)$, but the
+that `log1m(x)` has the same value as $\log(1 - x)$, but the
 computation is faster, more accurate, and more stable.
 
-单一的标量参数 `y` 被声明为位于区间 `(-1,1)` 内。总的对数概率会根据所有参数的联合对数概率进行累加，即 $\log \mathsf{Triangle}(y \mid -1,1)$。在 Stan 中，这个值被编码为 `log1m(abs(y))`。函数 `log1m` 被定义为使得 `log1m(x)` 具有与 $\log(1-x)$ 相同值的函数，但计算速度更快、更准确、更稳定。
+单一的标量参数 `y` 被声明为位于区间 `(-1, 1)` 内。总的对数概率会根据所有参数的联合对数概率进行累加，即 $\log \mathsf{Triangle}(y \mid -1, 1)$。在 Stan 中，这个值被编码为 `log1m(abs(y))`。函数 `log1m` 被定义为使得 `log1m(x)` 具有与 $\log(1 - x)$ 相同值的函数，但计算速度更快、更准确、更稳定。
 
 
 The constrained type `real<lower=-1, upper=1>` declared for `y` is
@@ -89,9 +108,9 @@ explored values of `y` outside of $(-1,1)$.
 
 Now suppose the log probability function were extended to all of
 $\mathbb{R}$ as follows by defining the probability to be `log(0.0)`,
-i.e., $-\infty$, for values outside of $(-1,1)$.
+i.e., $-\infty$, for values outside of $(-1, 1)$.
 
-现在假设将对数概率函数扩展到整个实数集 $\mathbb{R}$，方法是对于 $(-1,1)$ 范围之外的值将概率定义为 `log(0.0)`，即 $-\infty$。
+现在假设将对数概率函数扩展到整个实数集 $\mathbb{R}$，方法是对于 $(-1, 1)$ 范围之外的值将概率定义为 `log(0.0)`，即 $-\infty$。
 
 ```stan
 target += log(fmax(0.0,1 - abs(y)));

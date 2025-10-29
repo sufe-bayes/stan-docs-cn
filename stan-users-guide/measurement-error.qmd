@@ -265,10 +265,10 @@ This explicit model for the unrounded measurements $z$ produces the
 same posterior for $\mu$ and $\sigma$ as the previous model that
 marginalizes $z$ out.  Both approaches mix well, but the latent
 parameter version is about twice as efficient in terms of effective
-samples per iteration, as well as providing a posterior for the
+sample size per iteration, as well as providing a posterior for the
 unrounded parameters.
 
-这个针对未舍入测量值 z 的显式模型会产生与之前将 $z$ 边缘化掉的模型相同的 $\mu$ 和 $\sigma$ 后验分布。两种方法十分相似，但就每次迭代的有效样本而言，潜参数版本的效率约为前者的两倍，并且为未舍入参数提供了后验分布。
+这个针对未舍入测量值 z 的显式模型会产生与之前将 $z$ 边缘化掉的模型相同的 $\mu$ 和 $\sigma$ 后验分布。两种方法十分相似，但就每次迭代的有效样本量而言，潜参数版本的效率约为前者的两倍，并且为未舍入参数提供了后验分布。
 
 ## Meta-analysis
 

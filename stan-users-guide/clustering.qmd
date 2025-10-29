@@ -751,12 +751,11 @@ replaced with a multivariate logistic normal distribution.
 
 The authors treat the prior as a fixed hyperparameter.  They use an
 $L_1$-regularized estimate of covariance, which is equivalent to the
-maximum a posteriori estimate given a double-exponential prior.  Stan
-does not (yet) support maximum a posteriori estimation, so the mean and
-covariance of the multivariate logistic normal must be specified as
+maximum a posteriori estimate given a double-exponential prior.  Here
+the mean and covariance of the multivariate logistic normal are specified as
 data.
 
-作者将先验视为固定的超参数。他们使用带 $L_1$ 正则化的协方差估计，这等价于在双指数先验下的最大后验估计。由于 Stan 尚不支持最大后验估计，因此必须将多元 Logistic-正态分布的均值和协方差指定为数据。
+作者将先验视为固定的超参数。他们使用带 $L_1$ 正则化的协方差估计，这等价于在双指数先验下的最大后验估计。此处多元 Logistic-正态分布的均值和协方差被指定为数据。
 
 #### Fixed hyperparameter correlated topic model {-}
 

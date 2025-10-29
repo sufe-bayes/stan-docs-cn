@@ -18,7 +18,7 @@ contain the true parameter 80% of the time.  If data is generated
 according to a model, Bayesian posterior inference with respect to
 that model is calibrated by construction.  Simulation-based
 calibration (SBC) exploits this property of Bayesian inference to
-asses the soundness of a posterior sampler.  Roughly, the way it works
+assess the soundness of a posterior sampler.  Roughly, the way it works
 is by simulating parameters according to the prior, then simulating
 data conditioned on the simulated parameters, then testing posterior
 calibration of the inference algorithm over independently simulated
@@ -393,7 +393,7 @@ for (k in 1:K) {
 
 The draws from the posterior are assumed to be roughly independent.
 If they are not, artifacts may arise in the uniformity tests due to
-correlation in the posterior draws.  Thus it is best to think the
+correlation in the posterior draws.  Thus it is best to thin the
 posterior draws down to the point where the effective sample size is
 roughly the same as the number of thinned draws.  This may require
 running the code a few times to judge the number of draws required to
@@ -587,6 +587,8 @@ the ranks are computed and binned, and then plotted.
 
 ![](./img/sbc-normal-normal.png){width=90%}
 
+Simulation based calibration plots for location and scale of a normal model with standard normal prior on the location, standard lognormal prior on the scale.  Both histograms appear uniform, which is consistent with inference being well calibrated.
+
 基于模拟的校准图，用于正态模型的位置和尺度参数，位置参数具有标准正态先验，尺度参数具有标准对数正态先验。两个直方图都显示均匀，这与推断被良好校准一致。
 :::
 
@@ -605,6 +607,8 @@ model.
 ::: {#fig-sbc-bad}
 
 ![](./img/sbc-student-t-normal.png){width=90%}
+
+Simulation based calibration plots for location and scale of a normal model with standard normal prior on the location standard lognormal prior on the scale with mismatched generative model using a Student-t data model with 4 degrees of freedom.  The mean histogram appears uniform, but the scale parameter shows simulated values much smaller than fit values, clearly signaling the lack of calibration.
 
 基于模拟的校准图，用于正态模型的位置和尺度参数，位置参数具有标准正态先验，尺度参数具有标准对数正态先验，但生成模型不匹配，使用自由度为 4 的 Student-t 数据模型。均值直方图显示均匀，但尺度参数显示模拟值远小于拟合值，清楚地表明缺乏校准。
 :::
@@ -729,6 +733,9 @@ SBC 也诊断出了问题。这是运行 $N = 200$ 次模拟的秩图，其中�
 ![$\tau$](img/sbc-ctr-8-schools-tau.png){#fig-tau}
 
 ![${\theta}_1$](img/sbc-ctr-8-schools-theta1.png){#fig-theta1}
+
+Simulation based calibration plots for the eight-schools model with centered parameterization in Stan.
+The geometry is too difficult for the NUTS sampler to handle, as indicated by the plot for $\theta_1$ (@fig-theta1).
 
 Stan 中使用中心参数化的八所学校模型的基于模拟的校准图。几何形状对于 NUTS 采样器来说太困难了，如 $\theta_1$ 的图所示（@fig-theta1）。
 :::

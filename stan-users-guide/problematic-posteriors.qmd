@@ -245,6 +245,8 @@ produces the same simplex $\theta$.
 
 `softmax` 函数是多对一的，这导致了无约束参数 $\alpha$ 的不可辨识性。特别地，对每个 $\alpha_k$ 添加或减去一个常数会得到相同的单纯形 $\theta$。
 
+
+
 ### Mitigating the invariances {-}
 
 ### 缓解不变性的方法 {-}
@@ -284,14 +286,14 @@ interpretable relative to student 1's ability to answer them.
 
 This solution is not sufficient to deal with the multiplicative
 invariance introduced by the question discrimination parameters
-$\delta_i$.  To solve this problem, one of the difficulty parameters,
+$\delta_i$.  To solve this problem, one of the discrimination parameters,
 say $\delta_1$, must also be constrained.  Because it's a
 multiplicative and not an additive invariance, it must be constrained
 to a non-zero value, with 1 being a convenient choice.  Now all of the
 discrimination parameters may be interpreted relative to item 1's
 discrimination.
 
-这种解决方案无法解决由问题区分参数 $\delta_i$ 引入的乘法不变性问题。为了解决这个问题，必须对其中一个难度参数进行约束，比如将 $\delta_1$ 约束为一个非零值，1是一个方便的选择。现在，所有的区分参数都可以相对于项目1的区分度进行解释了。
+这种解决方案无法解决由问题区分参数 $\delta_i$ 引入的乘法不变性问题。为了解决这个问题，必须对其中一个区分度参数进行约束，比如将 $\delta_1$ 约束为一个非零值，1是一个方便的选择。现在，所有的区分参数都可以相对于项目1的区分度进行解释了。
 
 The many-to-one nature of $\texttt{softmax}(\alpha)$ is typically
 mitigated by pinning a component of $\alpha$, for instance fixing
@@ -314,6 +316,9 @@ vector softmax_id(vector alpha) {
   return softmax(alphac1);
 }
 ```
+
+
+
 
 #### Adding priors {-}
 
@@ -370,6 +375,7 @@ The single intercept parameterization with no prior also has a proper posterior.
 没有先验的单一截距参数化也具有一个正规的后验分布。
 
 ![Single intercepts with improper prior](img/one-param-identified.png)
+
 
 
 The addition of a prior to the two intercepts model is shown in the
@@ -551,10 +557,10 @@ $\mu_1 > \mu_2$.  In these cases, the posteriors are affected by
 the constraint and true posterior uncertainty in $\mu_1$ and $\mu_2$
 is not captured by the model with the constraint.  In addition,
 standard approaches to posterior inference for event probabilities is
-compromised.  For instance, attempting to use $M$ posterior samples to
+compromised.  For instance, attempting to use $M$ posterior draws to
 estimate $\Pr[\mu_1 > \mu_2]$, will fail, because the estimator
 
-一种常见的策略是对参数进行约束，以确定各个成分。例如，在上面讨论的两个成分的正态混合模型中，我们可以考虑对参数 $\mu_1$ 和 $\mu_2$ 施加约束 $\mu_1 < \mu_2$。然而，这种方法可能会引发一个问题，即当相反的顺序 $\mu_1 > \mu_2$ 具有相当大的概率质量时。在这些情况下,后验分布会受到约束的影响,而 $\mu_1$ 和 $\mu_2$ 的真实后验不确定性无法被带约束的模型捕捉到。此外，用于事件概率的后验推断的标准方法也会受到影响。例如，试图使用 $M$ 个后验样本估计 $\textsf{Pr}[\mu_1 > \mu_2]$ 将会失败，因为估计量
+一种常见的策略是对参数进行约束，以确定各个成分。例如，在上面讨论的两个成分的正态混合模型中，我们可以考虑对参数 $\mu_1$ 和 $\mu_2$ 施加约束 $\mu_1 < \mu_2$。然而，这种方法可能会引发一个问题，即当相反的顺序 $\mu_1 > \mu_2$ 具有相当大的概率质量时。在这些情况下,后验分布会受到约束的影响,而 $\mu_1$ 和 $\mu_2$ 的真实后验不确定性无法被带约束的模型捕捉到。此外，用于事件概率的后验推断的标准方法也会受到影响。例如，试图使用 $M$ 个后验采样点估计 $\textsf{Pr}[\mu_1 > \mu_2]$ 将会失败，因为估计量
 
 $$
 \Pr[\mu_1 > \mu_2]
@@ -696,6 +702,7 @@ overflow to 1, even when the unconstrained parameter is not infinite.
 Similar problems arise for the expectation terms in logistic
 regression, which is why the logit-scale parameterizations of the
 Bernoulli and binomial distributions are more stable.
+
 
 然而，仍然存在两个问题。首先，如果 $\phi$ 的后验质量接近其中一个边界，logit 变换后的参数将需要扫描很长的路径，从而可能主导无转弯条件（no-U-turn sampler, NUTS）所施加的条件。第二个问题是，从非受限制空间到受限制空间的逆变换可能会下溢到0或上溢到1，即使非受限制的参数并非无穷大。类似的问题也会在逻辑回归的期望项中出现，这就是伯努利分布和二项分布的 logit-scale 参数化更稳定的原因。
 
@@ -1018,12 +1025,12 @@ the following.
 
 * 在可辨识模型中，平均跳跃步数大约为3步；在通过弱先验得到可辨识的模型中，平均跳跃步数为150步；而在非可辨识模型中，平均跳跃步数为1400步。
 
-* The number of effective samples per
+* The effective sample size per
   second for $\mu$ is roughly 31,000 in the identified model, 1,900 in the model
   identified with weakly informative priors, and 200 in the
   non-identified model; the results are similar for $\sigma$.
 
-* 在可辨识模型中，$\mu$ 的每秒有效样本数大约为31,000个；在通过弱信息先验得到可辨识的模型中，每秒有效样本数为1,900个；而在非可辨识模型中，每秒有效样本数为200个。$\sigma$ 的结果类似。
+* 在可辨识模型中，$\mu$ 的每秒有效样本量大约为31,000个；在通过弱信息先验得到可辨识的模型中，每秒有效样本数为1,900个；而在非可辨识模型中，每秒有效样本数为200个。$\sigma$ 的结果类似。
 
 * In the non-identified model, the 95% interval for $\lambda_1$ is
   (-2300,6000), whereas it is only (-12,12) in the model identified with

@@ -331,9 +331,9 @@ and the same transformed data definitions of `mu` and
 `K` as the previous model, with the addition of a transformed
 data variable for the Cholesky decomposition.  The parameters change
 to the raw parameters sampled from an isotropic standard normal, and the
-actual samples are defined as generated quantities.
+actual parameters are defined in generated quantities.
 
-这个模型对于 `N` 和 `x` 的数据声明，以及对于 `mu` 和 `K` 的“transformed data”定义与之前的模型相同，并增加了一个用于 Cholesky 分解的“transformed data”变量。参数更改为从各向同性标准正态分布中采样的原始参数，并且实际的样本被定义为生成量（即“generated quantities”）。
+这个模型对于 `N` 和 `x` 的数据声明，以及对于 `mu` 和 `K` 的“transformed data”定义与之前的模型相同，并增加了一个用于 Cholesky 分解的“transformed data”变量。参数更改为从各向同性标准正态分布中采样的原始参数，并且实际的参数被定义为生成量（即“generated quantities”）。
 
 ```stan
 // ...

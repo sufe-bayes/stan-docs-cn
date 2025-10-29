@@ -286,10 +286,10 @@ $$
 
 In the linear regression case, two stages of simplification can be
 carried out, the first of which helpfully reduces the variance of the
-estimator. First, rather than averaging samples $\tilde{y}_n^{(m)}$,
+estimator. First, rather than averaging draws $\tilde{y}_n^{(m)}$,
 the same result is obtained by averaging linear predictions,
 
-在线性回归的情况下，可以进行两个阶段的简化，第一个阶段有助于减少估计量的方差。首先，不是平均样本 $\tilde{y}_n^{(m)}$，而是通过平均线性预测获得相同的结果，
+在线性回归的情况下，可以进行两个阶段的简化，第一个阶段有助于减少估计量的方差。首先，不是平均采样样本 $\tilde{y}_n^{(m)}$，而是通过平均线性预测获得相同的结果，
 
 \begin{eqnarray*}
 \hat{\tilde{y}}_n
