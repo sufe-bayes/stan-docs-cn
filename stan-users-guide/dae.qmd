@@ -302,4 +302,4 @@ can happen during warmup.  With the non-stiff solver, this may happen when
 the sampler moves to stiff regions of parameter space, which will requires small
 step sizes.
 
-最大步数可用于停止失控的模拟。当 MCMC 移动到参数空间中离通常求解微分方程的区域很远的部分时，可能会发生这种情况。特别是在预热期间可能会发生这种情况。对于非刚性求解器，当采样器移动到参数空间的刚性区域时可能会发生这种情况，这将需要很小的步长。
+最大步数可用于停止失控的模拟。当 MCMC 移动到参数空间中离通常求解微分方程的区域很远的部分时，可能会发生这种情况。特别是在预热期间可能会发生这种情况。对于非刚性求解器，当采样器移动到参数空间的刚性区域时可能会发生这种情况，这将需要较小的步长。

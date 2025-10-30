@@ -6,7 +6,6 @@ pagetitle: Complex Numbers
 
 # Complex Numbers {-#complex-numbers.chapter}
 
-
 本节译者：段园家
 
 本节校审：张梓源（ChatGPT辅助）
@@ -14,7 +13,7 @@ pagetitle: Complex Numbers
 Stan supports complex scalars, matrices, and vectors as well as
 real-based ones.
 
-Stan 在支持实数的标量、矩阵和向量的同时也支持复数的标量、矩阵和向量。
+Stan 在支持实数标量、矩阵和向量的同时，也支持复数标量、矩阵和向量。
 
 
 ## Working with complex numbers
@@ -24,7 +23,7 @@ Stan 在支持实数的标量、矩阵和向量的同时也支持复数的标量
 This section describes the complex scalar type, including how to build
 complex numbers, assign them, and use them in arrays and functions.
 
-本节介绍复数标量类型的使用方法，包括如何构建、赋值，以及在数组和函数中的应用。
+本节介绍复数标量类型的使用方法，包括如何构造复数、赋值复数，以及在数组和函数中的应用。
 
 ### Constructing and accessing complex numbers {-}
 
@@ -46,7 +45,7 @@ function may be used.  For example, the following code will work if
 `x` and `y` are parameters, transformed data, or local variables in a
 function or model block.
 
-生成复数 $-1.1 + 2.3i$。 这种方式仅在实部和虚部都是字面量时有效。 要从任意实变量中构造一个复数，可以使用 `to_complex()` 函数。 例如，如 果`x` 和 `y` 是函数或模型块中的参数、转换数据或局部变量，则以下代码将起作用。
+生成复数 $-1.1 + 2.3i$。 这种方式仅在实部和虚部都是字面量时有效。要从任意实变量中构造一个复数，可以使用 `to_complex()` 函数。例如，如果 `x` 和 `y` 是函数或模型块中的参数、转换数据或局部变量，则以下代码将起作用。
 
 ```stan
 real x = // ...
@@ -80,7 +79,7 @@ if (a == b) print("hello");
 
 ### Complex assignment and promotion {-}
 
-### 复数的分配和提升 {-}
+### 复数赋值和类型提升 {-}
 
 Integer- or real-valued expressions may be assigned to complex
 numbers, with the corresponding imaginary component set to zero.
@@ -134,7 +133,7 @@ be passed integer or real values, which will be promoted before the
 function is evaluated.  For example, the following user-defined
 complex function will accept integer, real, or complex arguments.
 
-类型提升同样适用于复数函数的参数传递，可以传入整数或实数值，这些值会在函数执行前自动提升为复数。例如，下面这个用户定义的复数函数可以接受整数、实数或复数参数。
+类型提升同样适用于复数函数参数，可以传入整数或实数值，这些值会在函数执行前自动提升为复数。例如，下面这个用户定义的复数函数可以接受整数、实数或复数参数。
 
 ```stan
 complex times_i(complex z) {
@@ -158,7 +157,7 @@ $z = x + yi$ is to consider its real part $x$ and imaginary part $y$
 to have a bivariate normal distribution.  For example, a complex prior
 can be expressed as follows.
 
-对复随机数 $z = x + yi$ 上的分布进行建模的最简单方法是将其实部 $x$ 和虚部 $y$ 视为具有二元正态分布。 例如，一个复数的先验可以表示如下。
+对复数随机变量 $z = x + yi$ 的分布进行建模的最简单方法是将其实部 $x$ 和虚部 $y$ 视为具有二元正态分布。 例如，一个复数的先验可以表示如下。
 
 ```stan
 complex z;
@@ -184,7 +183,7 @@ Stan supports complex matrices, vectors, and row vectors.  Variables
 of these types are declared with sizes in the same way as their
 real-based counterparts.
 
-Stan 支持复数矩阵、向量和行向量。 这些类型的变量大小的定义同实数值的相同。
+Stan 支持复数矩阵、向量和行向量。这些类型的变量大小的定义方式与实数类型相同。
 
 ```stan
 complex_vector[3] v;
@@ -208,7 +207,7 @@ operations including negation, addition, subtraction, and
 multiplication (division involves a solve, and isn't a simple
 arithmetic operation for matrices).  They also support transposition.
 
-复矩阵和向量支持所有标准的算术运算，包括逻辑非、加法、减法和乘法（除法涉及方程的求解，而不是矩阵之间简单的算术运算）。 它们还支持转置。
+复矩阵和向量支持所有标准的算术运算，包括取负、加法、减法和乘法（除法涉及方程的求解，而不是矩阵之间简单的算术运算）。 它们还支持转置。
 
 Furthermore, it is possible to convert back and forth between arrays
 and matrices using the `to_array` functions.
@@ -218,7 +217,7 @@ and matrices using the `to_array` functions.
 
 ## Complex linear regression
 
-## 复线性回归 {-}
+## 复数线性回归 {-}
 
 Complex valued linear regression with complex predictors and
 regression coefficients looks just like standard regression.  For

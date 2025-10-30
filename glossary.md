@@ -40,6 +40,7 @@
 | | non-centered parameterization | 非中心参数化 | |
 | | ability parameter | 能力参数 | |
 | | difficulty parameter | 难度参数 | |
+| | discrimination parameter | 区分参数 | |
 | | multivariate priors | 多元先验 | |
 | | LKJ prior | LKJ 先验 | |
 | | Cholesky factorization | Cholesky 分解 | |
@@ -177,7 +178,7 @@
 | | segment operation | 分段操作 | |
 | | database-like structure | 数据库式结构 | |
 | **9. 聚类** | clustering | 聚类 | |
-| | soft K-means | 软K-均值 | |
+| | soft K-means | 软 K-均值 | |
 | | latent Dirichlet allocation | 潜在狄利克雷分配 | |
 | | naive Bayes | 朴素贝叶斯 | |
 | | mixture model | 混合模型 | |
@@ -195,7 +196,7 @@
 | | squared exponential | 平方指数 | |
 | | length-scale | 长度尺度 | |
 | | marginal standard deviation | 边际标准差 | |
-| | Cholesky decomposition | Cholesky分解 | |
+| | Cholesky decomposition | Cholesky 分解 | |
 | | latent variable GP | 潜变量高斯过程 | |
 | | marginal likelihood GP | 边际似然高斯过程 | |
 | | automatic relevance determination | 自动相关性确定 | |
@@ -224,11 +225,39 @@
 | | prior knowledge | 先验知识 | |
 | | parameter identifiability | 参数可识别性 | |
 | | computational efficiency | 计算效率 | |
-| **12. 方向、旋转和超球面** | compact | 紧致的 | |
-| | improper | 不正确的 | |
-| | a set of points | 一组点 | |
-| | discrimination parameter | 区分参数 | |
-| **13. 常微分方程** | forward sensitivity | 前向灵敏度 | |
+| **12. 超球面模型** | directional statistics | 方向统计 | |
+| | hypersphere | 超球面 | |
+| | unit vector | 单位向量 | |
+| | constrained parameter transform | 约束参数变换 | |
+| | degrees of freedom | 自由度 | |
+| | proper uniform distribution | 正确的均匀分布 | |
+| | manifold | 流形 | |
+| | compact | 紧致的 | |
+| | geodesic | 测地线 | |
+| | great circles | 大圆 | |
+| | auxiliary variable approach | 辅助变量法 | |
+| | uniformity | 均匀性 | |
+| | rotation matrix | 旋转矩阵 | |
+| | circular representations | 循环表示法 | |
+| | temporal effects | 时间规律 | |
+| | ad-hoc predictors | 特设预测因子 | |
+| | daylight savings time | 夏令时制 | |
+| **13. 代数方程** | algebraic equations | 代数方程 | |
+| | Newton method | 牛顿方法 | |
+| | Powell hybrid method | Powell 混合方法 | |
+| | root-finding problem | 寻根问题 | |
+| | nonlinear algebraic equations | 非线性代数方程 | |
+| | algebraic solver | 代数求解器 | |
+| | Jacobian | 雅可比矩阵 | |
+| | implicit function theorem | 隐函数定理 | |
+| | degenerate systems | 退化系统 | |
+| | relative tolerance | 相对容差 | |
+| | function tolerance | 函数容差 | |
+| | scaling step | 缩放步长 | |
+| | sensitivity analysis | 灵敏度分析 | |
+| | importance sampling | 重要性采样 | |
+| | Metropolis proposal | Metropolis提议 | |
+| **14. 常微分方程** | forward sensitivity | 前向灵敏度 | |
 | | adjoint sensitivity | 伴随灵敏度 | |
 | | stiffness / stiff system | 刚性系统 | |
 | | system function | 系统函数 | |
@@ -248,15 +277,49 @@
 | | adjoint ODE solver | 伴随 ODE 求解器 | |
 | | checkpointing | 检查点机制 | |
 | | Hermite interpolation | Hermite 插值 | |
-| | matrix exponential | matrix exponential | 需要确认是否翻译 |
+| | matrix exponential | 矩阵指数 | |
 | | linear ODE system | 线性 ODE 系统 | |
 | | quadrature tolerance | 积分容差 | |
-| **15. 复数** | imaginary literals | 虚数字面量 | |
-| | complex vector | 复向量 | |
-| | Cholesky factor | Cholesky 因子 | |
-| | multivariate normal | 多元正态分布 | |
-| | promotion | 类型提升 | |
-| **16. 微分代数方程 (DAE)** | Differential-Algebraic Equations (DAEs) | 微分代数方程组 | |
+| | non-stiff system | 非刚性系统 | |
+| | Runge-Kutta method | Runge-Kutta 方法 | |
+| | backward-differentiation formula | 后向差分公式 | |
+| | Adams-Moulton formula | Adams-Moulton 公式 | |
+| | harmonic oscillator | 简谐振子 | |
+| | discontinuous ODE | 不连续 ODE | |
+| | measurement error model | 测量误差模型 | |
+| **15. 一维积分** | one dimensional integrals | 一维积分 | |
+| | integrate_1d function | integrate_1d 函数 | |
+| | normalizing constant | 归一化常数 | |
+| | left-truncated normal distribution | 左截断正态分布 | |
+| | integrand | 被积函数 | |
+| | limits of integration | 积分限 | |
+| | relative tolerance | 相对容差 | |
+| | double exponential quadrature | 双指数求积 | |
+| | zero-crossing integrals | 过零积分 | |
+| | precision loss | 精度损失 | |
+| | beta distribution | beta 分布 | |
+| | log-normal distribution | 对数正态分布 | |
+| | shifted log-normal distribution | 偏移对数正态分布 | |
+| | numerical breakdown | 数值崩溃 | |
+| **16. 复数** | complex numbers | 复数 | |
+| | complex scalars | 复数标量 | |
+| | complex matrices | 复数矩阵 | |
+| | complex vectors | 复数向量 | |
+| | complex row vectors | 复数行向量 | |
+| | imaginary literals | 虚数字面量 | |
+| | to_complex() function | to_complex 函数 | |
+| | get_real() function | get_real 函数 | |
+| | get_imag() function | get_imag 函数 | |
+| | type promotion | 类型提升 | |
+| | complex arrays | 复数数组 | |
+| | complex random variables | 复数随机变量 | |
+| | bivariate normal distribution | 二元正态分布 | |
+| | complex linear regression | 复数线性回归 | |
+| | arithmetic operations | 算术运算 | |
+| | negation | 取负 | |
+| | transpose | 转置 | |
+| | imaginary unit | 虚数单位 | |
+| **17. 微分代数方程** | Differential-Algebraic Equations (DAEs) | 微分代数方程组 | |
 | | residuals | 残差 | |
 | | consistent initial conditions | 一致的初始条件 | |
 | | index (of DAEs) | 指数 | |
@@ -274,7 +337,7 @@
 | | mass conservation | 质量守恒 | |
 | | reaction rate coefficients | 反应速率系数 | |
 | | stiff regions | 刚性区域 | |
-| **17. 生存模型** | censoring | 删失 | |
+| **18. 生存模型** | censoring | 删失 | |
 | | right censoring | 右删失 | |
 | | memoryless property | 无记忆性 | |
 | | complementary cumulative distribution function (ccdf) | 补累积分布函数 | |
@@ -284,13 +347,13 @@
 | | cumulative hazard function | 累积风险函数 | |
 | | baseline hazard function | 基线风险函数 | |
 | | proportional hazards | 比例风险 | |
-| | Cox's proportional hazards model | Cox比例风险模型 | |
+| | Cox's proportional hazards model | Cox 比例风险模型 | |
 | | partial likelihood | 部分似然 | |
 | | semi-parametric | 半参数 | |
 | | tied survival times | 并列生存时间 | |
-| | Efron's estimator | Efron估计器 | |
+| | Efron's estimator | Efron 的估计量 | |
 | | log_diff_exp | 对数差分指数函数 | |
-| **18. 浮点数运算** | subnormal number | 次正规数 | |
+| **19. 浮点数运算** | subnormal number | 次正规数 | |
 | | signed zero | 符号零 | |
 | | not-a-number (NaN) | 非数字（NaN） | |
 | | positive/negative infinity | 正/负无穷 | |
@@ -306,21 +369,21 @@
 | | log scale | 对数尺度 | |
 | | Welford's algorithm | Welford 算法 | |
 | | CCDF | 互补累积分布函数 | |
-| **20. 多重索引和范围索引** | Multiple Indexing | 多重索引 | |
+| **21. 多重索引和范围索引** | Multiple Indexing | 多重索引 | |
 | | Range Indexing | 范围索引 | |
 | | container | 容器 | |
 | | Lower/upper bound | 下界/上界 | |
 | | prefixes | 前若干个元素 | |
 | | suffixes | 后若干个元素 | |
-| **21. 用户自定义函数** | User-Defined Functions | 用户自定义函数 | |
+| **22. 用户自定义函数** | User-Defined Functions | 用户自定义函数 | |
 | | encapsulation | 封装 | |
 | | modular code | 模块化代码 | |
 | | monolithic program | 单体程序 | |
 | | reject statement | 拒绝语句 | |
 | | fatal_error statement | 致命错误语句 | |
 | | log probability accumulator | 对数概率累加器 | |
-| | void return type | void返回类型 | |
-| | non-void return type | 非void返回类型 | |
+| | void return type | void 返回类型 | |
+| | non-void return type | 非 void 返回类型 | |
 | | function overloading | 函数重载 | |
 | | function resolution | 函数解析 | |
 | | recursive functions | 递归函数 | |
@@ -340,18 +403,18 @@
 | | context-sensitive | 上下文敏感的 | |
 | | parameter constraints | 参数约束 | |
 | | simplex parameter | 单纯形参数 | |
-| | Cholesky factor parameterization | Cholesky因子参数化 | |
-| | LKJ correlation Cholesky factor distribution | LKJ相关Cholesky因子分布 | |
-| | Wishart distribution | Wishart分布 | |
+| | Cholesky factor parameterization | Cholesky 因子参数化 | |
+| | LKJ correlation Cholesky factor distribution | LKJ 相关 Cholesky 因子分布 | |
+| | Wishart distribution | Wishart 分布 | |
 | | half-normal priors | 半正态先验 | |
 | | uniform variate | 均匀变量 | |
-| | standard logistic variate | 标准logistic变量 | |
+| | standard logistic variate | 标准 logistic 变量 | |
 | | standard normal variate | 标准正态变量 | |
 | | location-scale variety | 位置-尺度类型 | |
 | | truncated variate | 截断变量 | |
 | | survival analysis | 生存分析 | |
 | | censored data | 删失数据 | |
-| **24. 有问题的后验分布** | ridge | 岭 | |
+| **25. 有问题的后验分布** | ridge | 岭 | |
 | | weakly informative prior | 弱信息先验 | |
 | | proper posterior | 正规的后验分布 | |
 | | improper posterior | 非正规的后验分布 | |
@@ -361,7 +424,7 @@
 | | improper | 非正规的 | |
 | | simplex | 单纯形 | |
 | | multimodality | 多峰性 | |
-| **25. 重参数化和变量转换** | reparameterization | 重参数化 | |
+| **26. 重参数化和变量转换** | reparameterization | 重参数化 | |
 | | change of variables | 变量变换 | |
 | | probability measure | 概率测度 | |
 | | probability density | 概率密度 | |
@@ -373,7 +436,7 @@
 | | monotonic | 单调的 | |
 | | injective | 单射的 | |
 | | simplex | 单纯形 | |
-| | softmax function | softmax函数 | |
+| | softmax function | softmax 函数 | |
 | | inverse logit | 反logit | |
 | | probit | probit | |
 | | logit | logit | |
@@ -385,7 +448,7 @@
 | | unconstrained parameters | 无约束参数 | |
 | | constrained parameters | 约束参数 | |
 | | varying bounds | 可变边界 | |
-| **27. 并行计算** | parallelization | 并行化 | |
+| **28. 并行计算** | parallelization | 并行化 | |
 | | multi-threading | 多线程 | |
 | | multi-processing | 多进程 | |
 | | manycore processing | 众核处理 | |
@@ -397,12 +460,12 @@
 | | dynamic scheduling algorithm | 动态调度算法 | |
 | | grainsize | 粒度大小 | |
 | | heterogeneous platforms | 异构平台 | |
-| | OpenCL backend | OpenCL后端 | |
+| | OpenCL backend | OpenCL 后端 | |
 | | vectorization | 向量化 | |
 | | shard | 分片 | |
 | | ragged inputs | 不规则输入 | |
 | | ragged outputs | 不规则输出 | |
-| **29. 基于模拟的校准** | Simulation-Based Calibration (SBC) | 基于模拟的校准 | |
+| **30. 基于模拟的校准** | Simulation-Based Calibration (SBC) | 基于模拟的校准 | |
 | | posterior intervals | 后验区间 | |
 | | coverage | 覆盖率 | |
 | | posterior sampler | 后验采样器 | |
@@ -426,13 +489,13 @@
 | | centered parameterization | 中心参数化 | |
 | | posterior geometry | 后验几何形状 | |
 | | reparameterization | 重参数化 | |
-| **31. Held-Out 评估与交叉验证** | Held-out evaluation | Held-Out 评估 | |
+| **32. Held-Out 评估与交叉验证** | Held-out evaluation | Held-Out 评估 | |
 | | Cross-validation | 交叉验证 | |
 | | Posterior predictive density | 后验预测密度 | |
 | | Monte Carlo methods | 蒙特卡罗方法 | |
 | | Log-sum-exp | 对数指数和 | |
 | | Underflow | 下溢 | |
-| | Rao-Blackwellization | Rao-Blackwell化 | |
+| | Rao-Blackwellization | Rao-Blackwell 化 | |
 | | Absolute error | 绝对误差 | |
 | | Squared error | 平方误差 | |
 | | Mean square error (MSE) | 均方误差 | |
@@ -449,7 +512,7 @@
 | | Hierarchical model | 分层模型 | |
 | | Simulation-Based Calibration (SBC) | 基于模拟的校准 | |
 | | Coverage | 覆盖率 | |
-| **33. 决策分析** | Decision Analysis | 决策分析 | |
+| **34. 决策分析** | Decision Analysis | 决策分析 | |
 | | Expected Utility | 期望效用 | |
 | | Bayes Optimal Decision | 贝叶斯最优决策 | |
 | | Utility Function | 效用函数 | |

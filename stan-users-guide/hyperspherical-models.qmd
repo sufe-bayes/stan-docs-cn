@@ -21,7 +21,7 @@ around a circle, you wind up back where you started.  In other words,
 out the same point, and the distance between 359 degrees and 2 degrees
 is the same as the distance between 137 and 140 degrees.
 
-方向统计涉及到的数据和参数被限制为方向。这些方向的集合形成了一个球体，这个球体的几何结构无法平滑地映射到欧几里得空间。这是因为在球面上不断移动可以返回到起点。因此，想要在一张平面纸上制作一个球体的地图，使球体上彼此接近的点在平面地图上也彼此接近，是行不通的。这个基本问题在二维空间中很容易可视化。想象你沿着一个圆周移动，最终会回到起点。换句话说，0度和360度（等同于弧度值中的0和 $2 \pi$ 
+方向统计涉及到的数据和参数被限制为方向。这些方向的集合形成了一个球体，这个球体的几何结构无法平滑地映射到欧氏空间。这是因为在球面上沿着某个方向持续移动最终会回到起点。因此，想要在一张平面纸上制作一个球体的地图，使球体上彼此接近的点在平面地图上也彼此接近，是行不通的。这个基本问题在二维空间中很容易可视化。想象你沿着一个圆周移动，最终会回到起点。换句话说，0度和360度（等同于弧度值中的0和 $2 \pi$ 
 弧度）指的是同一个点，359度和2度之间的距离与137度和140度之间的距离是一样的。
 
 Stan supports directional statistics by providing a unit-vector data
@@ -60,7 +60,7 @@ the value of `x` will be constrained to be a vector of size
 `K` with unit length;  the reference manual chapter on
 constrained parameter transforms provides precise definitions.
 
-变量 `x` 是一个长度为1，维度为 `K` 的向量。具体的定义可在参考手册的受限参数变换章节中找到。
+变量 `x` 是一个长度为1，维度为 `K` 的向量。具体的定义可在参考手册的约束参数变换章节中找到。
 
 *Warning:* An extra term gets added to the log density to ensure
 the distribution on unit vectors is proper.  This is not a problem in
@@ -81,7 +81,7 @@ drawn standard normal, then they are together projected down to the
 hypersphere to produce a unit vector.  The result is a proper uniform
 distribution over the hypersphere.
 
-*注意：* 为确保单位向量的分布是正确的，会在对数密度中添加一个额外的项。这在实践中通常可行，但这可能导致目标对数密度输出（某些接口中为 `lp__`）出错。问题的根源在于，一个维度为 $K$ 的单位向量实际上只有 $K - 1$ 个自由度，但是没有办法将这 $K - 1$ 个自由度连续地映射到欧几里得空间 $\mathbb{R}^N$ 中。例如，圆不能连续地映射到直线上同时保证极限可求，球体也不能映射到平面上。因此需要一种变通方法。Stan 的单位向量转换使用了 $K$ 个无约束变量，然后将其投影到单位超球面上。即便超球面本身是一个紧致的集合，这样的变换结果仍将导致一个非正规分布。为确保单位向量分布的正确性，对每个无约束变量都做了一个等同于独立标准正态分布的“雅可比”调整。实际上，每个维度都是按照标准正态分布抽样，然后将每个维度上抽取到的标准正态分布的值投影到超球面上，从而得到一个单位向量。最后可以在超球面上得到正确的均匀分布。
+*注意：* 为确保单位向量的分布是正确的，会在对数密度中添加一个额外的项。这在实践中通常可行，但这可能导致目标对数密度输出（某些接口中为 `lp__`）出错。问题的根源在于，一个维度为 $K$ 的单位向量实际上只有 $K - 1$ 个自由度，但是没有办法将这 $K - 1$ 个自由度连续地映射到欧氏空间 $\mathbb{R}^N$ 中。例如，圆不能连续地映射到直线上同时保证极限可求，球体也不能映射到平面上。因此需要一种变通方法。Stan 的单位向量转换使用了 $K$ 个无约束变量，然后将其投影到单位超球面上。即便超球面本身是一个紧致的集合，这样的变换结果仍将导致一个非正常分布。为确保单位向量分布的正确性，对每个无约束变量都做了一个等同于独立标准正态分布的"雅可比"调整。实际上，每个维度都是按照标准正态分布抽样，然后将每个维度上抽取到的标准正态分布的值投影到超球面上，从而得到一个单位向量。最后可以在超球面上得到正确的均匀分布。
 
 
 ## Circles, spheres, and hyperspheres
@@ -111,7 +111,7 @@ the geodesics on the sphere ($S^2$) are called "great circles," and
 why we need to use some clever representations to do circular or
 spherical statistics.
 
-尽管 $S^n$ 由 $(n+1)$ 维的点组成，它仍然只是一个 $n$ 维流形。例如，$S^2$ 被定义为 $\mathbb{R}^3$ 中的一组点，但是每个这样的点都可以通过一个纬度和一个经度唯一地表示。从几何学角度，$\mathbb{R}^3$ 中由 $S^2$ 定义的表面在局部表现类似于平面，即 $\mathbb{R}^2$。然而，$S^2$ 的整体形状与平面不同，它是紧致的（即点与点之间存在着最大距离）。如果沿着球体表面的“直线”（即测地线也就是球面上的最短路径）出发，最终会回到起点。这就是为什么在球面（$S^2$）上的测地线被称为“大圆”。因此我们需要使用一些巧妙的表示方法来进行圆形或球形统计。
+尽管 $S^n$ 由 $(n+1)$ 维的点组成，它仍然只是一个 $n$ 维流形。例如，$S^2$ 被定义为 $\mathbb{R}^3$ 中的一组点，但是每个这样的点都可以通过一个纬度和一个经度唯一地表示。从几何学上来看，$\mathbb{R}^3$ 中由 $S^2$ 定义的表面在局部表现类似于平面，即 $\mathbb{R}^2$。然而，$S^2$ 的整体形状与平面不同，它是紧致的（即点与点之间存在着最大距离）。如果沿着球体表面的“直线”（即测地线也就是球面上的最短路径）出发，最终会回到起点。这就是为什么在球面（$S^2$）上的测地线被称为“大圆”。因此我们需要使用一些巧妙的表示方法来进行圆形或球形统计。
 
 Even though $S^{n-1}$ behaves locally like $\mathbb{R}^{n-1}$, there is no
 way to smoothly map between them. For example, because
@@ -148,7 +148,7 @@ desired properties of uniformity; the reference manual contains the
 precise definitions used in the chapter on constrained parameter
 transforms.
 
-这种映射的问题在于它是多对一的。任何从原点出发的向量上的点，都会被投影到球面上的同一点。 @Muller:1959 对这一映射引入了辅助变量解释，它提供了期望具有的均匀性特性，参考手册的受限参数变换章节中有精确的定义。
+这种映射的问题在于它是多对一的。任何从原点出发的向量上的点，都会被投影到球面上的同一点。 @Muller:1959 对这一映射引入了辅助变量解释，它提供了期望具有的均匀性质，参考手册的约束参数变换章节中有精确的定义。
 
 
 #### Warning: undefined at zero! {-}
@@ -162,7 +162,7 @@ vector parameters cannot be initialized at zero.  A simple workaround
 is to initialize from a  small interval around zero, which is an
 option built into all of the Stan interfaces.
 
-上述从 $\mathbb{R}^n$ 到 $S^n$ 的映射在零点处无定义。虽然在抽样过程中这一点的测度为零，可以忽略不计，但它是默认的初始化点，因此单位向量参数不能在零点初始化。一个简单的解决方法是从零点周围的一个小区间进行初始化，这是 Stan 所有接口内置的一个选项。
+上述从 $\mathbb{R}^n$ 到 $S^n$ 的映射在零点处无定义。虽然在抽样过程中这一点的测度为零，可以忽略不计，但它是默认的初始化点，因此单位向量参数不能在零点初始化。一个简单的解决方法是从零点附近的一个小范围内进行初始化，这是 Stan 所有接口内置的一个选项。
 
 
 ## Unit vectors and rotations

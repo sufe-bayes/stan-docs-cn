@@ -19,7 +19,7 @@ using the [`integrate_1d` function](https://mc-stan.org/docs/functions-reference
 
 As an example, the normalizing constant of a left-truncated normal distribution is
 
-例如，左截断正态分布的标准化常量为
+例如，左截断正态分布的归一化常数为
 
 $$
   \int_a^\infty \frac{1}{\sqrt{2 \pi \sigma^2}} e^{-\frac{1}{2}\frac{(x - \mu)^2}{\sigma^2}}
@@ -69,7 +69,7 @@ or vector, which can be created with rep_array(0, 0) and rep_vector(0, 0), respe
 Other options include an uninitialized variable declared with size 0, which is equivalent
 to the above, or any easy value, such as size 1 array created with {0}.
 
-定义被积函数的函数必须与上述 `normal_density` 具有完全相同的参数类型和返回类型，虽然参数名称并不重要。即使 `x_r` 和 `x_i` 在被积函数中未使用，也必须包含在函数签名中。即使积分不涉及这些参数中的某些，仍需要为它们提供某个值。最高效的做法是使用零长度数组或向量，可分别用 rep_array(0, 0) 和 rep_vector(0, 0) 创建。其他选择包括声明大小为 0 的未初始化变量（等价于上述做法），或任何简单值，如用 {0} 创建的大小为 1 的数组。
+定义被积函数的函数必须与上述 `normal_density` 具有完全相同的参数类型和返回类型，虽然参数名称并不重要。即使 `x_r` 和 `x_i` 在被积函数中未使用，也必须包含在函数签名中。即使积分不涉及这些参数中的某些，仍需要为它们提供某个值。最有效的方法是使用零长度数组或向量，可分别用 rep_array(0, 0) 和 rep_vector(0, 0) 创建。其他选择包括声明大小为 0 的未初始化变量（等价于上述做法），或任何简单值，如用 {0} 创建的大小为 1 的数组。
 
 ## Calling the integrator
 
@@ -82,7 +82,7 @@ computing our model's log density. Note this is just an example of how to use th
 1D integrator. The more efficient way to perform the correct normalization in Stan
 is described in the chapter on Truncated or Censored Data of this guide.
 
-假设我们的模型需要计算左截断正态分布的 lpdf，但截断限需要作为参数进行估计。由于截断点是参数，在计算模型对数密度时必须包含截断 pdf 的标准化项。请注意这只是使用一维积分器的示例。在 Stan 中执行正确标准化的更高效方法在本指南的"截断或删失数据"章节中描述。
+假设我们的模型需要计算左截断正态分布的 lpdf，但截断限需要作为参数进行估计。由于截断点是参数，在计算模型对数密度时必须包含截断 pdf 的标准化项。请注意，这只是一维积分器的使用示例。在 Stan 中执行正确标准化的更高效方法在本指南的"截断或删失数据"章节中描述。
 
 Such a model might look like (include the function defined at the beginning of this
 chapter to make this code compile):
@@ -120,7 +120,7 @@ model {
 
 ### Limits of integration {-}
 
-### 积分的极限 {-}
+### 积分限 {-}
 
 The limits of integration can be finite or infinite. The infinite limits are
 made available via the Stan calls `negative_infinity()` and
@@ -159,7 +159,7 @@ in the Boost library [@BoostQuadrature:2017]. If the $n$th estimate of the
 integral is denoted $I_n$ and the $n$th estimate of the norm of the integral is
 denoted $|I|_n$, the iteration is terminated when
 
-积分采用 Boost 库 [@BoostQuadrature:2017] 中实现的迭代一维双指数求积方法。如果积分的第 $n$ 次估计记为 $I_n$，积分范数的第 $n$ 次估计记为 $|I|_n$，则当满足以下条件时迭代终止
+积分采用 Boost 库 [@BoostQuadrature:2017] 中实现的迭代一维双指数求积方法。如果积分的第 $n$ 次估计记为 $I_n$，积分范数的第 $n$ 次估计记为 $|I|_n$，则当满足以下条件时迭代停止
 
 $$
   \frac{{|I_{n + 1} - I_n|}}{{|I|_{n + 1}}} < \text{relative tolerance}.
@@ -246,11 +246,7 @@ precision version of the distance from `x` to the nearest endpoint --- `a - x`
 or `b - x` for a lower endpoint `a` and an upper endpoint `b`. To make use of
 this for the beta integral, the integrand can be re-coded:
 
-这里 `xc` 就很有用。对于定积分，它被定义为从 `x` 到最近端点距离的高精度版本——对于下端点 `a` 和上端点 `b`，为 `a - x` 或 `b - x`。要在 beta 积分中利用这一点，可以重新编写被积函数： endpoint --- `a - x`
-or `b - x` for a lower endpoint `a` and an upper endpoint `b`. To make use of
-this for the beta integral, the integrand can be re-coded:
-
-这就是 `xc` 的用处。对于定积分来说，它被定义为 `x` 到最近端点距离的高精度版本——对于下端点 `a` 和上端点 `b`，为 `a - x` 或 `b - x`。为了将其用于贝塔积分，积分可以重写为：
+这里 `xc` 就很有用。对于定积分，它被定义为从 `x` 到最近端点距离的高精度版本——对于下端点 `a` 和上端点 `b`，为 `a - x` 或 `b - x`。为了将其用于 beta 积分，可以重新编写被积函数：
 
 ```stan
 real beta(real x, real xc, array[] real theta, array[] real x_r, array[] int x_i) {

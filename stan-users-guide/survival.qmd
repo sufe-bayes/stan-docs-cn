@@ -784,13 +784,16 @@ x, \beta]
 & = & x_n \cdot \beta - \textrm{logSumExp}_{n' = n}^N \ x_{n'} \cdot \beta,
 \end{eqnarray*}
 where
+
+其中
+
 \begin{equation*}
 \textrm{logSumExp}_{n = a}^b \ x_n
 = \log \sum_{n = a}^b \exp(x_n)
 \end{equation*}
 is implemented so as to preserve numerical precision.
 
-其中实现以保持数值精度。
+将采用保持数值精度的实现方式。
 
 This likelihood follows the same approach to ranking as that developed
 by @plackett:1975 for estimating the probability of the order of the
