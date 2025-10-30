@@ -73,7 +73,7 @@ on the observed and missing data; combining them in this case would be
 less efficient because the data observations would be promoted and
 have needless derivatives calculated.
 
-观测数据和缺失数据的数量分别用非负整数变量 `N_obs` 和 `N_mis` 编码。观测数据被表示为数组数据变量 `y_obs` 。缺失数据编码为一个数组参数 `y_mis`。被估计的普通参数包括位参数 `mu` 和尺度参数 `sigma`，它们也被编码为参数。该模型在观测和缺失数据上进行向量化；在这种情况下合并它们会降低效率，因为数据观测值会被提升，导致不必要的导数计算。
+观测数据和缺失数据的数量分别用非负整数变量 `N_obs` 和 `N_mis` 编码。观测数据被表示为数组数据变量 `y_obs` 。缺失数据编码为一个数组参数 `y_mis`。被估计的常规参数包括位置参数 `mu` 和尺度参数 `sigma`，它们也被编码为参数。该模型在观测和缺失数据上进行向量化；在这种情况下合并它们会降低效率，因为数据观测值会被提升，导致不必要的导数计算。
 
 ## Partially known parameters {#partially-known-parameters.section}
 
@@ -126,7 +126,7 @@ is defined as a transformed parameter, with the variances assigned to
 the two diagonal elements and the covariance to the two off-diagonal
 elements.
 
-方差定义为变量 `var1` 和 `var2` 中的数据，协方差定义为变量 `cov` 中的参数。$2 \times 2$ 协方差矩阵 `Sigma` 被定义为一个变换参数，其中把方差分配给两个对角元素，把协方差分配给这两个非对角元素。
+方差定义为变量 `var1` 和 `var2` 中的数据，协方差定义为变量 `cov` 中的参数。$2 \times 2$ 协方差矩阵 `Sigma` 被定义为一个转换参数，其中方差分配给两个对角元素，协方差分配给两个非对角元素。
 
 The constraint on the covariance declaration ensures that the
 resulting covariance matrix `sigma` is positive definite.  The
@@ -198,7 +198,7 @@ columns of a data matrix of predictors for which some predictors are
 missing; matrix columns can be accessed as vectors and assigned the
 same way, as in
 
-另一个潜在的应用是，当预测因子的数据矩阵有一些预测变量缺失时，可以填充这个数据矩阵的列; 矩阵的列可以像向量一样访问和赋值，例如
+另一个潜在应用是，当预测变量的数据矩阵中某些预测变量缺失时，可以填充该数据矩阵的列；矩阵的列可以像向量一样访问和赋值，例如
 
 ```stan
 x[N_obs_2, 2] = x_obs_2;
@@ -212,7 +212,7 @@ longer vectors (see the [ragged data structures
 section](sparse-ragged.qmd#ragged-data-structs.section) for a general discussion of
 coding ragged data structures in Stan).
 
-这里所有的相关变量都硬编码成索引 `2`，因为 Stan 不支持不规则数组。这些变量可以通过更复杂的索引打包到一个数组中，从更长的向量中切片出向量（请参阅 [ 不规则数据结构章节 ](#ragged-data-structs.section)，了解 Stan 中对不规则数据结构化编码的一般讨论）。 
+这里所有的相关变量都硬编码成索引 `2`，因为 Stan 不支持不规则数组。这些变量可以通过更复杂的索引打包到一个数组中，从更长的向量中切片出向量（请参阅 [不规则数据结构章节](sparse-ragged.qmd#ragged-data-structs.section)，了解 Stan 中对不规则数据结构化编码的一般讨论）。 
 
 ## Loading matrix for factor analysis
 
@@ -224,7 +224,7 @@ used in Bayesian factor analysis [@aguilar-west:2000].  This
 can be accomplished by declaring the below-diagonal elements as
 parameters, then filling the full matrix as a transformed parameter.
 
-Stan 用户小组的 Rick Farouni 询问了：如何为具有单位对角线的协方差矩阵构建 Cholesky 因子,这在贝叶斯因子分析中有应用 [@aguilar-west:2000]。这可以通过将下对角线元素声明为参数，然后将整个矩阵填充为转换参数来实现。
+Stan 用户小组的 Rick Farouni 询问了：如何为具有单位对角线的协方差矩阵构建 Cholesky 因子,这在贝叶斯因子分析中有应用 [@aguilar-west:2000]。这可以通过将下对角线元素声明为参数，然后将整个矩阵填充为变换参数来实现。
 
 ```stan
 data {
@@ -283,7 +283,7 @@ both an array of vector observations `y` and a boolean array
 `y_observed` to indicate which values were observed (others can
 have dummy values in the input).
 
-例如，我们考虑双变量分布，它很容易被边缘化（容易求边际分布）。这里的编码是暴力编码，同时表示了向量观察值数组 `y` 和布尔数组 `y_observed`，后者用于指示哪些值已被观察到（其他值可以在输入中有虚拟值）。
+例如，我们考虑双变量分布，它很容易被边缘化（容易求边际分布）。这里的编码采用直接方式，同时表示了向量观测值数组 `y` 和布尔数组 `y_observed`，后者用于指示哪些值已被观测到（其他值可以在输入中有虚拟值）。
 
 ```stan
 array[N] vector[2] y;

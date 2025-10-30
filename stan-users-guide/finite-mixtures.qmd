@@ -52,8 +52,8 @@ For each outcome $y_n$ there is a latent variable $z_n$ in
 $\{ 1,\dotsc,K \}$ with a categorical distribution parameterized
 by $\lambda$,
 
-参数化混合模型的一种方法是使用潜在分类变量来指示哪个混合成分生成观测结果。例如，考虑 $K$ 个正态分布，它们的位置参数是 $\mu_k \in \mathbb{R}$ ，尺度参数是 $\sigma_k \in (0,\infty)$。现在将它们按比例 $\lambda$ 混合，其中 $\lambda_k \geq 0$ and
-$\sum_{k=1}^K \lambda_k = 1$（即 $\lambda $位于单位 $K$ -单纯形上）。对于每个结果 $y_n$，都有一个从 $\{ 1,\dotsc,K \}$ 中取值的潜在变量 $z_n$，并有一个参数为 $\lambda$ 的分类分布。
+参数化混合模型的一种方法是使用潜在分类变量来指示哪个混合成分生成观测结果。例如，考虑 $K$ 个正态分布，它们的位置参数是 $\mu_k \in \mathbb{R}$ ，尺度参数是 $\sigma_k \in (0,\infty)$。现在将它们按比例 $\lambda$ 混合，其中 $\lambda_k \geq 0$ 且
+$\sum_{k=1}^K \lambda_k = 1$（即 $\lambda$ 位于单位 $K$ -单纯形上）。对于每个结果 $y_n$，都有一个从 $\{ 1,\dotsc,K \}$ 中取值的潜在变量 $z_n$，并有一个参数为 $\lambda$ 的分类分布。
 
 $$
 z_n \sim \textsf{categorical}(\lambda).
@@ -91,8 +91,6 @@ p_Y\left(y \mid \lambda, \mu, \sigma \right)
 =
 \sum_{k=1}^K \lambda_k \, \textsf{normal}\left(y \mid \mu_k, \sigma_k\right).
 $$
-
-
 
 ### Log sum of exponentials: linear Sums on the log scale {-}
 
@@ -132,8 +130,8 @@ For example, the mixture of $\textsf{normal}(-1, 2)$ with
 $\textsf{normal}(3, 1)$, with mixing proportion $\lambda =
 [0.3,0.7]^{\top}$, can be implemented in Stan as follows.
 
-例如，具有混合比例 $\lambda =
-[0.3,0.7]^{\top}$ 的 $\textsf{normal}(-1, 2)$ 和 $\textsf{normal}(3, 1)$ 的混合分布可以参考如下代码在 Stan 中实现。
+例如，要在 Stan 中实现 $\textsf{normal}(-1, 2)$ 和 $\textsf{normal}(3, 1)$ 的混合分布，混合比例为 $\lambda =
+[0.3,0.7]^{\top}$，代码如下所示。
 
 ```stan
 parameters {
@@ -335,7 +333,7 @@ array `lps`.  Then the log probability is incremented with the log
 sum of exponentials of those values.
 
 该模型声明一个大小为 `K` 的局部数组变量 `lps`，并使用它来累积混合成分的对数贡献值。主要操作发生在对数据点 `n` 的循环中。对于每个这样的点，计算 $\theta_k \times
-\textsf{normal}\left(y_n \mid \mu_k,\sigma_k\right)$ 的对数，并添加到数组 `lpps` 中。然后，用这些值的指数和的对数来增加对数概率。
+\textsf{normal}\left(y_n \mid \mu_k,\sigma_k\right)$ 的对数，并添加到数组 `lps` 中。然后，用这些值的指数和的对数来增加对数概率。
 
 ## Vectorizing mixtures
 
@@ -450,7 +448,7 @@ in posterior predictions for new observations.
 As an example, consider the normal mixture from the previous section,
 which provides an exchangeable prior on the pairs of parameters
 
-以前一节中的正态混合模型为例，该模型对参数对$(\mu_1, \sigma_1)$ 和 $(\mu_2, \sigma_2)$提供了可交换先验分布。
+以前一节中的正态混合模型为例，该模型对参数对 $(\mu_1, \sigma_1)$ 和 $(\mu_2, \sigma_2)$ 提供了可交换先验分布。
 
 $(\mu_1, \sigma_1)$ and $(\mu_2, \sigma_2)$,
 \begin{align*}
@@ -622,7 +620,7 @@ used for mixing proportions because $\lambda$ is the traditional
 notation for a Poisson mean parameter). Given the probability $\theta$
 and the intensity $\lambda$, the distribution for $y_n$ can be written as
 
-考虑以下关于零膨胀泊松分布的例子。存在一个概率 $\theta$ 观测到一个零，和一个概率 $1 - \theta$ 观测到一个$\textsf{Poisson}(\lambda)$ 分布的计数（现在使用 $\theta$ 作为混合比例，因为 $\lambda$ 是泊松分布的传统均值参数符号）。给定概率 $\theta$ 和强度 $\lambda$，$y_n$ 的分布可以写成
+考虑以下关于零膨胀泊松分布的例子。存在一个概率 $\theta$ 观测到一个零，和一个概率 $1 - \theta$ 观测到一个 $\textsf{Poisson}(\lambda)$ 分布的计数（现在使用 $\theta$ 作为混合比例，因为 $\lambda$ 是泊松分布的传统均值参数符号）。给定概率 $\theta$ 和强度 $\lambda$，$y_n$ 的分布可以写成
 
 \begin{align*}
 y_n & = 0 & \quad\text{with probability } \theta, \text{ and}\\
@@ -846,7 +844,7 @@ functions {
 Then a transformed data block can be used to store the sufficient
 statistics,
 
-然后可以使用 transformed data 块能用来储存充分统计量
+然后可以使用 transformed data 块来存储充分统计量
 
 ```stan
 transformed data {
@@ -886,7 +884,7 @@ that the negation is applied to the constant `Ngt0`; whenever
 possible, leave subexpressions constant because then gradients need
 not be propagated until a non-constant term is encountered.
 
-第一条语句解释了伯努利对零和非零计数的贡献。第二行是来自非零计数的泊松贡献，现在已经矢量化。最后，截断的归一化是单独的一行，因此对数 CCDF 在0处的表达式不会重复。还要注意，常量 `Ngt0` 取了相反数；尽可能保留子表达式常量，因为这样只有在遇到非常量项时才需要传播梯度。
+第一条语句解释了伯努利对零和非零计数的贡献。第二行是来自非零计数的泊松贡献，现在已经矢量化。最后，截断的归一化项是单独的一行，因此对数 CCDF 在0处的表达式不会重复。还要注意，常量 `Ngt0` 取了相反数；尽可能保留子表达式常量，因为这样只有在遇到非常量项时才需要传播梯度。
 
 ## Priors and effective data size in mixture models
 

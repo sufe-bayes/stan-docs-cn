@@ -77,8 +77,74 @@
 | | conditional observation distribution | 条件观测分布 | |
 | | stationary distribution | 平稳分布 | |
 | | latent | 潜在的 | |
-| **3. 缺失数据和部分已知参数** | dummy values | 虚拟值 | |
-| **5. 有限混合模型** | modes | 峰值 | |
+| **3. 缺失数据和部分已知参数** | missing data | 缺失数据 | |
+| | partially known parameters | 部分已知参数 | |
+| | dummy values | 虚拟值 | |
+| | impute | 插补/估算 | |
+| | index arrays | 索引数组 | |
+| | slicing | 切片 | |
+| | ragged arrays | 不规则数组 | |
+| | Bayesian inference | 贝叶斯推断 | |
+| | marginalized | 边缘化的 | |
+| | vectorization | 向量化 | |
+| | factor analysis | 因子分析 | |
+| | unit diagonal | 单位对角线 | |
+| | Jacobian adjustment | 雅可比调整 | |
+| | covariance matrix | 协方差矩阵 | |
+| | bivariate | 双变量的/二元变量 | |
+| | multivariate outcome | 多元结果 | |
+| | positive definite | 正定的 | |
+| **4. 截断和删失数据** | truncation | 截断 | |
+| | truncated data | 截断数据 | |
+| | truncated distributions | 截断分布 | |
+| | censoring | 删失 | |
+| | censored data | 删失数据 | |
+| | truncation point | 截断点 | |
+| | censoring point | 删失点 | |
+| | user-defined truncation | 用户定义截断 | |
+| | imputed values | 插补值 | |
+| | upper bound | 上界 | |
+| | lower bound | 下界 | |
+| | bounds | 边界 | |
+| | out-of-bounds | 越界 | |
+| | log probability | 对数概率 | |
+| | likelihood contribution | 似然贡献 | |
+| | zero-probability | 零概率 | |
+| | right-censored | 右删失 | |
+| | left-censored | 左删失 | |
+| | Hamiltonian dynamics | 哈密顿动力学 | |
+| **5. 有限混合模型** | finite mixture models | 有限混合模型 | |
+| | mixture models | 混合模型 | |
+| | mixture components | 混合成分 | |
+| | mixing proportions | 混合比例 | |
+| | mixing distribution | 混合分布 | |
+| | categorical mixing distribution | 分类混合分布 | |
+| | latent categorical variable | 潜在分类变量 | |
+| | latent discrete parameterization | 潜在离散变量参数化 | |
+| | responsibility parameter | 责任参数 | |
+| | log sum of exponentials | 指数的对数和 | |
+| | multimodal densities | 多峰密度分布 | |
+| | label switching | 标签切换 | |
+| | identifiability | 可识别性 | |
+| | exchangeable prior | 可交换先验 | |
+| | ordered vector | 有序向量 | |
+| | collapsing components | 退化成分 | |
+| | posterior predictive distribution | 后验预测分布 | |
+| | component responsibility | 成分责任 | |
+| | zero-inflated models | 零膨胀模型 | |
+| | hurdle models | 障碍模型 | |
+| | probability mass function | 概率质量函数 | |
+| | zero outcomes | 零结果 | |
+| | intensity parameter | 强度参数 | |
+| | conditional distribution | 条件分布 | |
+| | effective data size | 有效数据大小 | |
+| | posterior responsibility | 后验责任 | |
+| | model averaging | 模型平均 | |
+| | sufficient statistics | 充分统计量 | |
+| | truncated Poisson distribution | 截断泊松分布 | |
+| | relative normalization term | 相对归一化项 | |
+| | component indicator | 成分指示变量 | |
+| | modes | 峰值 | |
 | **11. 方向、旋转和超球面** | compact | 紧致的 | |
 | | improper | 不正确的 | |
 | | a set of points | 一组点 | |

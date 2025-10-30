@@ -45,7 +45,7 @@ truncation point of $U = 300$ so that $y_n < 300$.  In Stan, this
 data can be modeled as following a truncated normal distribution for
 the observations as follows.
 
-在 Stan 中，可以使用截断分布对截断数据进行建模。例如，假设截断的数据是 $y_n$，截断点的上限为 $U=300$，因此有 $y_n<300$。在 Stan 中，可以将此数据建模成一个如下的带有截断的正态分布。
+在 Stan 中，可以使用截断分布对截断数据进行建模。例如，假设截断的数据是 $y_n$，截断点的上限为 $U=300$，因此有 $y_n<300$。在 Stan 中，可以将此数据建模为截断正态分布，如下所示：
 
 ```stan
 data {
@@ -75,7 +75,7 @@ This model implicitly uses an improper flat prior on the scale and
 location parameters; these could be given priors in the model using
 distribution statements.
 
-该模型默认对尺度和位置参数使用了非正规的均匀先验；我们可以使用分布语句给出其他先验分布。
+该模型默认对尺度和位置参数使用非正规均匀先验；可以通过分布语句指定其他先验分布。
 
 ### Constraints and out-of-bounds returns {-}
 
@@ -97,15 +97,14 @@ or greater than the value of `U`, the distribution statement produces
 a zero-probability estimate.  For user-defined truncation, this
 zeroing outside of truncation bounds must be handled explicitly.
 
-如果 `y` 中的任何值小于 `L` 或大于 `U`，则采样语句将生成一个零概率的估计。对于用户定义的截断，我们必须要显式地处理截断边界之外的这种归零。
+如果 `y` 中的任何值小于 `L` 或大于 `U`，则采样语句将生成一个零概率的估计。对于用户定义的截断，必须显式处理截断边界外的归零操作。
 
 To avoid variables straying outside of truncation bounds, appropriate
 constraints are required.  For example, if `y` is a parameter in
 the above model, the declaration should constrain it to fall between
 the values of `L` and `U`.
 
-为了避免变量偏离截断边界，需要加入适当的约束。例如，如果 `y` 是上述模型中的一个参数，则声明应将其约束为介于
- `L` 和 `U` 之间的值.
+为了避免变量偏离截断边界，需要加入适当的约束。例如，如果 `y` 是上述模型中的一个参数，则声明应将其约束为介于 `L` 和 `U` 之间的值。
 
 ```stan
 parameters {
@@ -151,7 +150,7 @@ parameters.  This can be done with a slight rearrangement of the
 variable declarations from the model in the previous section with
 known truncation points.
 
-如果截断点未知，则可以将其作为参数进行估计。这可以通过对上一节中已知截断点的模型中的变量声明进行微小的重排来完成。
+如果截断点未知，则可以将其作为参数进行估计。这可以通过对上一节已知截断点模型中的变量声明进行微调来实现。
 
 ```stan
 data {
@@ -180,7 +179,7 @@ bounds.  With `N` declared as type `int<lower=1>`, there must be
 at least one data point.  The constraint that `L` is less than
 `U` is enforced indirectly, based on the non-empty data.
 
-此处有一个下截断点 `L`，它被声明小于或等于 `y` 的最小值。上截断点 `U` 被声明大于 `y` 的最大值。尽管此声明依赖于数据，但它仅强制要求数据落在截断边界内。将 `N` 声明为类型 `int<lower=1>` 是指至少有一个数据点。`L` 小于 `U` 的约束基于非空数据便间接给定了。
+此处有一个下截断点 `L`，它被声明小于或等于 `y` 的最小值。上截断点 `U` 被声明大于 `y` 的最大值。尽管此声明依赖于数据，但它仅强制要求数据落在截断边界内。将 `N` 声明为类型 `int<lower=1>` 是指至少有一个数据点。`L` 小于 `U` 的约束基于非空数据间接确定。
 
 The ellipses where the priors for the bounds `L` and `U`
 should go should be filled in with a an informative prior in
@@ -276,7 +275,7 @@ where `normal_lccdf` is the log of complementary CDF
 (Stan provides `<distr>_lccdf` for each distribution
 implemented in Stan). 
 
-其中 `normal_lccdf` 是互补的 CDF 的日志（Stan 为 Stan 当中实现的每个分布提供了 `<distr>_lccdf`）。
+其中 `normal_lccdf` 是互补累积分布函数的对数（Stan 为实现的每个分布提供了 `<distr>_lccdf`）。
 
 The following right-censored model assumes
 that the censoring point is known, so it is declared as data.
@@ -306,7 +305,7 @@ integrated out censored values can not be coded with distribution
 statement, and the log probability is directly incremented using the
 calculated log cumulative normal probability of the censored observations.
 
-对于 `y_obs` 中的观测值，使用了没有截断的正态分布进行抽样。对计算出的删失数据项的对数累积正态分布概率进行加和得到最终的对数概率值。
+对于 `y_obs` 中的观测值，使用了没有截断的正态分布进行抽样。通过累加删失数据项的对数累积正态分布概率得到最终的对数概率值。
 
 For the left-censored data the CDF (`normal_lcdf`) has to be
 used instead of complementary CDF.  If the censoring point variable
