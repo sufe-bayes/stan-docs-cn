@@ -37,7 +37,7 @@ $$
 This is equivalent to the following sampling involving the
 residual,
 
-这相当于涉及残差的以下采样，
+这等价于以下基于残差的采样，
 
 $$
 y_n - (\alpha + \beta X_n) \sim \operatorname{normal}(0,\sigma),
@@ -76,7 +76,7 @@ There are `N` observations and for each observation, $n \in N$,  we have predict
 distributed noise term with scale `sigma`.  This model has
 improper priors for the two regression coefficients.
 
-这里共有 `N` 个观测值，对于每个观测值 $n \in N$，都包含一个自变量 `x[n]` 和对应的因变量 `y[n]`。截距参数为 `alpha`，斜率参数为 `beta`。该模型假设噪声项服从标准差为 `sigma` 的正态分布。该模型对于两个回归系数采用了非正规先验分布。
+这里共有 `N` 个观测值，对于每个观测值 $n \in N$，都包含一个自变量 `x[n]` 和对应的因变量 `y[n]`。截距参数为 `alpha`，斜率参数为 `beta`。该模型假设噪声项服从尺度参数为 `sigma` 的正态分布。该模型对于两个回归系数采用了非正规先验分布。
 
 ### Matrix notation and vectorization {- #vectorization.section}
 
@@ -197,7 +197,7 @@ singled out because there's one fewer multiplications; it should not
 make that much of a difference to speed, though, so the choice should
 be based on clarity.
 
-不再存在截距系数 `alpha`。取而代之的是，我们假设输入矩阵 `x` 的第一列是全为1的列。这样，`beta[1]` 就扮演截距的角色。如果截距与斜率项有不同的先验分布，那么将其单独分离出来会更清晰。将截距变量显式地单独列出，在计算效率上会略有提升，因为可以减少一次乘法运算；不过对速度来说，这并不会有太大的影响，所以我们应当选择更简明清晰的代码表述。
+不再有截距系数 `alpha`。取而代之的是，我们假设输入矩阵 `x` 的第一列是全为1的列。这样，`beta[1]` 就扮演截距的角色。如果截距与斜率项有不同的先验分布，那么将其单独分离出来会更清晰。将截距变量显式地单独列出，在计算效率上会略有提升，因为可以减少一次乘法运算；不过对速度来说，这并不会有太大的影响，所以我们应当选择更简明清晰的代码表述。
 
 ## The QR reparameterization {#QR-reparameterization.section}
 

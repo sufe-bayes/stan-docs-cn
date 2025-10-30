@@ -16,7 +16,7 @@ Times series data come arranged in temporal order.  This chapter
 presents two kinds of time series models, regression-like models such
 as autoregressive and moving average models, and hidden Markov models.
 
-时间序列数据以时间顺序排列。本章介绍了两种时间序列模型，第一种是基于回归的模型，例如自回归模型和移动平均模型；另外一种是隐马尔科夫模型。
+时间序列数据以时间顺序排列。本章介绍了两种时间序列模型，第一种是基于回归的模型，例如自回归模型和移动平均模型；另外一种是隐马尔可夫模型。
 
 The [Gaussian processes chapter](gaussian-processes.qmd) presents
 Gaussian processes, which may also be used for time-series (and
@@ -86,7 +86,7 @@ Although perhaps a bit more difficult to read, a much more efficient
 way to write the above model is by slicing the vectors, with the model
 above being replaced with the one-liner
 
-通过向量切片可以实现更高效的模型表达，尽管这可能增加理解难度。对于上述的代码可以改写为如下一行代码来表示：
+通过向量切片可以实现更高效的模型表达，尽管这可能增加理解难度。上述代码可以简化为一行代码：
 
 ```stan
 model {
@@ -97,7 +97,7 @@ model {
 The left-hand side slicing operation pulls out the last $N-1$
 elements and the right-hand side version pulls out the first $N-1$.
 
-左侧的切片操作取出向量后 $N-1$ 个元素，右侧的是取出向量前 $N-1$ 个元素。
+左侧的切片操作取出向量的后 $N-1$ 个元素，右侧取出向量的前 $N-1$ 个元素。
 
 
 ### Extensions to the AR(1) model {-}
@@ -792,43 +792,67 @@ and $p(z_n \mid z_{n-1}, \phi)$.
 Here we make the dependency on additional model parameters $\phi$ explicit.
 ($\phi$ may be a vector of parameters.)
 The complete data likelihood is then
+
+隐马尔可夫模型（Hidden Markov model, HMM）是一个基于 $N$ 个观测值 $y_{1:N}$ 和 $N$ 个隐状态 $z_{1:N}$ 的概率模型。该模型由条件分布 $p(y_n \mid z_n, \phi)$ 和 $p(z_n \mid z_{n-1}, \phi)$ 定义。这里我们明确了对其他模型参数 $\phi$ 的依赖关系。（$\phi$ 可以是参数向量。）完整数据似然函数为：
+
 $$
 p(y, z \mid \phi) = \prod_n p(y_n \mid z_n, \phi) p(z_n \mid z_{n - 1}, \phi)
 $$
 When $z_{1:N}$ is continuous, the user can explicitly encode these distributions
 in Stan and use Markov chain Monte Carlo to integrate $z$ out.
 
+当 $z_{1:N}$ 是连续时，用户可以在 Stan 中显式编码这些分布，并使用马尔可夫链蒙特卡洛方法将 $z$ 积分掉。
+
 When each state $z$ takes a value over a discrete and finite set,
 say $\{1, 2, ..., K\}$, we can use Stan's suite of HMM functions to marginalize
 out $z_{1:N}$ and compute
+
+当每个状态 $z$ 在离散有限集合上取值时，比如 $\{1, 2, ..., K\}$，我们可以使用 Stan 的 HMM 函数套件将 $z_{1:N}$ 边缘化，并计算：
+
 $$
 p(y_{1:N} \mid \phi) = \int_{\mathcal Z} p(y, z \mid \phi) \text d z.
 $$
 We start by defining the conditional observation distribution, stored in a
 $K \times N$ matrix $\omega$ with
+
+我们首先定义条件观测分布，存储在一个 $K \times N$ 矩阵 $\omega$ 中，其中：
+
 $$
 \omega_{kn} = p(y_n \mid z_n = k, \phi).
 $$
 Next, we introduce the $K \times K$ transition matrix, $\Gamma$, with
+
+接下来，我们引入 $K \times K$ 转移矩阵 $\Gamma$，其中：
+
 $$
 \Gamma_{ij} = p(z_n = j \mid z_{n - 1} = i, \phi).
 $$
 (This is a right-stochastic matrix.)
 Finally, we define the initial state $K$-vector $\rho$, with
+
+（这是一个右随机矩阵。）最后，我们定义初始状态 $K$ 维向量 $\rho$，其中：
+
 $$
  \rho_k = p(z_0 = k \mid \phi).
 $$
 It is common practice to set $\rho$ to be the stationary distribution of the HMM,
 that is $\rho$ is the first eigenvector of $\Gamma$ and solves $\Gamma \rho = \rho$.
 
+常见的做法是将 $\rho$ 设置为 HMM 的平稳分布，即 $\rho$ 是 $\Gamma$ 的第一个特征向量，满足 $\Gamma \rho = \rho$。
+
 As an example, consider a three-state model with $K=3$.
 The observations are normally distributed conditional on the HMM states with
+
+举个例子，考虑一个三状态模型，$K=3$。观测值在 HMM 状态的条件下服从正态分布：
+
 $$
   y_n \sim \text{normal}(\mu_k, \sigma),
 $$
 where $\mu = (1, 5, 9)$ and the standard deviation $\sigma$ is the same
 across all observations.
 The model is then
+
+其中 $\mu = (1, 5, 9)$，标准差 $\sigma$ 在所有观测中相同。该模型如下：
 
 ```stan
 data {
@@ -878,6 +902,8 @@ model {
 The last function `hmm_marginal` takes in all the ingredients of the HMM
 and computes the relevant log marginal distribution, $\log p(y \mid \phi)$.
 
+最后一个函数 `hmm_marginal` 接收 HMM 的所有组成部分，并计算相关的对数边缘分布 $\log p(y \mid \phi)$。
+
 If we desire draws from the posterior distribution of $z$,
 we use the generated quantities block and draw, for each sample $\phi$,
 a sample from $p(z \mid y, \phi)$.
@@ -887,6 +913,8 @@ $p(\phi \mid y) p(z \mid y, \phi) = p(z, \phi \mid y)$.
 It is also possible to compute the posterior probbability of each hidden state,
 that is $\text{Pr}(z_n = k \mid \phi, y)$.
 Averagging these probabilities over all MCMC draws, we obtain $\text{Pr}(z_n = k \mid y)$.
+
+如果我们希望从 $z$ 的后验分布中抽取样本，我们使用生成量块，并对每个样本 $\phi$ 从 $p(z \mid y, \phi)$ 中抽取一个样本。实际上，MCMC 从 $p(\phi \mid y)$ 中产生样本，而通过生成量中的样本，我们从 $p(\phi \mid y) p(z \mid y, \phi) = p(z, \phi \mid y)$ 中获得样本。也可以计算每个隐状态的后验概率，即 $\text{Pr}(z_n = k \mid \phi, y)$。在所有 MCMC 样本上对这些概率求平均，我们得到 $\text{Pr}(z_n = k \mid y)$。
 
 ```stan
 generated quantities {
@@ -902,6 +930,8 @@ for the posterior correlation between the different components of $z$.
 Therefore, `hidden_probs` should *not* be used to obtain posterior draws.
 Instead, users should rely on `hmm_latent_rng`.
 
+`hmm_hidden_state_prob` 返回每个状态的边缘概率 $\text{Pr}(z_n = k \mid \phi, y)$。这个函数不能用来计算联合概率 $\text{Pr}(z \mid \phi, y)$，因为这样的计算需要考虑 $z$ 的不同分量之间的后验相关性。因此，`hidden_probs` 不应该用来获取后验样本。相反，用户应该依赖 `hmm_latent_rng`。
+
 ```stan
 generated quantities {
    array[N] int<lower=1, upper=K> z = hmm_latent_rng(...fill-in params here to match example...);
@@ -912,3 +942,6 @@ generated quantities {
 The example in this section is derived from the more detailed case study
 by Ben Bales:
 [https://mc-stan.org/users/documentation/case-studies/hmm-example.html](https://mc-stan.org/users/documentation/case-studies/hmm-example.html).
+
+本节中的示例来源于 Ben Bales 更详细的案例研究：
+[https://mc-stan.org/users/documentation/case-studies/hmm-example.html](https://mc-stan.org/users/documentation/case-studies/hmm-example.html)。
