@@ -201,7 +201,30 @@
 | | automatic relevance determination | 自动相关性确定 | |
 | | matrix normal distribution | 矩阵正态分布 | |
 | | isotropic | 各向同性 | |
-| **11. 方向、旋转和超球面** | compact | 紧致的 | |
+| **11. Copula 模型** | Copula model | Copula 模型 | |
+| | marginal cumulative distribution function | 边际累积分布函数 | |
+| | dependence structure | 依赖结构 | |
+| | probability integral transform | 概率积分变换 | |
+| | tail dependence | 尾部依赖 | |
+| | correlation matrix | 相关矩阵 | |
+| | multivariate distribution | 多元分布 | |
+| | Gaussian copula | 高斯 Copula 模型 | |
+| | Student-t copula | 学生 t Copula 模型 | |
+| | Archimedean copula | 阿基米德 Copula 模型 | |
+| | Clayton copula | Clayton Copula 模型 | |
+| | Gumbel copula | Gumbel Copula 模型 | |
+| | Frank copula | Frank Copula 模型 | |
+| | Vine copula | 藤 Copula 模型 | |
+| | radial symmetry | 径向对称性 | |
+| | exchangeability | 可交换性 | |
+| | asymmetric tail dependence | 不对称尾部依赖 | |
+| | numerical stability | 数值稳定性 | |
+| | heavy-tailed marginals | 重尾边际分布 | |
+| | joint extreme events | 联合极端事件 | |
+| | prior knowledge | 先验知识 | |
+| | parameter identifiability | 参数可识别性 | |
+| | computational efficiency | 计算效率 | |
+| **12. 方向、旋转和超球面** | compact | 紧致的 | |
 | | improper | 不正确的 | |
 | | a set of points | 一组点 | |
 | | discrimination parameter | 区分参数 | |

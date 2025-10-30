@@ -2,15 +2,27 @@
 pagetitle: Copulas
 ---
 
-# Copulas {#copulas.chapter}
+# Copula 模型 {#copulas.chapter--cn}
+
+# Copulas {-#copulas.chapter}
+
+本节译者：邱怡轩（Claude Code+GLM 辅助）
 
 Copulas provide a flexible way to model multivariate distributions by separating the marginal cumulative distribution functions from the dependence structure. This chapter introduces copulas in Stan, focusing on implementation techniques and practical examples.  This chapter was derived from Brynjólfur Gauti Guðrúnar Jónsson's [A gentle introduction: the Gaussian copula](https://bggj.is/posts/gaussian-copula/).
 
+Copula 模型通过将边际累积分布函数与依赖结构分离，提供了一种灵活的方法来建模多元分布。本章介绍 Stan 中的 Copula 模型，重点关注实现技巧和实际示例。本章来源于 Brynjólfur Gauti Guðrúnar Jónsson 的[高斯 Copula 模型简介](https://bggj.is/posts/gaussian-copula/)一文。
+
 ## What Are Copulas?
+
+## 什么是 Copula 函数？ {-}
 
 According to Sklar's theorem [@sklar1959], any multivariate distribution can be expressed in terms of its marginals and a copula that captures the dependence structure. Copulas are functions that join univariate marginal cumulative distribution functions to form multivariate distributions.
 
+根据 Sklar 定理 [@sklar1959]，任何多元分布都可以用其边际分布和一个捕获依赖结构的 Copula 函数来表示。Copula 是将一元边际累积分布函数连接起来形成多元分布的函数。
+
 For a multivariate random variable $\mathbf{X} = [X_1 \cdots X_D]^\top$ with marginal cumulative distribution functions $F_i$, the joint cumulative distribution function can be written as:
+
+对于具有边际累积分布函数 $F_i$ 的多元随机变量 $\mathbf{X} = [X_1 \cdots X_D]^\top$，其联合累积分布函数可以写成：
 
 $$
 F_{\mathbf{X}}(\mathbf{x}) = C(F_1(x_1), \ldots, F_D(x_D)) = \Pr[X_1 \leq x_1, \ldots, X_D \leq x_D]
@@ -18,11 +30,19 @@ $$
 
 where $C$ is the copula function, $F_{\mathbf{X}}$ is the joint cumulative distribution function, and $F_i$ are the marginal cumulative distribution functions. The copula function $C$ must be a joint cumulative distribution function over the unit hypercube $[0, 1]^D$.
 
+其中 $C$ 是 Copula 函数，$F_{\mathbf{X}}$ 是联合累积分布函数，$F_i$ 是边际累积分布函数。Copula 函数 $C$ 必须是单位超立方体 $[0, 1]^D$ 上的联合累积分布函数。
+
 ## General Structure of Copula Models in Stan
 
-This section describes the general structure of copula models in Stan. The next sections will provide specific examples of copula implementations, but first, let's understand the general pattern that separates the marginal distributions from the dependence structure. 
+## Stan 中 Copula 模型的一般结构 {-}
+
+This section describes the general structure of copula models in Stan. The next sections will provide specific examples of copula implementations, but first, let's understand the general pattern that separates the marginal distributions from the dependence structure.
+
+本节描述 Stan 中 Copula 模型的一般结构。接下来的章节将提供 Copula 实现的具体示例，但首先让我们理解将边际分布与依赖结构分离的一般模式。 
 
 The log density of a multivariate distribution using a copula can be written as:
+
+使用 Copula 模型的多元分布的对数密度可以写成：
 
 $$
 \log h(\mathbf{x}) = \log c\left(u_1, \dots, u_D \vert \boldsymbol{\alpha}\right) + \sum_{i=1}^D \log f_i(x_i \vert \boldsymbol{\beta}_i)
@@ -30,38 +50,64 @@ $$
 
 where:
 
+其中：
+
 - $u_i = F_i(x_i \vert \boldsymbol{\beta}_i)$ are the probability integral transforms of the data
+- $u_i = F_i(x_i \vert \boldsymbol{\beta}_i)$ 是数据的概率积分变换
 - $\log c\left(u_1, \dots, u_D \vert \boldsymbol{\alpha}\right)$ is the log density of the copula
+- $\log c\left(u_1, \dots, u_D \vert \boldsymbol{\alpha}\right)$ 是 Copula 模型的对数密度
 - $\sum_{i=1}^D \log f_i(x_i \vert \boldsymbol{\beta}_i)$ is the sum of the log densities of the marginals
+- $\sum_{i=1}^D \log f_i(x_i \vert \boldsymbol{\beta}_i)$ 是边际分布对数密度之和
 - $\boldsymbol{\alpha}$ represents the parameters describing the parametric form of the copula
+- $\boldsymbol{\alpha}$ 表示描述 Copula 模型参数形式的参数
 - $\boldsymbol{\beta}_i$ represents the parameters describing the parametric form of the $i$-th marginal distribution
+- $\boldsymbol{\beta}_i$ 表示描述第 $i$ 个边际分布参数形式的参数
 
 The implementation of copulas in Stan has two key requirements:
 
+在 Stan 中实现 Copula 模型有两个关键要求：
+
 1. Both the probability density functions and cumulative distribution functions of the marginal distributions must be available
+1. 边际分布的概率密度函数和累积分布函数都必须可用
 2. A function that computes the log density of the copula for the transformed data must be implemented
+2. 必须实现一个计算变换数据后 Copula 模型对数密度的函数
 
 Most copula implementations in Stan follow a three-step process:
 
+Stan 中的大多数 Copula 模型实现遵循三步过程：
+
 1. **Accumulate marginal log likelihoods**: Calculate and add the log density of each marginal distribution to the target log density
+1. **累积边际对数似然**：计算每个边际分布的对数密度并将其加到目标对数密度中
 2. **Transform to uniform variables**: Apply the marginal CDFs to transform the data to uniform variables on the unit interval
+2. **变换为均匀变量**：应用边际 CDF 将数据变换为单位区间上的均匀变量
 3. **Calculate copula density**: Compute the log density of the copula based on these uniform variables and add it to the target log density
+3. **计算 Copula 密度**：基于这些均匀变量计算 Copula 模型的对数密度并将其加到目标对数密度中
 
 This process is reflected in the general form of the log density shown above, where the first term represents the copula density and the second term represents the sum of marginal log densities.
 
-In a way, we are always modeling with copulas, as the independence assumption can be viewed as a special case using the independence copula, where $\log c(\mathbf{u}) = 0$, resulting in the familiar sum of marginal log densities. This perspective highlights that traditional independent modeling is just a specific case within the broader copula framework. 
+这个过程反映在上面显示的对数密度一般形式中，其中第一项代表 Copula 模型密度，第二项代表边际对数密度之和。
+
+In a way, we are always modeling with copulas, as the independence assumption can be viewed as a special case using the independence copula, where $\log c(\mathbf{u}) = 0$, resulting in the familiar sum of marginal log densities. This perspective highlights that traditional independent modeling is just a specific case within the broader copula framework.
+
+在某种意义上，我们总是在使用 Copula 模型建模，因为独立性假设可以看作是使用独立性 Copula 模型的特例，其中 $\log c(\mathbf{u}) = 0$，结果是熟悉的边际对数密度之和。这种观点强调传统的独立性建模只是更广泛的 Copula 模型框架中的一个特例。 
 
 Most parametric copula families include independence as a special case, either as a subset of their parameter space (e.g., when correlation parameters are zero) or as a limit when parameters approach specific values (e.g., when the dependence parameter approaches zero in Archimedean copulas).
 
+大多数参数 Copula 模型族都包含独立性作为特例，要么作为其参数空间的子集（例如，当相关参数为零时），要么作为参数接近特定值时的极限（例如，当阿基米德 Copula 模型中的依赖参数接近零时）。
+
 ## Gaussian Copula Example
+
+## 高斯 Copula 模型示例 {-}
 
 The Gaussian copula is constructed using the multivariate normal distribution. For a $D$-dimensional random vector $\mathbf{X}$ with marginals $F_i$, the log Gaussian copula density is given by:
 
+高斯 Copula 模型是使用多元正态分布构造的。对于具有边际分布 $F_i$ 的 $D$ 维随机向量 $\mathbf{X}$，高斯 Copula 模型的对数密度由下式给出：
+
 $$
 \begin{aligned}
-\log c(\mathbf{u}) &= 
+\log c(\mathbf{u}) &=
 -\frac{1}{2} \log |\boldsymbol{\Omega}| -\frac{1}{2} \mathbf{z}^\top (\boldsymbol{\Omega}^{-1} - \mathbf{I}) \mathbf{z} \\
-& = 
+& =
 -\frac{1}{2} \log |\boldsymbol{\Omega}| -\frac{1}{2} \mathbf{z}^\top \boldsymbol{\Omega}^{-1} \mathbf{z} + \frac{1}{2} \mathbf{z}^\top \mathbf{z} \\
 &= \log \mathcal{N}(\mathbf{z} \mid \mathbf{0}, \boldsymbol{\Omega}) - \log \mathcal{N}(\mathbf{z} \mid \mathbf{0}, \mathbf{I})
 \end{aligned}
@@ -69,17 +115,26 @@ $$
 
 where $\mathbf{z} = [\Phi^{-1}(u_1), \ldots, \Phi^{-1}(u_D)]^\top$ are the inverse normal CDF transforms of the uniform marginals, $\boldsymbol{\Omega}$ is the correlation matrix, and $\mathbf{I}$ is the identity matrix. The joint log density is then:
 
+其中 $\mathbf{z} = [\Phi^{-1}(u_1), \ldots, \Phi^{-1}(u_D)]^\top$ 是均匀边际分布的逆正态 CDF 变换，$\boldsymbol{\Omega}$ 是相关矩阵，$\mathbf{I}$ 是单位矩阵。那么联合对数密度为：
+
 $$
 \log h(\mathbf{x}) = \log c(F_1(x_1), \ldots, F_D(x_D)) + \sum_{i=1}^D \log f_i(x_i)
 $$
 
 Following the three-step process for implementing copulas in Stan:
 
+遵循在 Stan 中实现 Copula 模型的三步过程：
+
 1. **Accumulate marginal log likelihoods**: The exponential log densities are added to the target in the line `target += exponential_lpdf(y[n] | lambda)`
+1. **累积边际对数似然**：指数对数密度在行 `target += exponential_lpdf(y[n] | lambda)` 中加到目标中
 2. **Transform to uniform variables**: The exponential CDF transforms the data to uniform variables: `exponential_cdf(y[n, d] | lambda[d])`
+2. **变换为均匀变量**：指数 CDF 将数据变换为均匀变量：`exponential_cdf(y[n, d] | lambda[d])`
 3. **Calculate copula density**: The transformed variables are converted to normal scale using `inv_Phi` and the multivariate normal log density is computed: `z ~ multi_normal_cholesky(zeros, L_Omega)`
+3. **计算 Copula 密度**：变换后的变量使用 `inv_Phi` 转换为正态尺度，并计算多元正态对数密度：`z ~ multi_normal_cholesky(zeros, L_Omega)`
 
 The following example demonstrates a Gaussian copula with exponential marginal distributions. Note that while the copula is Gaussian, the marginals are exponential.
+
+以下示例演示了具有指数边际分布的高斯 Copula 模型。请注意，虽然 Copula 模型是高斯的，但边际分布是指数的。
 
 ```stan
 data {
@@ -131,7 +186,11 @@ generated quantities {
 
 ## Advantages of Copulas
 
+## Copula 模型的优势 {-}
+
 Copulas offer several advantages in statistical modeling:
+
+Copula 模型在统计建模中提供了几个优势：
 
 1. **Flexibility**: They allow combining any marginal distributions with various dependence structures. For example:
    - Modeling financial returns with heavy-tailed marginals and complex dependence structures
@@ -139,32 +198,65 @@ Copulas offer several advantages in statistical modeling:
    - Capturing asymmetric dependencies between variables, such as in financial markets where joint negative returns are more common than joint positive returns due to macro-events affecting multiple stocks simultaneously, while positive returns tend to be more idiosyncratic
    - Modeling different types of tail dependence in different parts of the distribution
 
-2. **Factorability**: The marginal distributions and dependence structure can be modeled separately, allowing for different prior knowledge about each component. This is similar to the common practice of factoring scale and correlation in multivariate normal priors. 
+1. **灵活性**：它们允许将任何边际分布与各种依赖结构结合起来。例如：
+   - 使用重尾边际分布和复杂依赖结构建模金融收益
+   - 在单一模型中组合不同类型的分布（例如，正态分布和伽马分布）
+   - 捕获变量之间的不对称依赖关系，例如在金融市场中，由于宏观事件同时影响多只股票，联合负收益比联合正收益更常见，而正收益往往更加特殊
+   - 在分布的不同部分建模不同类型的尾部依赖
+
+2. **Factorability**: The marginal distributions and dependence structure can be modeled separately, allowing for different prior knowledge about each component. This is similar to the common practice of factoring scale and correlation in multivariate normal priors.
 
     For example, when modeling the survival times of two components in a system, we can separately specify exponential or gamma marginal distributions based on historical failure data for each component, and a Gaussian copula (or asymmetrical Archimedean copula) capturing how the failure of one component affects the other, making it easier to incorporate prior knowledge about each aspect independently.
 
+2. **可分解性**：边际分布和依赖结构可以分别建模，允许对每个组件使用不同的先验知识。这类似于在多元正态先验中分解尺度和相关性的常见做法。
+
+    例如，在建模系统中两个组件的生存时间时，我们可以基于每个组件的历史故障数据分别指定指数或伽马边际分布，以及一个捕获一个组件故障如何影响另一个组件的高斯 Copula 模型（或不对称阿基米德 Copula 模型），使得更容易独立地纳入每个方面的先验知识。
+
 3. **Tail dependence**: Different copulas can capture different types of tail dependence, which is crucial in applications like risk management and extreme value analysis where joint extreme scenarios need to be quantified.
+
+3. **尾部依赖**：不同的 Copula 模型可以捕获不同类型的尾部依赖，这在风险管理和极值分析等应用中至关重要，这些应用需要量化联合极端情景。
 
 4. **Universal Framework**: In a way, we are always modeling with copulas, as the independence assumption can be viewed as a special case using the independence copula. This perspective highlights that traditional independent modeling is just a specific case within the broader copula framework.
 
+4. **通用框架**：在某种意义上，我们总是在使用 Copula 模型建模，因为独立性假设可以看作是使用独立性 Copula 模型的特例。这种观点强调传统的独立性建模只是更广泛的 Copula 模型框架中的一个特例。
+
 ## Common Pitfalls and Considerations
+
+## 常见陷阱和注意事项 {-}
 
 When implementing copulas in Stan, several considerations should be kept in mind:
 
+在 Stan 中实现 Copula 模型时，应牢记几个注意事项：
+
 1. **Computational efficiency**: The probability integral transform and inverse transform steps can be computationally intensive, especially for complex marginal distributions.
 
+1. **计算效率**：概率积分变换和逆变换步骤可能在计算上很密集，特别是对于复杂的边际分布。
+
 2. **Parameter identifiability**: Care must be taken to ensure that the parameters of the marginal distributions and the copula are identifiable.
+
+2. **参数可识别性**：必须小心确保边际分布和 Copula 模型的参数是可识别的。
 
 3. **Model selection**: The choice of copula family should be guided by the specific dependence structure of the data. For example:
    - The Gaussian copula may underestimate the probability of joint extreme events in financial data
    - The Student-t copula, while offering tail dependence, maintains symmetric tail behavior that may not match all applications
    - Archimedean copulas can model asymmetric tail dependence but may be less flexible and harder to estimate in high dimensions
 
+3. **模型选择**：Copula 模型族的选择应取决于数据的具体依赖结构。例如：
+   - 高斯 Copula 模型可能低估金融数据中联合极端事件的概率
+   - 学生 t Copula 模型虽然提供尾部依赖，但保持对称的尾部行为，可能不匹配所有应用
+   - 阿基米德 Copula 模型可以建模不对称尾部依赖，但在高维中可能灵活性较差且难以估计
+
 4. **Numerical stability**: The transformations between different scales (original, uniform, and normal/Student-t/calculations using Archimedian copulas) require careful implementation to maintain numerical stability.
+
+4. **数值稳定性**：不同尺度（原始尺度、均匀尺度和正态/学生 t/使用阿基米德 Copula 模型的计算）之间的变换需要仔细实现以保持数值稳定性。
 
 5. **Symmetry considerations**: Many copula families exhibit strong symmetries that may not match the data:
    - **Radial symmetry**: Some copulas (like Gaussian and Student-t) treat positive and negative extremes equally, which may not match financial data where joint negative returns are more common than joint positive returns
    - **Exchangeability**: Some copulas are invariant under permutations of their arguments, which can lead to unintuitive results when combined with inhomogeneous marginals. For example, when modeling time-to-event scenarios with different marginal distributions (e.g., exponential distributions with different parameters), perfect dependence in the copula does not imply simultaneous events. Instead, one event triggers the other at a later time corresponding to the same quantile, which can lead to incorrect modeling of joint events.
+
+5. **对称性考虑**：许多 Copula 模型族表现出可能不匹配数据的强对称性：
+   - **径向对称性**：一些 Copula 模型（如高斯和学生 t 模型）平等对待正负极端情况，这可能不匹配金融数据，其中联合负收益比联合正收益更常见
+   - **可交换性**：一些 Copula 模型在参数置换下是不变的，当与非均匀边际分布结合时可能导致不直观的结果。例如，在建模具有不同边际分布（例如，具有不同参数的指数分布）的事件时间情景时，Copula 模型中的完美依赖并不意味着同时事件。相反，一个事件在对应于相同分位数的较晚时间触发另一个事件，这可能导致对联合事件的错误建模
 
 6. **Tail dependence**: Understanding and choosing appropriate tail dependence is crucial:
    - The upper (lower) tail dependence coefficient $\lambda_U (\lambda_L)$ is the probability that one variable is extremely large (small) given that another is extremely large (small).
@@ -178,14 +270,35 @@ When implementing copulas in Stan, several considerations should be kept in mind
      - Risk management applications may need asymmetric tail dependence
      - Some applications may require different tail behavior in different parts of the distribution
 
+6. **尾部依赖**：理解和选择适当的尾部依赖至关重要：
+   - 上（下）尾部依赖系数 $\lambda_U (\lambda_L)$ 是指当一个变量极大（极小）时，另一个变量也极大（极小）的概率
+   - 不同的 Copula 模型族表现出不同的尾部依赖特性：
+     - 一些 Copula 模型（如高斯模型）具有零尾部依赖
+     - 其他模型可以建模对称尾部依赖（$\lambda_U = \lambda_L$）
+     - 一些模型可以捕获不对称尾部依赖（$\lambda_U \neq \lambda_L$）
+     - 某些 Copula 模型即使在零相关性下也允许尾部依赖
+   - Copula 模型的选择应取决于应用中预期的尾部行为：
+     - 金融数据通常需要建模联合下极端事件
+     - 风险管理应用可能需要不对称尾部依赖
+     - 一些应用可能在分布的不同部分需要不同的尾部行为
+
 7. **High-dimensional modeling**: As dimensionality increases:
    - The number of dependence parameters grows
    - Some copula families become less flexible
    - Vine copulas or factor copulas may be more appropriate
 
+7. **高维建模**：随着维度增加：
+   - 相依性参数的数量会增长
+   - 一些 Copula 模型族会变得不那么灵活
+   - 藤 Copula 模型或因子 Copula 模型可能更合适
+
 ## Common Copula Families
 
+## 常见 Copula 模型族 {-}
+
 Several copula families are available for modeling different dependence structures in the correlation component:
+
+有一些 Copula 模型族可用于建模相关性组件中的不同依赖结构：
 
 - **Gaussian copula**: Based on the multivariate normal distribution, offering symmetric dependence
 - **Student-t copula**: Based on the multivariate Student-t distribution, providing more flexibility in tail dependence than the Gaussian copula
@@ -195,7 +308,17 @@ Several copula families are available for modeling different dependence structur
   - Frank copula: Symmetric dependence
 - **Vine copulas**: A flexible approach for modeling high-dimensional dependencies by decomposing the joint distribution into a series of bivariate copulas
 
+- **高斯 Copula 模型**：基于多元正态分布，提供对称依赖
+- **学生 t Copula 模型**：基于多元学生 t 分布，比高斯 Copula 模型在尾部依赖方面提供更多灵活性
+- **阿基米德 Copula 模型**：通过生成函数定义的一类 Copula 模型，包括：
+  - Clayton Copula 模型：更强的下尾部依赖
+  - Gumbel Copula 模型：更强的上尾部依赖
+  - Frank Copula 模型：对称依赖
+- **藤 Copula 模型**：通过将联合分布分解为一系列二元 Copula 模型来建模高维依赖的灵活方法
+
 ## Further reading/viewing
+
+## 延伸阅读/浏览 {-}
 
 *  Jónsson's three part blog series, *Copulas in Stan*:
     * Part I: [If it bleeds, we can kill it](https://bggj.is/posts/stan-copulas-1/)
@@ -203,3 +326,10 @@ Several copula families are available for modeling different dependence structur
     * Part III: [It was the best of tails, it was the worst of tails: The T-Copula](https://bggj.is/posts/t-copula/)
 * Brynjólfur Gauti Guðrúnar Jónsson's StanCon 2024 presentation, [Copulas in Stan: Modeling Spatial Dependence](https://www.youtube.com/watch?v=aHZ-rnepUNk)
 * Sean Pinkney's *Helpful Stan functions*: [copula functions](https://spinkney.github.io/helpful_stan_functions/group__copula.html)
+
+* Jónsson 的三部分博客系列，*Stan 中的 Copula 模型*：
+    * 第一部分：[只要它会流血，我们就能打败它](https://bggj.is/posts/stan-copulas-1/)
+    * 第二部分：[高斯 Copula 模型简介](https://bggj.is/posts/gaussian-copula/)
+    * 第三部分：[成也尾部，败也尾部：T-Copula](https://bggj.is/posts/t-copula/)
+* Brynjólfur Gauti Guðrúnar Jónsson 的 StanCon 2024 报告，[Stan 中的 Copula 模型：建模空间依赖](https://www.youtube.com/watch?v=aHZ-rnepUNk)
+* Sean Pinkney 的 *有用的 Stan 函数*：[Copula 函数](https://spinkney.github.io/helpful_stan_functions/group__copula.html)
