@@ -101,8 +101,7 @@ Tuples provide a way to represent a sequence of values of
 heterogeneous types.  For example, `tuple(int, real)` is the type of a
 pair consisting of an integer and a real number and `tuple(array[5]
 int, vector[6])` is the type of pairs where the first element is a
-five-element array of integers, the second entry is an integer, and
-the third is a six-element vector.
+five-element array of integers, and the second is a six-element vector.
 
 元组提供了一种表示不同类型值序列的方法。例如，`tuple(int, real)` 是由整数和实数组成的数对的类型，而 `tuple(array[5] int, vector[6])` 是一种配对类型，其第一个元素是包含五个整数的数组，第二个元素是六维向量。
 
@@ -536,18 +535,11 @@ Stan 没有矩阵、向量和数组之间的自动转换，但是有很多转换
 
 Stan expressions are all evaluated before assignment happens, so there
 is no danger of so-called aliasing in array, vector, or matrix
-operations.  Contrast the behavior of the assignments to `u` and
-`x`, which start with the same values.
+operations. In the following Stan program, contrast the behavior of
+the loop assignment to `u` and the compound slicing assignment to `x`,
+where `u` and `x` start with the same values.
 
-Stan 表达式都在赋值之前求值，因此不存在数组、向量或矩阵操作中的别名风险。对比以下对 `u` 和 `x` 赋值的操作，其中二者有相同的初值。
-
-The loop assigning to `u` and the compound slicing assigning to `x`.
-
-对 `u` 进行循环赋值，对 `x` 进行复合切片赋值。
-
- the following trivial Stan program.
-
-以下是个简单的 Stan 程序。
+Stan 表达式都在赋值之前求值，因此不存在数组、向量或矩阵操作中的别名风险。在下面的 Stan 程序中，可以对比针对 `u` 的循环赋值操作和针对 `x` 的复合切片赋值操作，其中 `u` 和 `x` 具有相同的初值。
 
 ```stan
 transformed data {
