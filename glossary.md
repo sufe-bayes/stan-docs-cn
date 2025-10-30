@@ -145,6 +145,62 @@
 | | relative normalization term | 相对归一化项 | |
 | | component indicator | 成分指示变量 | |
 | | modes | 峰值 | |
+| **6. 测量误差** | measurement error | 测量误差 | |
+| | rounding | 舍入 | |
+| | measurement noise | 测量噪声 | |
+| | latent parameters | 潜参数 | |
+| | exposure model | 暴露模型 | |
+| | constant measurement error | 恒定测量误差 | |
+| | hierarchical prior | 分层先验 | |
+| | fixed effects | 固定效应 | |
+| | random effects | 随机效应 | |
+| | treatment effect | 治疗效果 | |
+| | log odds ratio | 对数几率比 | |
+| **7. 潜在离散参数** | latent discrete parameters | 潜在离散参数 | |
+| | marginalization | 边际化 | |
+| | change point model | 变点模型 | |
+| | mark-recapture model | 标记-重捕模型 | |
+| | Cormack-Jolly-Seber model | Cormack-Jolly-Seber 模型 | |
+| | conditional operator | 条件运算符 | |
+| | log sum of exponents | 对数指数和 | |
+| | diagnostic accuracy | 诊断准确性 | |
+| | noisy categorical measurement | 含噪分类测量 | |
+| | sensitivity | 敏感性 | |
+| | specificity | 特异性 | |
+| | prevalence | 患病率 | |
+| **8. 稀疏和不规则数据** | sparse data structures | 稀疏数据结构 | |
+| | ragged data structures | 不规则数据结构 | |
+| | dense array | 稠密数组 | |
+| | long form data | 长格式数据 | |
+| | vectorized notation | 向量化表示法 | |
+| | slicing operations | 切片操作 | |
+| | segment operation | 分段操作 | |
+| | database-like structure | 数据库式结构 | |
+| **9. 聚类** | clustering | 聚类 | |
+| | soft K-means | 软K-均值 | |
+| | latent Dirichlet allocation | 潜在狄利克雷分配 | |
+| | naive Bayes | 朴素贝叶斯 | |
+| | mixture model | 混合模型 | |
+| | multinomial distribution | 多项分布 | |
+| | Dirichlet distribution | 狄利克雷分布 | |
+| | identifiability | 可识别性 | |
+| | multimodality | 多峰性 | |
+| | label switching | 标签交换 | |
+| | correlated topic model | 相关主题模型 | |
+| | logistic normal distribution | Logistic-正态分布 | |
+| **10. 高斯过程** | Gaussian process | 高斯过程 | |
+| | covariance function | 协方差函数 | |
+| | mean function | 均值函数 | |
+| | exponentiated quadratic | 指数二次 | |
+| | squared exponential | 平方指数 | |
+| | length-scale | 长度尺度 | |
+| | marginal standard deviation | 边际标准差 | |
+| | Cholesky decomposition | Cholesky分解 | |
+| | latent variable GP | 潜变量高斯过程 | |
+| | marginal likelihood GP | 边际似然高斯过程 | |
+| | automatic relevance determination | 自动相关性确定 | |
+| | matrix normal distribution | 矩阵正态分布 | |
+| | isotropic | 各向同性 | |
 | **11. 方向、旋转和超球面** | compact | 紧致的 | |
 | | improper | 不正确的 | |
 | | a set of points | 一组点 | |

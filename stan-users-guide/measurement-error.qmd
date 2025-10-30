@@ -21,7 +21,7 @@ relations can be estimated being measured quantities, it is useful to
 introduce an explicit model of measurement error.  One kind of
 measurement error is rounding.
 
-统计模型中使用的多数量都是通过测量获得的，而大多数的测量都有一定的误差。当测量误差相对于被测量量较小时，其对模型的影响通常较小。当测量误差相对于被测量量较大，或者可以估计被测量量之间的精确关系时，引入显式的测量误差模型是有用的。一种测量误差就是舍入（rounding）。
+统计模型中使用的大多数量值都是通过测量获得的，而大多数的测量都有一定的误差。当测量误差相对于被测量量较小时，其对模型的影响通常较小。当测量误差相对于被测量量较大，或者当能够估计被测量量之间的精确关系时，引入显式的测量误差模型是有用的。一种测量误差就是舍入（rounding）。
 
 Meta-analysis plays out statistically much like measurement error
 models, where the inferences drawn from multiple data sets are
@@ -29,7 +29,7 @@ combined to do inference over all of them.  Inferences for each data
 set are treated as providing a kind of measurement error with respect
 to true parameter values.
 
-从统计学角度来看，元分析与测量误差模型非常相似，其中从多个数据集中得出的推断被结合，来整体的对它们进行推断。对每个数据集的推断都被当作是提供了一种相对于真实参数值的测量误差。
+从统计学角度来看，元分析与测量误差模型非常相似，其中从多个数据集中得出的推断被结合，来对它们进行整体推断。对每个数据集的推断都被当作是提供了一种相对于真实参数值的测量误差。
 
 ## Bayesian measurement error model
 
@@ -83,7 +83,7 @@ the model.  A simple approach is to assume the measurement error is
 normal with known deviation $\tau$.  This leads to the following
 regression model with constant measurement error.
 
-假设预测变量 $x_n$ 的真实值未知，但是对于每个 $n$，有一个 $x_n$ 的测量值 $x^{\textrm{meas}}_n$ 是可用的。如果测量的误差可以被建模，那么测量值 $x^{\textrm{meas}}_n$ 可以用真实值 $x_n$ 加上测量噪声来建模。真实值 $x_n$ 被视为缺失数据，与模型中的其他量一起被估计。一种简单的方法是假设测量误差服从正态分布，且标准差 $\tau$ 已知。由此得到下面含常测量误差的回归模型。
+假设预测变量 $x_n$ 的真实值未知，但是对于每个 $n$，有一个 $x_n$ 的测量值 $x^{\textrm{meas}}_n$ 是可用的。如果测量的误差可以被建模，那么测量值 $x^{\textrm{meas}}_n$ 可以用真实值 $x_n$ 加上测量噪声来建模。真实值 $x_n$ 被视为缺失数据，与模型中的其他量一起被估计。一种简单的方法是假设测量误差服从正态分布，且标准差 $\tau$ 已知。由此得到下面含恒定测量误差的回归模型。
 
 ```stan
 data {
@@ -124,7 +124,7 @@ risk factors $x$ in terms of known (without measurement error) risk
 factors $c$.  A simple model would regress $x_n$ on the covariates
 $c_n$ with noise term $\upsilon$,
 
-当测量误差不服从正态分布时，有更丰富的测量误差模型可以使用。对真实值的先验信息也可以得到丰富。例如， @Clayton:1992 引入了一个曝露（exposure）模型，用已知（没有测量误差）的风险因素 $c$ 来表示未知（但受噪声干扰的）风险因素 $x$。一个简单的模型是利用协变量 $c_n$ 回归 $x_n$，并加上噪声项 $\upsilon$，
+当测量误差不服从正态分布时，有更丰富的测量误差模型可以使用。对真实值的先验信息也可以得到丰富。例如， @Clayton:1992 引入了一个暴露（exposure）模型，用已知（没有测量误差）的风险因素 $c$ 来表示未知（但受噪声干扰的）风险因素 $x$。一个简单的模型是利用协变量 $c_n$ 回归 $x_n$，并加上噪声项 $\upsilon$，
 
 $$
 x_n \sim \textsf{normal}(\gamma^{\top}c, \upsilon).
@@ -268,7 +268,7 @@ parameter version is about twice as efficient in terms of effective
 sample size per iteration, as well as providing a posterior for the
 unrounded parameters.
 
-这个针对未舍入测量值 z 的显式模型会产生与之前将 $z$ 边缘化掉的模型相同的 $\mu$ 和 $\sigma$ 后验分布。两种方法十分相似，但就每次迭代的有效样本量而言，潜参数版本的效率约为前者的两倍，并且为未舍入参数提供了后验分布。
+这个针对未舍入测量值 z 的显式模型会产生与之前将 $z$ 边缘化掉的模型相同的 $\mu$ 和 $\sigma$ 后验分布。两种方法都混合良好，但就每次迭代的有效样本量而言，潜参数版本的效率约为前者的两倍，并且为未舍入参数提供了后验分布。
 
 ## Meta-analysis
 
@@ -308,7 +308,7 @@ myocardial infarction under a treatment of beta blockers
 
 The clinical data consists of $J$ trials, each with $n^t$ treatment cases, $n^c$ control cases, $r^t$ successful outcomes among those treated and $r^c$ successful outcomes among those in the control group.  This data can be declared in Stan as follows.^[Stan's integer constraints are not powerful enough to express the constraint that $\texttt{r}\mathtt{\_}\texttt{t[j]} \leq \texttt{n}\mathtt{\_}\texttt{t[j]}$, but this constraint could be checked in the transformed data block.]
 
-临床数据由 $J$ 个试验组成，每个试验包含 $n^t$ 个治疗组病例，$n^c$ 个对照组病例，治疗组中有 $r^t$ 个成功结果，对照组中有 $r^c$ 个成功结果。可以在 Stan 中如下声明这些数据。^[Stan的整数约束不足以表达约束条件 $\texttt{r}\mathtt{\_}\texttt{t[j]} \leq \texttt{n}\mathtt{\_}\texttt{t[j]}$，但这个约束条件可以在变换数据模块中被写入。]
+临床数据由 $J$ 个试验组成，每个试验包含 $n^t$ 个治疗组病例，$n^c$ 个对照组病例，治疗组中有 $r^t$ 个成功结果，对照组中有 $r^c$ 个成功结果。可以在 Stan 中如下声明这些数据。^[Stan的整数约束不足以表达约束条件 $\texttt{r}\mathtt{\_}\texttt{t[j]} \leq \texttt{n}\mathtt{\_}\texttt{t[j]}$，但这个约束条件可以在变换数据模块中被检查。]
 
 ```stan
 data {
@@ -328,7 +328,7 @@ data {
 Although the clinical trial data are binomial in its raw format, it may
 be transformed to an unbounded scale by considering the log odds ratio
 
-尽管临床试验数据在原始形式下是二项分布的，但可以将其转换到无穷尺度上，通过考虑对数几率（log odds ratio）
+尽管临床试验数据在原始形式下是二项分布的，但可以将其转换到无界尺度上，通过考虑对数几率比（log odds ratio）
 
 \begin{align*}
 y_j &= \log \left( \frac{r^t_j / (n^t_j - r^t_j)}

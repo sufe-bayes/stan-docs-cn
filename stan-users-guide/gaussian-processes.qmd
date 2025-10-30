@@ -50,7 +50,7 @@ over the latent Gaussian process, and applies a Cholesky-factor
 reparameterization of the Gaussian to compute the likelihood and the posterior
 predictive distribution analytically.
 
-高斯过程可以通过实现其均值和协方差函数并将结果代入其采样分布的高斯形式，或使用下面概述的专用协方差函数，在 Stan 中进行编码。这种形式的模型很简单，可用于模拟、模型拟合或后验预测推断。对于具有正态分布结果的高斯过程，一种更高效的 Stan 实现是对潜在高斯过程进行边缘化，并应用高斯分布的 Cholesky 因子重参数化来解析地计算似然和后验预测分布。
+高斯过程可以通过实现其均值和协方差函数并将结果代入高斯分布形式，或使用下面概述的专用协方差函数在 Stan 中进行编码。这种形式的模型很简单，可用于模拟、模型拟合或后验预测推断。对于具有正态分布结果的高斯过程，一种更高效的 Stan 实现是对潜在高斯过程进行边缘化，并应用高斯分布的 Cholesky 因子重参数化来解析地计算似然和后验预测分布。
 
 After defining Gaussian processes, this chapter covers the basic
 implementations for simulation, hyperparameter estimation, and
@@ -119,7 +119,7 @@ test is between the indexes $i$ and $j$, not between values $x_i$ and
 $x_j$. This kernel is obtained through a convolution of two
 independent Gaussian processes, $f_1$ and $f_2$, with kernels
 
-其中 $\alpha$、$\rho$ 和 $\sigma$ 是定义协方差函数的超参数，$\delta_{i,j}$ 是 Kronecker delta 函数，如果 $i=j$ 则值为1，否则值为0（这一测试是针对索引 $i$ 和 $j$，而不是针对值 $x_i$ 和 $x_j$）。该核函数通过两个独立的高斯过程 $f_1$ 和 $f_2$ 进行卷积得到，其中 $f_1$ 的核函数为
+其中 $\alpha$、$\rho$ 和 $\sigma$ 是定义协方差函数的超参数，$\delta_{i,j}$ 是 Kronecker delta 函数，如果 $i=j$ 则值为1，否则值为0（这一测试是针对索引 $i$ 和 $j$，而不是针对值 $x_i$ 和 $x_j$）。该核函数通过两个独立的高斯过程 $f_1$ 和 $f_2$ 的卷积得到，其中 $f_1$ 的核函数为
 
 $$
   K_1(x \mid \alpha, \rho)_{i, j}
@@ -155,7 +155,7 @@ by the GP. If you were to take the standard deviation of many draws from the GP
 $f_1$ prior at a single input $x$ conditional on one value of $\alpha$ one
 would recover $\alpha$.
 
-超参数 $\rho$ 是*长度尺度*，对应于高斯过程先验所表示函数在定义域上的频率。$\rho$ 值接近0，则高斯过程表示高频函数，而 $\rho$ 较大时则表示低频函数。超参数 $\alpha$ 是*边际标准差*，它控制高斯过程所表示函数的幅度范围。在给定 $\alpha$ 值的情况下，如果从高斯过程先验 $f_1$ 中抽取大量样本，并在单个输入 $x$ 处计算标准差，则结果就是 $\alpha$。
+超参数 $\rho$ 是*长度尺度*，对应于高斯过程先验所表示函数在定义域上的频率。$\rho$ 值接近0，则高斯过程表示高频函数，而 $\rho$ 较大时则表示低频函数。超参数 $\alpha$ 是*边际标准差*，它控制高斯过程所表示函数的幅度范围。在给定 $\alpha$ 时，从高斯过程先验 $f_1$ 中抽取大量样本并在单个输入 $x$ 处计算标准差，结果即为 $\alpha$。
 
 The only term in the squared exponential covariance function involving
 the inputs $x_i$ and $x_j$ is their vector difference, $x_i - x_j$.
@@ -315,7 +315,7 @@ $K(x \mid \theta)$, i.e., the lower-triangular matrix $L$ such that $LL^{\top} =
 K(x \mid \theta)$.  Then the transformed variable $\mu + L\eta$ has the intended
 target distribution,
 
-其中 $\textbf{0}$ 是 $N$ 维零向量，$\textbf{1}$ 是 $N\times N$ 的单位矩阵。令 $L$ 表示 $K(x \mid \theta)$ 的 Cholesky 分解，即下三角矩阵 $L$ 满足 $LL^{\top} = K(x \mid \theta)$。于是变换后的变量 $\mu + L\eta$ 服从目标分布，
+其中 $\textbf{0}$ 是 $N$ 维零向量，$\textrm{I}$ 是 $N\times N$ 的单位矩阵。令 $L$ 表示 $K(x \mid \theta)$ 的 Cholesky 分解，即下三角矩阵 $L$ 满足 $LL^{\top} = K(x \mid \theta)$。于是变换后的变量 $\mu + L\eta$ 服从目标分布，
 
 $$
   \mu + L\eta \sim \textsf{multivariate normal}(\mu(x), K(x \mid \theta)).
@@ -489,7 +489,7 @@ inference in this model [@Neal:1997]. If the posterior is
 well-concentrated for the hyperparameters the Stan implementation will fit
 hyperparameters in models with a few hundred data points in seconds.
 
-在这个模型中，Hamiltonian Monte Carlo 采样对于超参数推断是快速和有效的 [@Neal:1997]。如果后验密度函数在超参数方面高度集中，则 Stan 实现可以在几秒钟内拟合包含数百个数据点的模型。
+在这个模型中，Hamiltonian Monte Carlo 采样对于超参数推断是快速和有效的 [@Neal:1997]。如果后验密度在超参数处高度集中，则 Stan 实现可以在几秒钟内拟合包含数百个数据点的模型。
 
 #### Latent variable GP {-}
 
@@ -758,7 +758,7 @@ to exactly interpolate between the input data.  The resulting posterior not
 only significantly overfits to the input data, it also becomes hard to
 accurately sample using Euclidean HMC.
 
-高斯过程是一类灵活的先验分布，因此能够表示广泛的函数形式。当长度尺度小于协变量的最小间距时，高斯过程的似然函数趋于平坦。如果没有先验的正则化，这种平坦的似然会将后验质量集中在长度尺度很小的区域内，此时观测方差趋近于零，高斯过程能表达的函数开始几乎在输入数据之间进行精确的插值。由此产生的后验分布不仅会严重过拟合输入数据，而且难以通过欧氏 HMC 进行准确的采样。
+高斯过程是一类灵活的先验分布，因此能够表示广泛的函数形式。当长度尺度小于协变量的最小间距时，高斯过程的似然函数趋于平坦。如果没有先验的正则化，这种平坦的似然会将后验质量集中在长度尺度很小的区域内，此时观测方差趋近于零，高斯过程支持的函数开始在输入数据之间进行精确插值。由此产生的后验分布不仅会严重过拟合输入数据，而且难以通过欧氏 HMC 进行准确的采样。
 
 We may wish to put further soft constraints on the length-scale, but these are
 dependent on how the GP is used in our statistical model.

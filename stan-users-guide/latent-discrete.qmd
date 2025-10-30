@@ -25,7 +25,7 @@ latent discrete parameters.  The next chapter, the [clustering
 chapter](clustering.qmd), on clustering models, considers further
 models involving latent discrete parameters.
 
-本章介绍了如何编码涉及潜在离散参数的几个广泛使用的模型。下一章，[聚类章节](#clustering.chapter)，将进一步讨论涉及潜在离散参数的模型。
+本章介绍了如何编码涉及潜在离散参数的几个广泛使用的模型。下一章，[聚类章节](clustering.qmd)，将进一步讨论涉及潜在离散参数的模型。
 
 ## The benefits of marginalization {#rao-blackwell.section}
 
@@ -106,7 +106,7 @@ marginalized out to produce a model defining the log of the
 probability function $p(e,l,D_t)$.
 The full joint probability factors as
 
-要在 Stan 中编码这个模型，必须边际化离散参数 $s$，以得到定义概率函数 $log \ p(e,l,D_t)$ 的模型。
+要在 Stan 中编码这个模型，必须边际化离散参数 $s$，以得到定义对数概率函数 $\log p(e,l,D_t)$ 的模型。
 完整的联合概率可以分解为
 
 \begin{align*}
@@ -533,7 +533,7 @@ $f : (C-R+M,\infty) \rightarrow (-\infty,+\infty)$ defined by
 $f(N) = \log(N - (C - R + M))$; the reference manual contains full
 details of all constrained parameter transforms.
 
-模型中的一个棘手部分是对种群大小 $N$ 设置的下界 $C - R + M$。低于此下界的值是不可能的，因为否则无法从重新捕获的 $C$ 只动物中抽 取 $R$ 个样本。实现此下界是为了确保在变换后的（非约束）空间上的参数支持无界，使得采样和优化能够以非约束的方式进行。在 $C$ 的声明中的下界意味着一个变量变换 $f : (C-R+M,\infty) \rightarrow (-\infty,+\infty)$，其中 $f(N) = \log(N - (C - R + M))$；参考手册中包含了所有约束参数变换的详细信息。
+模型中的一个棘手部分是对种群大小 $N$ 设置的下界 $C - R + M$。低于此下界的值是不可能的，因为否则无法从重新捕获的 $C$ 只动物中抽取 $R$ 个样本。实现此下界是为了确保参数在变换后的（无约束）空间上具有无界支持，使得采样和优化能够以无约束的方式进行。在 $C$ 的声明中的下界意味着一个变量变换 $f : (C-R+M,\infty) \rightarrow (-\infty,+\infty)$，其中 $f(N) = \log(N - (C - R + M))$；参考手册中包含了所有约束参数变换的详细信息。
 
 ### Cormack-Jolly-Seber with discrete parameter {-}
 
@@ -581,7 +581,7 @@ There are two Bernoulli parameters in the model,
 These parameters will both be given uniform priors, but information
 should be used to tighten these priors in practice.
 
-这些参数都将具有均匀先验分布，但在实践中应使用信息来加优化这些先验分布。
+这些参数都将具有均匀先验分布，但在实践中应使用信息来加强这些先验分布。
 
 The CJS model also employs a latent discrete parameter $z_{i,t}$
 indicating for each individual $i$ whether it is alive at time $t$,
@@ -624,7 +624,7 @@ the probability that an individual is never captured again if it is
 alive at time $t$ (if it is dead, the recapture probability is zero).
 this quantity is defined recursively by
 
-为了简化对潜在离散参数 $z_{i,t}$ 的边际化处理，Stan 模型依赖于一个派生量 $\chi_t$，用于表示在时间 $t$ 仍然存活的个体再次被捕获的概率（如果个体已经死亡，则再次捕获概率为零）。该数量通过递归方式定义如下：
+为了简化对潜在离散参数 $z_{i,t}$ 的边际化处理，Stan 模型依赖于一个派生量 $\chi_t$，用于表示在时间 $t$ 存活的个体不再被捕获的概率（如果个体已经死亡，则再次捕获概率为零）。该数量通过递归方式定义如下：
 $$
 \chi_t
 =
@@ -754,7 +754,7 @@ thus have proper uniform priors, it would be better to formulate an
 identified parameterization.  One way to do this would be to formulate
 a hierarchical model for the $p$ and $\phi$ parameters.
 
-参数 $\phi_2$  和$p_3$，即时间2的死亡概率和时间3的捕获概率，是不可辨识的，因为两者都可以用来解释在时间3没有捕获到的情况。它们的乘积 $\beta_3 = \phi_2 \, p_3$ 是可辨识的。Stan 模型将 `beta3` 定义为生成的数量。不可辨识的参数对于 Stan 抽样器的自适应性会出问题。虽然在这里对自适应性的问题较小，因为参数是有界的，因此具有适当的均匀先验分布，但更好的做法是制定一个可辨识的参数化模型。一种方法是为 $p$ 和 $\phi$ 参数制定一个分层模型。
+参数 $\phi_2$  和$p_3$，即时间2的死亡概率和时间3的捕获概率，是不可辨识的，因为两者都可以用来解释在时间3没有捕获到的情况。它们的乘积 $\beta_3 = \phi_2 \, p_3$ 是可辨识的。Stan 模型将 `beta3` 定义为生成的数量。不可辨识的参数对于 Stan 抽样器的自适应性会出问题。虽然在这里对自适应性的问题不大，因为参数是有界的，因此具有适当的均匀先验分布，但更好的做法是制定一个可辨识的参数化模型。一种方法是为 $p$ 和 $\phi$ 参数制定一个分层模型。
 
 
 ### Individual Cormack-Jolly-Seber model {-}
@@ -862,7 +862,7 @@ is a function definition for computing the entire vector `chi`, the
 probability that if an individual is alive at `t` that it will
 never be captured again.
 
-参数和转换参数与之前一致，但现在增加了一个函数定义，用于计算整个向量 `chi`，表示如果个体在时间点 `t` 仍然存活，则它将永远不会再次被捕获的概率。
+参数和转换参数与之前一致，但现在增加了一个函数定义，用于计算整个向量 `chi`，表示如果个体在时间点 `t` 存活，则它将永远不会再次被捕获的概率。
 
 ```stan
 parameters {
@@ -1084,7 +1084,7 @@ categories of items in the data.
 
 ### Noisy categorical measurement model {-}
 
-### 嘈杂的分类测量模型 {-}
+### 含噪分类测量模型 {-}
 
 In this section, only categorical ratings are considered, and the
 challenge in the modeling for Stan is to marginalize out the discrete
@@ -1436,7 +1436,7 @@ $$
 $$
 Even after marginalization, computing expectations of functions of the continuous parameters can be performed as if no marginalization had taken place.
 
-即使在边缘化之后，计算关于连续参数的函数的期望值也可以像没有进行边缘化一样进行计算
+即使在边际化之后，计算连续参数函数的期望值也可以像没有进行边际化一样进行
 
 In the second case, where $g(\theta, z) = g(z)$, the conditional expectation instead simplifies as follows:
 
