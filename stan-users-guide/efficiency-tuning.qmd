@@ -232,7 +232,7 @@ likelihood model.
 
 ## Well-specified models
 
-## 指定良好的模型 {-}
+## 设定良好的模型 {-}
 
 Model misspecification, which roughly speaking means using a model
 that doesn't match the data, can be a major source of slow code.  This
@@ -1463,6 +1463,8 @@ expanded model.   This section provides examples for Bernoulli
 and normal distributions, but the same approach can be applied to
 other members of the exponential family.
 
+在某些情况下，模型可以重新编码以在估计中利用充分统计量。与展开的模型相比，这可以带来巨大的效率提升。本节提供了伯努利分布和正态分布的示例，但同样的方法可以应用于指数族的其他成员。
+
 
 ### Bernoulli sufficient statistics {-}
 
@@ -1470,7 +1472,7 @@ other members of the exponential family.
 
 Consider the following Bernoulli sampling model.
 
-在某些情况下，模型可以重新编码以利用估计中的充分统计量。这可能与扩展模型相比，会导致大量的效率提升。例如，考虑以下伯努利抽样模型。
+考虑以下伯努利抽样模型。
 
 ```stan
 data {
@@ -1539,12 +1541,16 @@ should be counted once in the transformed data block and stored.
 
 The same trick works for combining multiple binomial observations.
 
+同样的技巧也适用于组合多个二项观测值。
+
 
 ### Normal sufficient statistics {-}
 
 ### 正态充分统计量 {-}
 
 Consider the following Stan model for fitting a normal distribution to data.
+
+考虑以下用于拟合正态分布数据的 Stan 模型。
 
 ```stan
 data {
@@ -1565,9 +1571,13 @@ evaluate `log(sigma)` once, but it still has to evaluate the normal
 for all of `y[1]` to `y[N]`, which involves adding up all the squared
 differences from the mean and then dividing by `sigma` squared.
 
+对于 `y` 使用的向量化形式，Stan 足够智能，只评估一次 `log(sigma)`，但它仍然需要为从 `y[1]` 到 `y[N]` 的所有项评估正态分布，这涉及将所有与均值的平方差相加，然后除以 `sigma` 的平方。
+
 An equivalent density to the one above (up to normalizing constants
 that do not depend on parameters), is given in the following Stan
 program.
+
+与上述模型等价的密度（在不依赖于参数的归一化常数范围内）由以下 Stan 程序给出。
 
 ```stan
 data {
@@ -1597,6 +1607,8 @@ These are stored along with two other useful constants.  Then the
 program can define distributions over the mean and variance, both of
 which are scalars here.
 
+这个程序中的数据和参数与第一个程序相同。第二个版本添加了一个转换数据块来计算数据的均值和方差，这里是充分统计量。这些与另外两个有用的常量一起存储。然后程序可以为均值和方差定义分布，在这里两者都是标量。
+
 The original Stan program and this one define the same model in the
 sense that they define the same log density up to a constant additive
 term that does not depend on the parameters.  The priors on `mu` and
@@ -1604,10 +1616,14 @@ term that does not depend on the parameters.  The priors on `mu` and
 additional statements in the model block without affecting the
 sufficiency.
 
+原始 Stan 程序和这个程序定义了相同的模型，因为它们定义了相同的对数密度，仅相差一个不依赖于参数的常数加性项。`mu` 和 `sigma` 的先验都是非正规的，但可以在模型块中添加额外的语句作为正规的先验，而不会影响充分性。
+
 This transform explicitly relies on aggregating the data.  Using this
 trick on parameters leads to more computation than just computing the
 normal log density, even before accounting for the non-linear change
 of variables in the variance.
+
+这种变换明确依赖于数据的聚合。在参数上使用这个技巧会导致比仅仅计算正态对数密度更多的计算，甚至在考虑方差中的非线性变量变换之前也是如此。
 
 ### Poisson sufficient statistics {-}
 
@@ -1616,11 +1632,15 @@ of variables in the variance.
 The Poisson distribution is the easiest case, because the sum of
 observations is sufficient.  Specifically, we can replace
 
+泊松分布是最简单的情况，因为观测值的和是充分的。具体来说，我们可以将
+
 ```stan
 y ~ poisson(lambda);
 ```
 
 with
+
+替换为
 
 ```stan
 sum(y) ~ poisson(size(y) * lambda);
@@ -1628,6 +1648,8 @@ sum(y) ~ poisson(size(y) * lambda);
 
 This will work even if `y` is a parameter vector because no Jacobian
 adjustment is required for summation.
+
+即使 `y` 是参数向量，这也将起作用，因为求和不需要雅可比行列式调整。
 
 
 ## Aggregating common subexpressions
@@ -1646,7 +1668,7 @@ parameters, say `a[ii[n]] + b[jj[n]]`.  If `a` and `b`
 are small (i.e., do not have many levels), then a table `a_b` of
 their sums can be created, with
 
-另一个可能不太明显的情况是两个多层参数，例如 `a[ii[n]] + b[jj[n]]`。如果 `a` 和 `b`、很小（即没有许多层级） ，则可以创建它们的总和表 `a_b`，其中
+另一个可能不太明显的情况是两个多层参数，例如 `a[ii[n]] + b[jj[n]]`。如果 `a` 和 `b` 很小（即没有许多层级），则可以创建它们的总和表 `a_b`，其中
 
 ```stan
 matrix[size(a), size(b)] a_b;
@@ -1669,7 +1691,7 @@ Continuing the model from the previous section, the conjugacy of the
 beta prior and binomial distribution allow the model to be
 further optimized to the following equivalent form.
 
-继续上一节中的模型，贝塔先验和二项抽样分布的共扼性允许进一步优化模型为以下等效形式。
+继续上一节中的模型，贝塔先验和二项抽样分布的共轭性允许进一步优化模型为以下等效形式。
 
 ```stan
 theta ~ beta(alpha + sum(y), beta + N - sum(y));
@@ -1687,22 +1709,36 @@ defined to be `sum(y)` could be used in the place of `sum(y)`.
 Standardizing the data so that all predictors have a zero sample mean and
 unit sample variance has the following potential benefits:
 
+对数据进行标准化，使所有预测变量具有零样本均值和单位样本方差，具有以下潜在好处：
+
 * It helps in faster convergence of MCMC chains.
 * It makes the model less sensitive to the specifics of the parameterization.
 * It aids in the interpretation and comparison of the importance of coefficients across different predictors.
+
+* 有助于 MCMC 链的更快收敛。
+* 使模型对参数化的具体细节不那么敏感。
+* 有助于解释和比较不同预测变量的系数重要性。
 
 When there are large differences between the units and scales of the predictors,
 standardizing the predictors is especially useful.
 This section illustrates the principle for a simple linear regression.
 
+当预测变量的单位和尺度存在较大差异时，标准化预测变量特别有用。本节通过一个简单线性回归来说明这个原理。
+
 Suppose that $y = (y_1,\dotsc,y_N)$ is a vector of $N$ outcomes and
 $x = (x_1,\dotsc,x_N)$ the corresponding vector of $N$ predictors.  A
 simple linear regression involving an intercept coefficient $\alpha$
 and slope coefficient $\beta$ can be expressed as
+
+假设 $y = (y_1,\dotsc,y_N)$ 是包含 $N$ 个结果的向量，$x = (x_1,\dotsc,x_N)$ 是包含 $N$ 个对应预测变量的向量。一个包含截距系数 $\alpha$ 和斜率系数 $\beta$ 的简单线性回归可以表示为
+
 $$
 y_n = \alpha + \beta x_n + \epsilon_n,
 $$
 where
+
+其中
+
 $$
 \epsilon_n \sim \textsf{normal}(0,\sigma).
 $$
@@ -1713,18 +1749,27 @@ then it can be more efficient to standardize the predictor values $x_n$.
 First the elements of $x$ are zero-centered by subtracting the mean,
 then scaled by dividing by the standard deviation.
 
+如果 $x$ 的值非常大或非常小，或者这些值的均值远离 0（在值的尺度上），那么标准化预测变量值 $x_n$ 会更加高效。首先通过减去均值将 $x$ 的元素中心化为零，然后通过除以标准差进行缩放。
+
 The mean of $x$ is given by:
+
+$x$ 的均值由下式给出：
 
 $$
 mean_x = \frac{1}{N} \sum_{n=1}^{N} x_n
 $$
 
 The standard deviation of $x$ is calculated as:
+
+$x$ 的标准差计算如下：
+
 $$
 sd_x = {\left({\frac{1}{N} \sum_{n=1}^{N} (x_n - mean_x)^2}\right)}^{1/2}
 $$
 
 With these, we compute the $z$, the standardized predictors
+
+利用这些，我们计算 $z$，即标准化的预测变量：
 
 $$
 z_n = \frac{x_n - mean_x}{sd_x}
@@ -1732,9 +1777,13 @@ $$
 
 where $z_n$ is the standardized value corresponding to $x_n$.
 
+其中 $z_n$ 是对应于 $x_n$ 的标准化值。
+
 The inverse transform is
 defined by reversing the two normalization steps, first rescaling by
 the same deviation and relocating by the sample mean.
+
+逆变换通过反转两个标准化步骤来定义，首先通过相同的标准差重新缩放，然后通过样本均值重新定位。
 
 $$
 x_n = z_n sd_x + mean_x
@@ -1743,9 +1792,12 @@ $$
 Standardizing the predictors standardizes the scale of the variables,
 and hence the scale of the priors.
 
+标准化预测变量会标准化变量的尺度，从而也会标准化先验的尺度。
+
 Consider the following initial model.
 
-要标准化回归问题，需要对预测变量和输出变量进行标准化。这将改变变量的尺度，从而改变先验的尺度。考虑以下初始模型。
+考虑以下初始模型。
+
 
 ```stan
 data {
@@ -1772,7 +1824,7 @@ The data block for the standardized model is identical.
 The mean and standard deviation of the data are defined
 in the transformed data block, along with the standardized predictors.
 
-标准化模型的数据块是相同的。标准化预测变量和输出变量在变换数据块中定义。
+标准化模型的数据块是相同的。数据的均值和标准差在转换数据块中定义，同时定义的还有标准化预测变量。
 
 ```stan
 data {
@@ -1804,7 +1856,7 @@ by declaring these variables in the `transformed data` block, they will be avail
 in all following blocks, and therefore can be used in the `generated quantities` block
 to record the "natural" parameters `alpha` and `beta`.
 
-参数被重新命名以表示它们不是“自然”参数。转换后的数据 `x_std` 根据变量 `mean_x` 和 `sd_x` 定义；通过在 `transformed data` 块中声明这些变量，它们将在所有后续块中可用，因此可以在 `generated quantities` 块中用来记录“自然”参数 `alpha` 和 `beta`。
+参数被重命名以表明它们不是"自然"参数。转换数据 `x_std` 根据 `mean_x` 和 `sd_x` 变量定义；通过在 `transformed data` 块中声明这些变量，它们将在所有后续块中可用，因此可以在 `generated quantities` 块中用来记录“自然”参数 `alpha` 和 `beta`。
 
 The fairly diffuse priors on the coefficients are the same.
 These could have been transformed as well, but
@@ -1814,10 +1866,15 @@ diffuse priors for standardized data.
 对系数的相当扩散的先验是相同的。这些也可以进行转换，但在这里保持原样，因为对于标准化数据来说，这些尺度作为扩散先验是有意义的。
 
 The original regression
+
+原始回归
+
 $$
 y_n = \alpha + \beta x_n + \epsilon_n
 $$
 has been transformed to a regression on the standardized data variable $z$,
+
+已经转换为对标准化数据变量 $z$ 的回归：
 
 $$
 y_n = \alpha' + \beta' z_n + \epsilon_n.
@@ -1828,6 +1885,8 @@ The original slope $\beta$ is the standardized slope $\beta'$ scaled by the inve
 The original intercept $\alpha$ is the intercept from the standardized model $\alpha'$, corrected for the effect of scaling and centering $x$.
 Thus, the formulas to retrieve $\alpha$ and $\beta$ from $\alpha'$ and $\beta'$ are:
 
+似然函数根据标准化参数指定。原始斜率 $\beta$ 是标准化斜率 $\beta'$ 乘以 $x$ 标准差的倒数。原始截距 $\alpha$ 是标准化模型中的截距 $\alpha'$，经过对 $x$ 缩放和中心化效应的修正。因此，从 $\alpha'$ 和 $\beta'$ 恢复 $\alpha$ 和 $\beta$ 的公式为：
+
 \begin{align*}
 \beta = \frac{\beta'}{\sigma_x} \\
 \alpha = \alpha' - \beta' \frac{\mu_x}{\sigma_x}
@@ -1837,7 +1896,7 @@ These recovered parameter values on the original scales can be
 calculated within Stan using a generated quantities block following
 the model block,
 
-这些在原始尺度上恢复的参数值可以按照下列模型块使用生成的数量块在 Stan 中计算出来，
+这些在原始尺度上恢复的参数值可以在 Stan 中使用模型块之后的生成数量块计算出来，
 
 ```stan
 generated quantities {
@@ -1856,6 +1915,8 @@ the [QR reparameterization](regression.qmd#QR-reparameterization.section)
 is recommended for linear and generalized linear models
 unless there is an informative prior on the location of $\beta$.
 
+当存在多个实值预测变量时，即当 `K` 是预测变量数量，`x` 是 $N \times K$ 矩阵，`beta` 是 $K$ 维系数向量时，那么 `x * beta` 是 $N$ 维预测向量，对应 $N$ 个数据项中的每一个。当 $K \ll N$ 时，除非对 $\beta$ 的位置有信息性先验，否则推荐对线性和广义线性模型使用 [QR 重参数化](regression.qmd#QR-reparameterization.section)。
+
 
 ### Standard normal distribution {-}
 
@@ -1865,13 +1926,15 @@ For many applications on the standard scale, normal distributions with
 location zero and scale one will be used.  In these cases, it is more
 efficient to use
 
-对于标准尺度上的许多应用，将使用位置参数为0、尺度参数为1的正态分布。在这些情况下，使用第一种方式比第二种方式更高效
+对于标准尺度上的许多应用，将使用位置参数为0、尺度参数为1的正态分布。在这些情况下，使用
 
 ```stan
 y ~ std_normal();
 ```
 
 than to use
+
+比使用
 
 ```stan
 y ~ normal(0, 1);
@@ -1880,7 +1943,7 @@ y ~ normal(0, 1);
 because the subtraction of the location and division by the scale
 cancel, as does subtracting the log of the scale.
 
-因为位置的减法和除以尺度的运算相互抵消，减去尺度的对数也是如此。
+更高效，因为位置的减法和除以尺度的运算相互抵消，减去尺度的对数也是如此。
 
 ## Using map-reduce
 
