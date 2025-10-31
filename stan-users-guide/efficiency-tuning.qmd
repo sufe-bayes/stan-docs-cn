@@ -327,7 +327,7 @@ Stan 的采样器在从具有困难后验几何的分布中采样时可能很慢
 In this section, we discuss a general transform from a centered to a
 non-centered parameterization [@papa-et-al:2007].^[This parameterization came to be known on our mailing lists as the "Matt trick" after Matt Hoffman, who independently came up with it while fitting hierarchical models in Stan.]
 
-在这一节中，我们将讨论从中心化到非中心化参数化的一般转换 [@papa-et-al:2007]。^[这种参数化在我们的邮件列表中被称为 “Matt 技巧”，是以 Matt Hoffman 的名字命名的，他在 Stan 中拟合分层模型时独立提出了这个方案。]
+在这一节中，我们将讨论从中心化到非中心参数化的一般转换 [@papa-et-al:2007]。^[这种参数化在我们的邮件列表中被称为 “Matt 技巧”，是以 Matt Hoffman 的名字命名的，他在 Stan 中拟合分层模型时独立提出了这个方案。]
 
 This reparameterization is helpful when there is not much data,
 because it separates the hierarchical parameters and lower-level
@@ -453,7 +453,7 @@ Cauchy-distributed variable as the transform of a uniformly
 distributed variable using the Cauchy inverse cumulative distribution
 function.
 
-实际问题是 Cauchy 的尾部与主干相比需要相对较大的步长。步长较小时，No-U-Turn 采样器在分布的尾部开始时需要很多步；步长较大时，在分布的中心部分会有过多的拒绝。这个问题可以通过将 Cauchy 分布的变量定义为使用 Cauchy 反累积分布函数的均匀分布变量的变换来缓解。
+实际问题是 Cauchy 的尾部与主干相比需要相对较大的步长。步长较小时，No-U-Turn 采样器在分布的尾部开始时需要很多步；步长较大时，在分布的中心部分会有过多的拒绝。这个问题可以通过将 Cauchy 分布的变量定义为使用 Cauchy 逆累积分布函数的均匀分布变量的变换来缓解。
 
 Suppose a random variable of interest $X$ has a Cauchy distribution
 with location $\mu$ and scale $\tau$, so that $X \sim
@@ -681,13 +681,13 @@ can still be effective for separating parameters.
 
 #### Centered parameterization {-}
 
-#### 中心化参数化 {-}
+#### 中心参数化 {-}
 
 For example, a vectorized hierarchical model might draw a vector of
 coefficients $\beta$ with definitions as follows.  The so-called
 centered parameterization is as follows.
 
-例如，一个向量化分层模型可能包含一个系数向量 $\beta$，定义如下。所谓的中心化参数化如下。
+例如，一个向量化分层模型可能包含一个系数向量 $\beta$，定义如下。所谓的中心参数化如下。
 
 ```stan
 parameters {

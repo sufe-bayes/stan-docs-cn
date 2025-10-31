@@ -2,8 +2,6 @@
 
 | 章节 | 英文术语 | 中文翻译 | 备注 |
 |------|---------|---------|------|
-| **基础术语** | noninformative prior | 无信息的先验 | |
-| | meta analysis | 元分析 | |
 | **1. 回归模型** | multilevel generalized linear models | 多层次广义线性模型 | |
 | | predictor | 预测变量 | |
 | | outcome | 因变量 | |
@@ -152,6 +150,8 @@
 | | random effects | 随机效应 | |
 | | treatment effect | 治疗效果 | |
 | | log odds ratio | 对数几率比 | |
+| | noninformative prior | 无信息的先验 | |
+| | meta-analysis | 元分析 | |
 | **7. 潜在离散参数** | latent discrete parameters | 潜在离散参数 | |
 | | marginalization | 边际化 | |
 | | change point model | 变点模型 | |
@@ -283,7 +283,6 @@
 | | left-truncated normal distribution | 左截断正态分布 | |
 | | integrand | 被积函数 | |
 | | limits of integration | 积分限 | |
-| | relative tolerance | 相对容差 | |
 | | double exponential quadrature | 双指数求积 | |
 | | zero-crossing integrals | 过零积分 | |
 | | precision loss | 精度损失 | |
@@ -319,9 +318,7 @@
 | | sensitivities | 敏感性 | |
 | | relative tolerance | 相对容差 | |
 | | absolute tolerance | 绝对容差 | |
-| | function signature | 函数签名 | |
 | | residual function | 残差函数 | |
-| | system function | 系统函数 | |
 | | chemical kinetics | 化学动力学 | |
 | | nondimensionalized | 无量纲化的 | |
 | | mass conservation | 质量守恒 | |
@@ -426,7 +423,6 @@
 | | location-scale variety | 位置-尺度类型 | |
 | | truncated variate | 截断变量 | |
 | | survival analysis | 生存分析 | |
-| | censored data | 删失数据 | |
 | **24. 比例常数处理** | proportionality constant | 比例常数 | |
 | | additive constant | 加法常数 | |
 | | unnormalized density | 非归一化密度 | |
@@ -449,7 +445,6 @@
 | | proper | 正规的 | |
 | | improper | 非正规的 | |
 | | simplex | 单纯形 | |
-| | multimodality | 多峰性 | |
 | | separability | 可分离性 | |
 | | constrained parameters | 约束参数 | |
 | | unconstrained parameters | 无约束参数 | |
@@ -472,13 +467,11 @@
 | | log probability accumulator | 对数概率累加器 | |
 | | monotonic | 单调的 | |
 | | injective | 单射的 | |
-| | simplex | 单纯形 | |
 | | softmax function | softmax 函数 | |
 | | inverse logit | 反logit | |
 | | probit | probit | |
 | | logit | logit | |
 | | cumulative distribution function (CDF) | 累积分布函数 | |
-| | inverse CDF | 反累积分布函数 | |
 | | lognormal distribution | 对数正态分布 | |
 | | inverse gamma distribution | 逆伽马分布 | |
 | | Pareto prior | Pareto 先验 | |
@@ -488,8 +481,6 @@
 | | mean parameter | 均值参数 | |
 | | total count parameter | 总计数参数 | |
 | | transformed parameters | 转换参数 | |
-| | unconstrained parameters | 无约束参数 | |
-| | constrained parameters | 约束参数 | |
 | | varying bounds | 可变边界 | |
 | **27. 效率调优** | efficiency tuning | 效率调优 | |
 | | wall time | 墙上时间 | |
@@ -508,8 +499,6 @@
 | | varying curvature | 变曲率 | |
 | | typical set | 典型集 | |
 | | model misspecification | 模型误设 | |
-| | sufficient statistics | 充分统计量 | |
-| | Jacobian determinant | 雅可比行列式 | |
 | | gradient bottleneck | 梯度瓶颈 | |
 | | algorithmic differentiation | 算法微分 | |
 | | map-reduce | Map-Reduce | |
@@ -527,7 +516,7 @@
 | | inverse Wishart distribution | 逆 Wishart 分布 | |
 | | standard normal distribution | 标准正态分布 | |
 | | Neal's funnel | Neal 的漏斗分布 | |
-| | centered parameterization | 中心化参数化 | |
+| | centered parameterization | 中心参数化 | |
 | **28. 并行化** | parallelization | 并行化 | |
 | | Intel Threading Building Blocks (TBB) | 英特尔线程构建模块 (TBB) | |
 | | Message Passing Interface (MPI) | 消息传递接口 (MPI) | |
@@ -541,14 +530,11 @@
 | | reduce with summation | 求和归约 | |
 | | rectangular map | 矩形映射 | |
 | | Amdahl's law | 阿姆达尔定律 | |
-| | map-reduce | Map-Reduce | |
 | | partial sum function | 部分和函数 | |
 | | dynamic scheduling algorithm | 动态调度算法 | |
 | | grainsize | 粒度大小 | |
 | | heterogeneous platforms | 异构平台 | |
 | | OpenCL backend | OpenCL 后端 | |
-| | vectorization | 向量化 | |
-| | shard | 分片 | |
 | | ragged inputs | 不规则输入 | |
 | | ragged outputs | 不规则输出 | |
 | **30. 基于模拟的校准** | Simulation-Based Calibration (SBC) | 基于模拟的校准 | |
@@ -560,7 +546,6 @@
 | | joint distribution | 联合分布 | |
 | | rank statistics | 秩统计量 | |
 | | uniformity test | 均匀性检验 | |
-| | effective sample size | 有效样本量 | |
 | | thinning | 细化 | |
 | | posterior draws | 后验抽样 | |
 | | hypothesis test for uniformity | 均匀性假设检验 | |
@@ -572,7 +557,6 @@
 | | population-level parameters | 总体水平参数 | |
 | | divergence warnings | 发散警告 | |
 | | no-U-turn sampler | 无-U-转采样器 | |
-| | centered parameterization | 中心参数化 | |
 | | posterior geometry | 后验几何形状 | |
 | | reparameterization | 重参数化 | |
 | **32. Held-Out 评估与交叉验证** | Held-out evaluation | Held-Out 评估 | |
@@ -594,10 +578,6 @@
 | | Parameter estimates | 参数估计 | |
 | | Consistent initial conditions | 一致的初始条件 | |
 | | Variance reduction | 方差减少 | |
-| | Posterior geometry | 后验几何形状 | |
-| | Hierarchical model | 分层模型 | |
-| | Simulation-Based Calibration (SBC) | 基于模拟的校准 | |
-| | Coverage | 覆盖率 | |
 | **34. 决策分析** | Decision Analysis | 决策分析 | |
 | | Expected Utility | 期望效用 | |
 | | Bayes Optimal Decision | 贝叶斯最优决策 | |
