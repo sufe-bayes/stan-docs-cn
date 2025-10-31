@@ -21,7 +21,7 @@ For instance, consider the data model for a varying-slope,
 varying-intercept hierarchical linear regression, which could be coded
 as
 
-使用多重索引有助于模型内联向量化。例如，下述代码展示了一个变斜率、变截距的层次线性回归模型的似然函数：
+使用多重索引有助于模型内联向量化。例如，以下代码展示了一个变斜率、变截距的层次线性回归模型的似然函数：
 
 ```stan
 for (n in 1:N) {
@@ -41,7 +41,7 @@ y ~ normal(alpha[ii] + rows_dot_product(beta[ii], x), sigma);
 This latter version is faster than the loop version;  it is equivalent
 in speed to the clunky assignment to a local variable.
 
-后一种写法比循环写法更为高效，其性能与使用局部变量进行赋值的版本相当。
+后一种版本比循环写法更为高效，其性能与使用局部变量进行赋值的版本相当。
 
 ```stan
 {
@@ -131,7 +131,7 @@ The single index is applied, the one-dimensional result is determined,
 then the multiple index is applied to the result.  That is,
 `c[2,idxs]` evaluates to the same value as `c[2][idxs]`.
 
-首先应用单个索引，得到一个一维的结果；随后再对该结果进行多重索引。也就是说，`c[2，idxs]` 的计算结果与 `c[2][idxs]` 相同。
+首先应用单个索引，得到一个一维的结果；随后再对该结果进行多重索引。也就是说，`c[2, idxs]` 的计算结果与 `c[2][idxs]` 相同。
 
 Multiple indexing can apply to more than one position of a
 multi-dimensional array.  For instance, consider the following
@@ -213,7 +213,7 @@ bound.  Writing `c[3:]` is just shorthand for
 `c[3:size(c)]`.  Writing `c[:5]` is just shorthand for
 `c[1:5]`.
 
-在 Stan 中，也可以仅指定范围索引的下界或上界。`c[3：]` 就是 `c[3：size(c)]` 的简写形式。`c[:5]` 就是 `c[1:5]` 的简写形式。
+在 Stan 中，也可以仅指定范围索引的下界或上界。`c[3:]` 就是 `c[3:size(c)]` 的简写形式。`c[:5]` 就是 `c[1:5]` 的简写形式。
 
 ### Full range indexes {-}
 
@@ -369,7 +369,7 @@ before the assignment.
 It is tempting (but wrong) to think of the assignment `a[2:3] =
   a[1:2]` as executing the following assignments.
 
-人们可能直观地（但错误地）认为赋值语句 `a [2:3] = a [1:2]` 等同于顺序执行以下的单独赋值操作：
+读者可能会（错误地）认为赋值语句 `a[2:3] = a[1:2]` 等同于顺序执行以下的单独赋值操作：
 
 ```stan
 // ... define: a = (5, 6, 7)
@@ -400,7 +400,7 @@ multiple indexes.  If `v` is a vector, then `v[3]` is a
 scalar real value, whereas `v[2:4]` is a vector of size 3
 containing the elements `v[2]`, `v[3]`, and `v[4]`.
 
-向量和行向量在多重索引方面的行为与数组完全相同。如果 `v` 是一个向量，那么 `v[3]` 是一个标量实数值，而 `v[2:4]` 是一个包含元素 `v[2]`, `v[3]`, 和 `v[4]` 的大小为3的向量。
+向量和行向量在多重索引方面的行为与数组完全相同。如果 `v` 是一个向量，那么 `v[3]` 是一个标量实数值，而 `v[2:4]` 是一个包含元素 `v[2]`, `v[3]`, 和 `v[4]` 的长度为3的向量。
 
 The only subtlety with vectors is in inferring the return type when
 there are multiple indexes. For example, consider the following
@@ -430,7 +430,7 @@ the vector dimension (to a scalar), so the result type for `w` is
 an array of reals.  In both cases, the size of the multiple index
 (here, 7) determines the size of the result.
 
-关键是要理解，单个索引始终会降低维度，而多重索引则不会。具有多重索引（和未索引的维度）的维度决定了索引表达式的类型。在上面的示例中，因为 `v` 是向量数组，`v[2, idxs]` 减少了数组的维数，但并没有减少向量的维数，因此结果是一个向量。相比之下，`v[idxs, 2]` 不会减少数组的维数，但会将向量的维数减少（到一个标量），因此 `w` 的结果类型是实数数组。在上述两种情况下，最终结果的大小均由多重索引的大小决定（在本例中为7）。
+关键是要理解，单个索引始终会降低维度，而多重索引则不会。具有多重索引（和未索引的维度）的维度决定了索引表达式的类型。在上面的示例中，因为 `v` 是向量数组，`v[2, idxs]` 减少了数组的维数，但并没有减少向量的维数，因此结果是一个向量。相比之下，`v[idxs, 2]` 不会减少数组的维数，但会将向量的维数减少（到一个标量），因此 `w` 的结果类型是实数数组。在上述两种情况下，最终结果的大小均由多重索引的大小决定（此处为7）。
 
 ### Matrices {-}
 
@@ -527,7 +527,7 @@ lower bound minus one is added to the index, as seen in the `1 + j` expression a
 
 Continuing further, consider continuing with the following.
 
-接下来，我们继续考虑以下内容。
+接下来考虑以下情况：
 
 ```stan
 // ...
@@ -544,7 +544,7 @@ vector.  For indexing, the values are given by
 
 ### Block, row, and column extraction for matrices {-}
 
-### 矩阵的块，行，列提取 {-}
+### 矩阵的块、行、列提取 {-}
 
 Matrix slicing can also be performed using the `block` function.  For
 example, 
@@ -560,7 +560,7 @@ will set `b` equal to the submatrix of `a` starting at index [5, 9]
 and extending 3 rows and 2 columns.  Thus `block(a, 5, 9, 3, 2)` is
 equivalent to `b[5:7, 9:10]`.
 
-上面例子设 `b` 等于从索引 [5, 9] 开始并延伸3行2列的子矩阵。因此 `block(a, 5, 9, 3, 2)` 相当于 `a[5:7, 9:10]`。
+上述代码将 `b` 设为等于从索引 [5, 9] 开始并延伸3行2列的子矩阵。因此 `block(a, 5, 9, 3, 2)` 相当于 `a[5:7, 9:10]`。
 
 The `sub_col` function extracts a slice of a column of a matrix as a
 vector.  For example,
@@ -579,7 +579,7 @@ as a row vector.  For example, `sub_row(a, 2, 3, 5)` is equal to
 the row vector `a[2, 3:7]`, which also starts at position [2, 3] then
 extends for a total of 5 columns.
 
-上面例子设 `b` 为向量 `a[2:6, 3]`，取元素起始位置为 [2,3]，然后扩展5行。 函数 `sub_row` 也可以用于提取行的子序列作为行向量。例如，`sub_row(a,2,3,5)` 等于行向量 `a[2,3:7]`，它也从位置 [2,3] 开始，然后扩展了5列。
+上述代码将 `b` 设为向量 `a[2:6, 3]`，取元素起始位置为 [2,3]，然后扩展5行。函数 `sub_row` 也可以用于提取行的子序列作为行向量。例如，`sub_row(a,2,3,5)` 等于行向量 `a[2,3:7]`，它也从位置 [2,3] 开始，然后扩展了5列。
 
 
 ## Matrices with parameters and constants

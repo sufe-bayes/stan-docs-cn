@@ -20,8 +20,7 @@ ill-behaved in practice.  This chapter discusses issues in models that
 create problematic posterior inferences, either in general for
 Bayesian inference or in practice for Stan.
 
-从数学角度来说，只要有一个正规的后验分布，就可以进行贝叶斯推断。这甚至不要求方差或均值有限，只需要一个有限的积分。然而，建模是一项棘手的任务，即使是经验丰富的建模者，有时也会编写导致不合适先验分布的模型。此外,一些后验分布在数学上是合理的,但在实践中表现不佳。本章讨论了在模型中引发问题的后验推断，无论是对于贝叶斯推断的一般情况还是对于
-Stan 的实践情况。
+从数学角度来说，只要有一个正规的后验分布，就可以进行贝叶斯推断。这甚至不要求方差或均值有限，只需要一个有限的积分。然而，建模是一项棘手的任务，即使是经验丰富的建模者，有时也会编写导致不合适先验分布的模型。此外，一些后验分布在数学上是合理的，但在实践中表现不佳。本章讨论了在模型中引发问题的后验推断，无论是对于贝叶斯推断的一般情况还是对于 Stan 的实践情况。
 
 ## Collinearity of predictors in regressions {#collinearity.section}
 
@@ -44,10 +43,7 @@ wreak havoc with both sampling and inference.
 The first example of collinearity is an artificial example involving
 redundant intercept parameters.^[This example was raised by Richard McElreath on the Stan users group in a query about the difference in behavior between Gibbs sampling as used in BUGS and JAGS and the Hamiltonian Monte Carlo (HMC) and no-U-turn samplers (NUTS) used by Stan.]
 
-共线性的第一个例子是一个涉及冗余截距参数的人造示例。^[这个例子是 Richard
-McElreath 在 Stan 用户组中提出的,他询问了 BUGS 和 JAGS 中使用的 Gibbs
-采样与 Stan 使用的 Hamiltonian Monte Carlo (HMC)和 no-U-turn 采样器
-(NUTS)之间的行为差异。]
+共线性的第一个例子是一个涉及冗余截距参数的人造示例。^[这个例子是 Richard McElreath 在 Stan 用户组中提出的，他询问了 BUGS 和 JAGS 中使用的 Gibbs 采样与 Stan 使用的 Hamiltonian Monte Carlo (HMC) 和 no-U-turn 采样器 (NUTS) 之间的行为差异。]
 
 Suppose there are observations $y_n$ for $n \in \{1,\dotsc,N\}$,
 two intercept parameters $\lambda_1$ and
@@ -172,7 +168,7 @@ column $k'$, i.e., there is some constant $c$ such that $x_{n,k} = c
 and $\beta_{k'}$ can covary without changing the predictions, so that
 for any $d \neq 0$,
 
-现在假设预测因子矩阵的第 $k$ 列是第 $k'$ 列的倍数，即存在某个常数 $c$，使得对于所有 $n$，$x_{n,k} = c , x_{n,k'}$。在这种情况下，系数 $\beta_k$ 和 $\beta_{k'}$ 可以共变而不改变预测结果，因此对于任意 $d \neq 0$，
+现在假设预测因子矩阵的第 $k$ 列是第 $k'$ 列的倍数，即存在某个常数 $c$，使得对于所有 $n$，$x_{n,k} = c \, x_{n,k'}$。在这种情况下，系数 $\beta_k$ 和 $\beta_{k'}$ 可以共变而不改变预测结果，因此对于任意 $d \neq 0$，
 
 $$
 p(y \mid \ldots, \beta_k, \dotsc, \beta_{k'}, \dotsc, \sigma)
@@ -185,7 +181,7 @@ Even if columns of the predictor matrix are not exactly collinear as
 discussed above, they cause similar problems for inference if they are
 nearly collinear.
 
-即使预测矩阵的列不像上面讨论的那样完全共线,如果它们几乎共线,也会给推断带来类似的问题。
+即使预测矩阵的列不像上面讨论的那样完全共线，如果它们几乎共线，也会给推断带来类似的问题。
 
 #### Multiplicative issues with discrimination in IRT {-}
 
@@ -360,7 +356,7 @@ points drawn from a standard normal.
 
 The two intercept parameterization leads to an improper prior with a ridge extending infinitely to the northwest and southeast.
 
-两个截距参数化导致了一个非正规的先验概率，形成一个从西北向东南无限延伸的岭。
+两个截距参数化导致了一个非正规的先验分布，形成一个从西北向东南无限延伸的岭。
 
 ![Two intercepts with improper prior](img/non-identified.png)
 
@@ -438,7 +434,7 @@ knowledge of the problem.
 
 ## Label switching in mixture models {#label-switching-problematic.section}
 
-## 混合模型中的标签交换问题 {-#label-switching-problematic.section--cn}
+## 混合模型中的标签切换问题 {-#label-switching-problematic.section--cn}
 
 Where collinearity in regression models can lead to infinitely many
 posterior maxima, swapping components in a mixture model leads to
@@ -487,7 +483,7 @@ computations, is affected by label switching, resulting in a posterior
 mean for $\mu_1$ that is equal to that of $\mu_2$, and a posterior
 mean for $\theta$ that is always 1/2, no matter what the data are.
 
-对于混合模型来说，分析后验收敛和有效样本量也是困难的。例如，Stan 报告的 $\hat{R}$ 收敛统计量和有效样本量的计算都会受到标签切换的影响。问题在于在这些计算中的关键要素后验均值，受到了标签交换的影响，导致 $\mu_1$ 的后验均值等于 $\mu_2$ 的后验均值，并且无论数据是什么，$\theta$ 的后验均值始终为1/2。
+对于混合模型来说，分析后验收敛和有效样本量也是困难的。例如，Stan 报告的 $\hat{R}$ 收敛统计量和有效样本量的计算都会受到标签切换的影响。问题在于在这些计算中的关键要素后验均值，受到了标签切换的影响，导致 $\mu_1$ 的后验均值等于 $\mu_2$ 的后验均值，并且无论数据是什么，$\theta$ 的后验均值始终为1/2。
 
 ### Some inferences are invariant {-}
 
@@ -503,7 +499,7 @@ means for the parameters are meaningless because they are not
 invariant to label switching; for example, the posterior mean for
 $\theta$ in the two component mixture model will always be 1/2.
 
-在某种意义上，混合成分的索引（或标签）是无关紧要的。即使不确定混合成分的情况下，后验预测推断仍然可以进行。例如，新观测的对数概率不依赖于混合成分的身份。在这种情况下，唯一可靠的贝叶斯推断是对标签交换具有不变性的推断。参数的后验均值是没有意义的，因为它们对标签交换不具有不变性；例如，在两个成分的混合模型中，$\theta$ 的后验均值始终为 1/2。
+在某种意义上，混合成分的索引（或标签）是无关紧要的。即使不确定混合成分的情况下，后验预测推断仍然可以进行。例如，新观测的对数概率不依赖于混合成分的身份。在这种情况下，唯一可靠的贝叶斯推断是对标签切换具有不变性的推断。参数的后验均值是没有意义的，因为它们对标签切换不具有不变性；例如，在两个成分的混合模型中，$\theta$ 的后验均值始终为 1/2。
 
 ### Highly multimodal posteriors {-}
 
@@ -526,7 +522,7 @@ sampler gets stuck in one of the two "bowls" around the modes and
 cannot gather enough energy from random momentum assignment to move
 from one mode to another.
 
-在实践中能够进行这样的不变推断是一个完全不同的问题。寻找一个后验峰值甚至是平衡对多个局部最大值邻域的探索，根据概率密度进行探索，几乎总是不可行的。在 Gibbs 采样中，当在当前的 $\mu_2$ 和 $\theta$ 的值给定的条件下对 $\mu_1$ 进行采样时，$\mu_1$ 移动到新峰值的概率是很低的。对于 HMC 和 NUTS，问题在于采样器陷入了围绕模式的两个"碗"之一，并且无法从随机动量分配中获得足够的能量来从一个峰值转移到另一个峰值。
+在实践中能够进行这样的不变推断是一个完全不同的问题。寻找一个后验峰值，或者平衡对多个局部最大值邻域的探索，根据概率密度进行探索，几乎总是不可行的。在 Gibbs 采样中，当在当前的 $\mu_2$ 和 $\theta$ 的值给定的条件下对 $\mu_1$ 进行采样时，$\mu_1$ 移动到新峰值的概率是很低的。对于 HMC 和 NUTS，问题在于采样器陷入了围绕模式的两个"碗"之一，并且无法从随机动量分配中获得足够的能量来从一个峰值转移到另一个峰值。
 
 Even with a proper posterior, all known sampling and inference
 techniques are notoriously ineffective when the number of modes grows
@@ -537,12 +533,12 @@ numbers of components.
 
 ### Hacks as fixes {-}
 
-### 修复标签交换问题的技巧 {-}
+### 修复标签切换问题的技巧 {-}
 
 Several hacks (i.e., "tricks") have been suggested and employed to
 deal with the problems posed by label switching in practice.
 
-在实践中，已经提出并使用了一些技巧来解决标签交换所带来的问题。
+在实践中，已经提出并使用了一些技巧来解决标签切换所带来的问题。
 
 #### Parameter ordering constraints {-}
 
@@ -674,7 +670,7 @@ $\textsf{beta}(\phi \mid 9.5,0,5)$.  This posterior is unbounded as $\phi
 there is no posterior mode, the posterior mean is well-defined with a
 value of exactly 0.95.
 
-如果 $N = 9$ 且每个 $y_n = 1$，后验分布将为 $\textsf{beta}(\phi \mid 9.5,0.5)$。当 $\phi \rightarrow 1$ 时，该后验分布是无界的。尽管没有后验众数（峰值，mode），但后验均值是明确定义的，并且其值恰好为0.95。
+如果 $N = 9$ 且每个 $y_n = 1$，后验分布将为 $\textsf{beta}(\phi \mid 9.5,0.5)$。当 $\phi \rightarrow 1$ 时，该后验分布是无界的。尽管没有后验众数，但后验均值是明确定义的，并且其值恰好为0.95。
 
 
 #### Constrained vs.\ unconstrained scales {-}
@@ -797,7 +793,7 @@ efficient and well behaved for this unidentified model, but as
 discussed in the previous subsection, will not actually explore the
 posterior properly.
 
-BUGS 和 JAGS 等软件实现的 Gibbs 抽样可能在处理该不可辨识模型时表现出高效和良好的行为，但正如前面的子节中讨论的那样，它实际上无法正确地探索后验分布。虽然 Gibbs 抽样在表面上看起来效果良好，但它并不能提供对后验分布的准确估计。
+BUGS 和 JAGS 等软件实现的 Gibbs 抽样可能在处理该不可辨识模型时表现出高效和良好的行为，但正如前面的子节中讨论的那样，它实际上无法正确地探索后验分布。
 
 Consider what happens with initial values $\lambda_1^{(0)}, \lambda_2^{(0)}$.
 Gibbs sampling proceeds in iteration $m$ by drawing
@@ -915,8 +911,6 @@ mu               0.16  1.8e-03  1.0e-01  -8.1e-03   0.33   3289     1902    1.0
 Warmup took (0.011, 0.012, 0.011, 0.011) seconds, 0.044 seconds total
 Sampling took (0.017, 0.020, 0.020, 0.019) seconds, 0.077 seconds total
 
-预热阶段耗时(0.011, 0.012, 0.011, 0.011)秒，总计0.044秒
-抽样阶段耗时(0.017, 0.020, 0.020, 0.019)秒，总计0.077秒
 
                 Mean     MCSE  StdDev        5%   50%   95%  N_Eff  N_Eff/s  R_hat
 lp__             -54  2.5e-02    0.91  -5.5e+01   -53   -53   1318    17198    1.0

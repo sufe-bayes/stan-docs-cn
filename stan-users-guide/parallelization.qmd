@@ -2,7 +2,7 @@
 pagetitle: Parallelization
 ---
 
-# 并行计算
+# 并行化 {#parallelization.chapter--cn}
 
 # Parallelization  {-#parallelization.chapter}
 
@@ -73,9 +73,9 @@ described by [Amdahl's law](https://en.wikipedia.org/wiki/Amdahl%27s_law).
 
 由于只有 Stan 程序的部分内容会并行运行，因此能够实现的最大加速是有上限的，这是[阿姆达尔定律](https://en.wikipedia.org/wiki/Amdahl%27s_law)所描述的现象。
 
-## Reduce-sum
+## Reduce-sum { #reduce-sum }
 
-## 求和归约 {- #reduce-sum--cn}
+## 求和归约 {-#reduce-sum--cn}
 
 It is often necessary in probabilistic modeling to compute the sum of
 a number of independent function evaluations. This occurs, for instance, when
@@ -92,7 +92,7 @@ calculations.
 
 `reduce_sum` 和 `reduce_sum_static` 是并行化这些计算的工具。
 
-For efficiency reasons the reduce function doesn't work with the
+For efficiency reasons the reduce function doesn’t work with the
 element-wise evaluated function `g`, but instead the partial
 sum function `f: U[] -> real`, where `f` computes the partial
 sum corresponding to a slice of the sequence `x` passed in. Due to the
@@ -144,7 +144,7 @@ See details [below](#reduce-sum-grainsize).
 
 For efficiency and convenience additional
 shared arguments can be passed to every term in the sum. So for the
-array ```{ x1, x2, ... }``` and the shared arguments ```s1, s2, ...```
+array ```{ x1, x2, ... }``` and the shared arguments ```s1, s2, ...```stan
 the effective sum (with individual terms) looks like: 
 
 为了效率和便利，可以将额外的共享参数传递给和中的每一项。因此，对于数组 ```{ x1, x2, ... }``` 和共享参数 ```s1, s2, ...```，有效的和（带有各项）看起来像：
@@ -223,7 +223,7 @@ without modification from the ```reduce_sum``` / `reduce_sum_static` call)
 The user-provided function ```f``` is expected to compute the partial
 sum with the terms ```start``` through ```end``` of the overall
 sum. The user function is passed the subset ```x[start:end]``` as
-```x_slice```. ```start``` and  ```end``` are passed so that ```f```
+```x_slice```. ```start``` and  ```end``` are passed so that ```f```stan
 can index any of the tailing ```sM``` arguments as necessary. The
 trailing ```sM``` arguments are passed without modification to every
 call of ```f```.
@@ -877,6 +877,7 @@ model {
 }
 ```
 
+
 The model as written here computes the priors for each group's
 parameters along with the likelihood contribution for the group.  An
 alternative mapping would leave the prior in the model block and only
@@ -887,7 +888,7 @@ difference, but with parallelization, there is reduced communication
 parallelization with the version that leaves the prior in the model
 block.
 
-这里写的模型计算每组参数的先验以及组的似然贡献。另一种映射将先验留在模型块中，只映射似然计算。在串行设置中，这不应该有太大区别，但在并行化中，通信减少（不需要传输先验的参数），并且在模型块中留下先验的版本并行化也减少。
+这里写的模型计算每组参数的先验以及组的似然贡献。另一种映射将先验留在模型块中，只映射似然计算。在串行设置中，这不应该有太大区别，但在并行化中，通信减少（不需要传输先验的参数），并且在模型块中留下先验的版本并行化程度也降低。
 
 ### Ragged inputs and outputs {-}
 

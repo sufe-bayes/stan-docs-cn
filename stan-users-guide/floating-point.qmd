@@ -105,7 +105,7 @@ called "positive zero" and "negative zero".  This distinction is
 irrelevant in Stan (as it is in R), because the two values are equal
 (i.e., `0 == -0` evaluates to true).
 
-由于存在符号位，零有两种表示方式，分别为“正零”和“负零”。这种区别在 Stan 中是无关紧要的（就像在 R 中一样），因为这两个值是相等的(即 `0 == -0` 被认为是正确的)。
+由于存在符号位，零有两种表示方式，分别为“正零”和“负零”。这种区别在 Stan 中是无关紧要的（就像在 R 中一样），因为这两个值是相等的（即 `0 == -0` 求值为 true）。
 
 ### Not-a-number values {-}
 
@@ -123,7 +123,7 @@ missing values.  Usually when not-a-number is an argument to a
 function, the result will not-a-number if an exception (a rejection in
 Stan) is not raised.
 
-Stan 提供了一个值函数 `not_a_number()`，它返回这个特殊的非数字值。它用于表示错误条件而不是缺失值。通常，当非数字是一个函数的参数时，如果没有输出异常（在 Stan 中是拒绝输出），则结果将是非数字。
+Stan 提供了一个值函数 `not_a_number()`，它返回这个特殊的非数字值。它用于表示错误条件而不是缺失值。通常，当非数字是一个函数的参数时，如果没有抛出异常（在 Stan 中是拒绝），则结果将是非数字。
 
 Stan also provides a test function `is_nan(x)` that returns 1 if `x`
 is not-a-number and 0 otherwise.
@@ -142,7 +142,7 @@ propagating not-a-number values.
 Most of Stan's built-in functions will throw exceptions (i.e., reject)
 when any of their arguments is not-a-number.
 
-Stan 的大多数内置函数在它们的任何一个参数是非数字时将输出异常（即拒绝）。
+Stan 的大多数内置函数在它们的任何一个参数是非数字时将抛出异常（即拒绝）。
 
 Comparisons with not-a-number always return false, up to and including
 comparison with itself.  That is, `not_a_number() == not_a_number()`
@@ -156,7 +156,7 @@ not_a_number()` returns true.
 Undefined operations often return not-a-number values.  For example,
 `sqrt(-1)` will evaluate to not-a-number.
 
-未定义的操作通常返回非数字值。例如，`sqrt(-1)` 会输出非数字。
+未定义的操作通常返回非数字值。例如，`sqrt(-1)` 会返回非数字。
 
 ### Positive and negative infinity {-}
 
@@ -184,7 +184,7 @@ so that `negative_infinty() < 0` evaluates to true (represented with 1
 in Stan).  Also, negating positive infinity leads to negative infinity
 and vice-versa.
 
-正无穷和负无穷具有符合预期的比较行为，因此对 `negative_infinty() < 0` 求值的结果为 true（在 Stan 中用1表示）。此外，对正无穷取反会得到负无穷，反之亦然。
+正无穷和负无穷具有符合预期的比较行为，因此对 `negative_infinity() < 0` 求值的结果为 true（在 Stan 中用1表示）。此外，对正无穷取反会得到负无穷，反之亦然。
 
 Positive infinity added to either itself or a finite value produces
 positive infinity.  Negative infinity behaves the same way.  However,
@@ -381,14 +381,14 @@ to *underflow*.  For instance, `1e-200` may be represented, but
 Underflow is a ubiquitous problem in likelihood calculations,
 For example, if $p(y_n \mid \theta) < 0.1$, then
 
-下溢是似然计算中普遍存在的问题。例如，如果 $p(y_n \mid \theta) < 0.1$，那么一旦 $N > 350$，似然函数
+下溢是似然计算中普遍存在的问题。例如，如果 $p(y_n \mid \theta) < 0.1$，那么似然函数
 
 $$
 p(y \mid \theta) = \prod_{n=1}^N p(y_n \mid \theta)
 $$
 will underflow as soon as $N > 350$ or so.
 
-就会发生下溢。
+在 $N > 350$ 左右时就会发生下溢。
 
 To deal with underflow, work on the log scale.  Even though $p(y \mid
 \theta)$ can't be represented, there is no problem representing

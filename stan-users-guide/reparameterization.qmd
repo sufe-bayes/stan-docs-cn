@@ -2,7 +2,7 @@
 pagetitle: Reparameterization and Change of Variables
 ---
 
-# 重参数化和变量变换
+# 重参数化和变量变换 {#change-of-variables.chapter--cn}
 
 # Reparameterization and Change of Variables  {-#change-of-variables.chapter}
 
@@ -360,7 +360,7 @@ distribution is just the distribution of the first component of a
 Dirichlet with parameter vector $[a b]^{\top}$.  To formulate an
 unconstrained prior, the exact same strategy works as for the beta.
 
-现在 `a` 是一个有 `K` 行的向量，但它具有与 Beta 分布的 `a` 和 `b` 对相同的形状属性；Beta 分布只是具有参数向量 $[a b]^{\top}$ 的 Dirichlet 分布第一个分量的分布。要制定无约束先验，与 Beta 分布完全相同的策略也适用。
+现在 `a` 是一个 `K` 维向量，但它具有与 Beta 分布的参数对 `a` 和 `b` 相同的形状属性；Beta 分布只是具有参数向量 $[a b]^{\top}$ 的 Dirichlet 分布的第一个分量的分布。要制定无约束先验，与 Beta 分布完全相同的策略也适用。
 
 ```stan
 parameters {
@@ -392,7 +392,7 @@ theta_raw ~ normal(mu, sigma);
 
 where either or both of `mu` and `sigma` can be vectors.
 
-其中 `mu` 和 `sigma` 可以是向量，也可以都是向量。
+其中 `mu` 和 `sigma` 可以有一个是向量，也可以两个都是向量。
 
 ## Changes of variables
 
@@ -466,7 +466,7 @@ model {
 It is important, as always, to declare appropriate constraints on
 parameters;  here `y` is constrained to be positive.
 
-一如既往地重要的是，要对参数声明适当的约束；这里 `y` 被约束为正数。
+和往常一样重要的是，要对参数声明适当的约束；这里 `y` 被约束为正数。
 
 It would be slightly more efficient to define a local variable for the
 logarithm, as follows.
@@ -482,6 +482,7 @@ model {
   // ...
 }
 ```
+
 
 If `y` were declared as data instead of as a parameter, then the
 adjustment can be ignored because the data will be constant and Stan
@@ -580,6 +581,7 @@ $$
 =  -2 \log u.
 $$
 
+
 ### Multivariate changes of variables {-}
 
 ### 多元变量变换 {-}
@@ -589,7 +591,7 @@ determinant of the Jacobian of the transform must be added to the
 log probability accumulator.  In Stan, this can be coded as
 follows in the general case where the Jacobian is not a full matrix.
 
-在多元变换的情况下，必须将变换的雅可比行列式的绝对值的对数添加到对数概率累加器中。在 Stan 中，当雅可比不是满秩矩阵的一般情况下，可以编码如下。
+在多元变换的情况下，必须将变换的雅可比行列式的绝对值的对数添加到对数概率累加器中。在 Stan 中，当雅可比不是满矩阵的一般情况下，可以编码如下。
 
 ```stan
 parameters {
@@ -638,6 +640,7 @@ transformed parameters {
   // ...
 }
 ```
+
 
 ## Vectors with varying bounds
 

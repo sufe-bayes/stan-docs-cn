@@ -29,7 +29,7 @@ to select between them is by determining if the proportionality constants are
 necessary. If performance is not a problem, it is always safe to use the 
 normalized densities.
 
-在 Stan 中有三种不同的语法来建立模型，而选择哪种语法取决于是否需要比例常数。如果性能不是问题，使用归一化的密度总是安全的。
+在 Stan 中有三种不同的语法来建立模型，而选择哪种语法取决于是否需要比例常数。如果性能不是问题，使用归一化密度总是安全的。
 
 The distribution statement (`~`) and log density increment statement
 (`target +=`) with `_lupdf()` use unnormalized densities for $x$
@@ -71,7 +71,7 @@ the factors that are a not a function of $\theta$ and $g(\theta)$ are all the
 terms that are a function of $\theta$, then it is said that $g(\theta)$
 is proportional to $p(\theta)$ up to a constant.
 
-如果一个密度 $p(\theta)$ 可以分解成 $K g(\theta)$，其中 $K$ 是一个不依赖于 $\theta$ 的因子，而 $g(\theta)$ 是所有依赖于 $\theta$ 的项，那么称 $g(\theta)$ 与 $p(\theta)$ 成比例，它们相差一个常数。
+如果一个密度 $p(\theta)$ 可以分解成 $K g(\theta)$，其中 $K$ 是所有不依赖于 $\theta$ 的因子，而 $g(\theta)$ 是所有依赖于 $\theta$ 的项，那么称 $g(\theta)$ 与 $p(\theta)$ 成比例，它们相差一个常数。
 
 The advantage of all this is that sometimes $K$ is expensive to compute and if
 it is not a function of the distribution that is to be sampled (or optimized or
@@ -83,7 +83,7 @@ because it will not affect the results.
 Stan takes advantage of the proportionality constant fact with the `~` syntax.
 Take for instance the normal data model:
 
-Stan 利用比例常数这一特性，通过 `~` 语法予以实现。以正态数据模型为例：
+Stan 利用比例常数这一特性，通过 `~` 语法实现。以正态数据模型为例：
 
 ```stan
 data {
@@ -101,7 +101,7 @@ model {
 Syntactically, this is just shorthand for the equivalent model that replaces the
 `~` syntax with a `target +=` statement and a `normal_lupdf` function call:
 
-在语法上，这只是一个等价模型的简写形式，该等价模型使用 `target +=` 语句和 `normal_lupdf` 函数调用替换了 `~` 语法：
+在语法上，这只是一个等价模型的简写形式，它使用 `target +=` 语句和 `normal_lupdf` 函数调用替换了 `~` 语法：
 
 ```stan
 data {

@@ -186,7 +186,6 @@
 | | Dirichlet distribution | 狄利克雷分布 | |
 | | identifiability | 可识别性 | |
 | | multimodality | 多峰性 | |
-| | label switching | 标签交换 | |
 | | correlated topic model | 相关主题模型 | |
 | | logistic normal distribution | Logistic-正态分布 | |
 | **10. 高斯过程** | Gaussian process | 高斯过程 | |
@@ -359,7 +358,7 @@
 | | positive/negative infinity | 正/负无穷 | |
 | | scientific notation | 科学计数法 | |
 | | significand | 有效数字 | |
-| | figures | 指数 | |
+| | exponent | 指数部分 | |
 | | arithmetic precision | 算术精度 | |
 | | machine precision | 机器精度 | |
 | | rounding error | 舍入误差 | |
@@ -369,37 +368,62 @@
 | | log scale | 对数尺度 | |
 | | Welford's algorithm | Welford 算法 | |
 | | CCDF | 互补累积分布函数 | |
-| **21. 多重索引和范围索引** | Multiple Indexing | 多重索引 | |
-| | Range Indexing | 范围索引 | |
+| | normal number | 正规数 | |
+| | subnormal number | 次正规数 | |
+| | rounding | 舍入 | |
+| | transitivity | 传递性 | |
+| **20. 矩阵、向量和数组** | container type | 容器类型 | |
+| | tuple | 元组 | |
+| | heterogeneous types | 异构类型 | |
+| | lvalue | 左值 | |
+| | constant reference | 常量引用 | |
+| | memory locality | 内存局部性 | |
+| | column-major order | 列优先顺序 | |
+| | row-major order | 行优先顺序 | |
+| | aliasing | 别名问题 | |
+| | out of bounds | 越界 | |
+| **21. 多重索引和范围索引** | multiple indexing | 多重索引 | |
+| | range indexing | 范围索引 | |
+| | slicing | 切片 | |
+| | bounds | 边界 | |
+| | lower/upper bound | 下界/上界 | |
+| | prefix | 前缀 | |
+| | suffix | 后缀 | |
+| | segment | 分段 | |
+| | assign-by-value | 按值赋值 | |
+| | dimensionality | 维度 | |
+| | block extraction | 块提取 | |
+| | inline vectorization | 内联向量化 | |
 | | container | 容器 | |
-| | Lower/upper bound | 下界/上界 | |
-| | prefixes | 前若干个元素 | |
-| | suffixes | 后若干个元素 | |
 | **22. 用户自定义函数** | User-Defined Functions | 用户自定义函数 | |
 | | encapsulation | 封装 | |
 | | modular code | 模块化代码 | |
 | | monolithic program | 单体程序 | |
+| | function signature | 函数签名 | |
+| | forward declaration | 前向声明 | |
+| | function resolution | 函数解析 | |
+| | type promotion | 类型提升 | |
+| | recursive function | 递归函数 | |
+| | inverse CDF | 逆累积分布函数 | |
+| | truncated random number generation | 截断随机数生成 | |
 | | reject statement | 拒绝语句 | |
 | | fatal_error statement | 致命错误语句 | |
 | | log probability accumulator | 对数概率累加器 | |
 | | void return type | void 返回类型 | |
 | | non-void return type | 非 void 返回类型 | |
 | | function overloading | 函数重载 | |
-| | function resolution | 函数解析 | |
-| | recursive functions | 递归函数 | |
-| | truncated random number generation | 截断随机数生成 | |
-| | inverse CDF | 逆累积分布函数 | |
 | | cumulative distribution function (CDF) | 累积分布函数 | |
-| | log_sum_exp | 对数指数和 | |
 | | Jacobian adjustment | 雅可比调整 | |
 | | log probability density function (lpdf) | 对数概率密度函数 | |
 | | log probability mass function (lpmf) | 对数概率质量函数 | |
 | | log cumulative distribution function (lcdf) | 对数累积分布函数 | |
 | | log complementary cumulative distribution function (lccdf) | 对数补累积分布函数 | |
-| | pseudo-random number generators | 伪随机数生成器 | |
-| | forward declaration | 前向声明 | |
-| | function signature | 函数签名 | |
-| | type promotion | 类型提升 | |
+| | pseudo-random number generators | 伪随机数生成器 (PRNG) | |
+| | change-of-variable adjustments | 变量变换调整 | |
+| | density function | 密度函数 | |
+| | probability mass function | 概率质量函数 | |
+| | distribution statement | 分布语句 | |
+| | tilde symbol (~) | 波浪号 (~) | |
 | | context-sensitive | 上下文敏感的 | |
 | | parameter constraints | 参数约束 | |
 | | simplex parameter | 单纯形参数 | |
@@ -414,6 +438,19 @@
 | | truncated variate | 截断变量 | |
 | | survival analysis | 生存分析 | |
 | | censored data | 删失数据 | |
+| **24. 比例常数处理** | proportionality constant | 比例常数 | |
+| | additive constant | 加法常数 | |
+| | unnormalized density | 非归一化密度 | |
+| | normalized density | 归一化密度 | |
+| | unnormalized log probability density function (_lupdf) | 非归一化对数概率密度函数 | |
+| | unnormalized log probability mass function (_lupmf) | 非归一化对数概率质量函数 | |
+| | normalization constant | 归一化常数 | |
+| | variational inference | 变分推断 | |
+| | log density increment statement | 对数密度增量语句 | |
+| | user-defined distributions | 用户自定义分布 | |
+| | MCMC (Markov Chain Monte Carlo) | MCMC (马尔可夫链蒙特卡洛) | |
+| | optimization | 优化 | |
+| | model block | 模型块 | |
 | **25. 有问题的后验分布** | ridge | 岭 | |
 | | weakly informative prior | 弱信息先验 | |
 | | proper posterior | 正规的后验分布 | |
@@ -424,6 +461,17 @@
 | | improper | 非正规的 | |
 | | simplex | 单纯形 | |
 | | multimodality | 多峰性 | |
+| | separability | 可分离性 | |
+| | constrained parameters | 约束参数 | |
+| | unconstrained parameters | 无约束参数 | |
+| | component collapsing | 成分退化 | |
+| | effective sample size | 有效样本量 | |
+| | convergence monitoring | 收敛监测 | |
+| | Hamiltonian Monte Carlo (HMC) | Hamiltonian Monte Carlo (HMC) | |
+| | no-U-turn sampler (NUTS) | no-U-turn 采样器 (NUTS) | |
+| | leapfrog steps | 跳跃步/蛙跳步 | |
+| | posterior mode | 后验众数 | |
+| | Gibbs sampling | Gibbs 采样 | |
 | **26. 重参数化和变量转换** | reparameterization | 重参数化 | |
 | | change of variables | 变量变换 | |
 | | probability measure | 概率测度 | |
@@ -444,11 +492,23 @@
 | | inverse CDF | 反累积分布函数 | |
 | | lognormal distribution | 对数正态分布 | |
 | | inverse gamma distribution | 逆伽马分布 | |
+| | Pareto prior | Pareto 先验 | |
+| | hyperprior | 超先验 | |
+| | logistic distribution | logistic 分布 | |
+| | multivariate normal distribution | 多元正态分布 | |
+| | mean parameter | 均值参数 | |
+| | total count parameter | 总计数参数 | |
 | | transformed parameters | 转换参数 | |
 | | unconstrained parameters | 无约束参数 | |
 | | constrained parameters | 约束参数 | |
 | | varying bounds | 可变边界 | |
-| **28. 并行计算** | parallelization | 并行化 | |
+| **28. 并行化** | parallelization | 并行化 | |
+| | Intel Threading Building Blocks (TBB) | 英特尔线程构建模块 (TBB) | |
+| | Message Passing Interface (MPI) | 消息传递接口 (MPI) | |
+| | reduce_sum_static | 静态求和归约 | |
+| | map_rect | 矩形映射 | |
+| | Open Computing Language (OpenCL) | 开放计算语言 (OpenCL) | |
+| | partial sum | 部分和 | |
 | | multi-threading | 多线程 | |
 | | multi-processing | 多进程 | |
 | | manycore processing | 众核处理 | |
