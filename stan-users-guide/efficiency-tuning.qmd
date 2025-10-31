@@ -2,12 +2,13 @@
 pagetitle: Efficiency Tuning
 ---
 
-# Efficiency Tuning {#efficiency-tuning.chapter}
-
 # 效率调优 {#efficiency-tuning.chapter--cn}
 
+# Efficiency Tuning {-#efficiency-tuning.chapter}
+
 本节译者：焦睿宇、苏田园
-本节校审：张梓源
+
+初次校审：张梓源
 
 This chapter provides a grab bag of techniques for optimizing Stan
 code, including vectorization, sufficient statistics, and conjugacy.
@@ -17,11 +18,11 @@ practical applied statistical modeling, we are mainly concerned with
 reducing wall time (how long a program takes as measured by a clock on
 the wall) and keeping memory requirements within available bounds.
 
-本章提供了一系列优化 Stan 代码的技术，包括矢量化、充分统计和共轭。粗略而言，效率包括计算所需的时间量和所需的内存量。对于实际应用的统计建模，我们主要关注减少墙时间（通过墙上的时钟测量程序所需的时间），并将内存需求保持在可用范围内。
+本章提供了一系列优化 Stan 代码的技术，包括向量化、充分统计量和共轭性。粗略而言，效率包括计算所需的时间和所需的内存量。对于实际应用的统计建模，我们主要关注减少墙上时间（通过墙上时钟测量程序所需的时间），并将内存需求保持在可用范围内。
 
 ## What is efficiency?
 
-## 什么是效率？
+## 什么是效率？ {-}
 
 The standard algorithm analyses in computer science measure efficiency
 asymptotically as a function of problem size (such as data, number of
@@ -34,11 +35,11 @@ using built-in matrix operations as opposed to naive loops) and on
 asymptotic efficiency factors (such as using linear algorithms instead
 of quadratic algorithms in loops).
 
-计算机科学中的标准算法分析将效率渐近地测量为问题大小（如数据、参数数量等）的函数，通常不考虑启动时间等恒定的加法因子或运算速度等乘法因子。在实践中，恒定因素很重要；如果运行时间可以减少一半或更多，那将是一个巨大的收益。本章重点关注效率中涉及的恒定因子（例如使用内置矩阵运算而非简单的循环）和渐近效率因子（例如在循环中使用线性算法而非二次算法）。
+计算机科学中的标准算法分析将效率渐近地测量为问题规模（如数据、参数数量等）的函数，通常不考虑启动时间等常数加法因子或运算速度等常数乘法因子。在实践中，常数因子很重要；如果运行时间可以减少一半或更多，那将是一个巨大的收益。本章重点关注效率中涉及的常数因子（例如使用内置矩阵运算而非简单的循环）和渐近效率因子（例如在循环中使用线性算法而非二次算法）。
 
 ## Efficiency for probabilistic models and algorithms
 
-## 概率模型和算法的效率
+## 概率模型和算法的效率 {-}
 
 Stan programs express models which are intrinsically statistical in
 nature.  The algorithms applied to these models may or may not
@@ -52,7 +53,7 @@ inference algorithm (ADVI) is probabilistic despite being an
 optimization algorithm; the randomization lies in a nested Monte Carlo
 calculation for an expected gradient.
 
-Stan 程序表达的模型本质上是统计的。应用于这些模型的算法本身可能是概率的，也可能不是概率的。例如，给定参数的初始值（其本身可以是确定性的或随机生成的），用于惩罚最大似然估计的 Stan 优化算法（L-BFGS）是纯确定性的。Stan 的采样算法基于马尔可夫链蒙特卡罗（Markov Chain Monte Carlo, MCMC）算法，该算法在每一步都具有概率性。Stan 的变分推理算法（ADVI）虽然是一种优化算法，但却是概率性的，其随机化在于对期望梯度的嵌套蒙特卡罗计算。
+Stan 程序表达的模型本质上是统计的。应用于这些模型的算法本身可能是概率性的，也可能不是概率性的。例如，给定参数的初始值（其本身可以是确定性的或随机生成的），用于惩罚最大似然估计的 Stan 优化算法（L-BFGS）是纯确定性的。Stan 的采样算法基于马尔可夫链蒙特卡罗（Markov Chain Monte Carlo, MCMC）算法，该算法在每一步都具有概率性。Stan 的变分推断算法（ADVI）虽然是一种优化算法，但却是概率性的，其随机化在于对期望梯度的嵌套蒙特卡罗计算。
 
 With probabilistic algorithms, there will be variation in run times
 (and maybe memory usage) based on the randomization involved.  For
@@ -63,7 +64,7 @@ variation will be limited;  when there is a lot of variation it can be
 a sign that there is a problem with the model's parameterization in
 a Stan program or with initialization.
 
-对于概率算法，由于涉及随机化，运行时间（可能还有内存使用）会有所变化。例如，由于从尾部太远处开始，之后的迭代算法，如常微分方程的求解器，可能需要不同数量的步骤。理想情况下，这种变化是有限的；当有很多变化时，这可能意味着 Stan 程序中模型的参数化或初始化出现问题。
+对于概率性算法，由于涉及随机化，运行时间（可能还有内存使用）会有所变化。例如，由于从尾部太远处开始，后续的迭代算法，如常微分方程的求解器，可能需要不同数量的步骤。理想情况下，这种变化是有限的；当有较大变化时，这可能意味着 Stan 程序中模型的参数化或初始化出现问题。
 
 A well-behaved Stan program will have low variance between runs with
 different random initializations and differently seeded random number
@@ -78,11 +79,11 @@ rate in order to target a lower step size.  This is because smaller
 step sizes allow Stan's gradient-based algorithms to better follow the
 curvature in the density or penalized maximum likelihood being fit.
 
-一个表现良好的 Stan 程序在具有不同随机初始化和不同种子随机数生成器的运行之间具有较低的方差。但有时算法可能会卡在后部的一部分，通常是由于曲率太大。这种卡住几乎总是表明需要重新对模型进行参数化。仅仅丢弃具有明显不良行为（缓慢或停滞）的马尔可夫链可能带来后验估计的偏差。这种陷入停滞的问题通常可以通过降低初始步长来克服，以避免在适应过程中陷入困境，并增加目标接受率以达到较低的步长。这是因为较小的步长允许 Stan 的基于梯度的算法更好地遵循密度中的曲率或被惩罚的最大拟合可能性。
+一个表现良好的 Stan 程序在不同随机初始化和不同种子的随机数生成器运行之间具有较低的方差。但有时算法可能会卡在后验分布的一部分，通常是由于高曲率。这种停滞几乎总是表明需要重新对模型进行参数化。仅仅丢弃具有明显不良行为（缓慢或停滞）的马尔可夫链可能导致后验估计的偏差。这种陷入停滞的问题通常可以通过降低初始步长来克服，以避免在自适应过程中陷入困境，并增加目标接受率以达到较低的步长。这是因为较小的步长允许 Stan 的基于梯度的算法更好地遵循密度中的曲率或被惩罚的最大似然。
 
 ## Statistical vs.\  computational efficiency
 
-## 统计效率 VS 计算效率
+## 统计效率与计算效率 {-}
 
 There is a difference between pure computational efficiency and
 statistical efficiency for Stan programs fit with sampling-based
@@ -90,7 +91,7 @@ algorithms.  Computational efficiency measures the amount of time or
 memory required for a given step in a calculation, such as an
 evaluation of a log posterior or penalized likelihood.
 
-适用于基于采样的算法的 Stan 程序的纯计算效率和统计效率之间存在差异。计算效率衡量计算中给定步骤所需的时间或内存量，例如对数后验或惩罚似然的评估。
+对于使用基于采样算法的 Stan 程序，纯计算效率和统计效率之间存在差异。计算效率衡量计算中给定步骤所需的时间或内存量，例如对数后验或惩罚似然的评估。
 
 Statistical efficiency typically involves requiring fewer steps in
 algorithms by making the statistical formulation of a model better
@@ -98,11 +99,11 @@ behaved.  The typical way to do this is by applying a change of
 variables (i.e., reparameterization) so that sampling algorithms mix
 better or optimization algorithms require less adaptation.
 
-统计效率通常包括通过使模型的统计公式表现得更好来减少算法中的步骤。实现这一点的典型方法是应用变量的变化（即，重新参数化），以便采样算法更好地混合，或者优化算法需要更少的自适应。
+统计效率通常通过使模型的统计公式表现得更好来减少算法所需的步骤。实现这一点的典型方法是应用变量变换（即重新参数化），以便采样算法更好地混合，或者优化算法需要更少的自适应。
 
 ## Model conditioning and curvature
 
-## 模型条件和曲率
+## 模型条件和曲率 {-}
 
 Because Stan's algorithms rely on step-based gradient-based
 approximations of the density
@@ -110,7 +111,7 @@ approximations of the density
 not captured by this first-order approximation plays a central role in
 determining the statistical efficiency of Stan's algorithms.
 
-由于 Stan 的算法依赖于所拟合的基于阶跃和梯度的密度（或惩罚最大似然）近似，因此这种一阶近似没有捕捉到的后验曲率在决定 Stan 算法的统计效率方面起着核心作用。
+由于 Stan 的算法依赖于对所拟合的密度（或惩罚最大似然）的基于步长和梯度的近似，因此这种一阶近似没有捕捉到的后验曲率在决定 Stan 算法的统计效率方面起着核心作用。
 
 A second-order approximation to curvature is provided by the
 Hessian, the matrix of second derivatives of the log density $\log
@@ -151,7 +152,7 @@ log densities or penalized likelihood functions, it is easier for
 Stan's adaptation, especially the diagonal adaptations that are used
 as defaults.
 
-Hessian 矩阵 $H$ 的条件数给出了曲率问题难度的一个很好的衡量标准，它是 $H$ 最大特征值与最小特征值的比值（假设 Hessian 是正定的）。这基本上衡量了最平坦的运动方向和最弯曲的运动方向之间的差异。通常，基于梯度的算法的步长受到最陡峭的弯曲方向的限制。有了更好的条件对数密度或惩罚似然函数，Stan 的自适应更容易，尤其是用作默认值的对角自适应。
+Hessian 矩阵 $H$ 的条件数给出了曲率问题难度的一个很好的衡量标准，它是 $H$ 最大特征值与最小特征值的比值（假设 Hessian 是正定的）。这基本上衡量了最平坦的方向和最弯曲的方向之间的差异。通常，基于梯度的算法的步长受到最陡峭弯曲方向的限制。有了条件更好的对数密度或惩罚似然函数，Stan 的自适应更容易，尤其是用作默认值的对角自适应。
 
 ### Unit scales without correlation {-}
 
@@ -164,7 +165,7 @@ optimal performance of Stan's algorithms.  For Hamiltonian Monte
 Carlo, this implies a unit mass matrix, which requires no adaptation
 as it is where the algorithm initializes.
 
-理想情况下，所有参数都应该进行编程，以具有单位尺度并减少后验相关性；总之，这些性质意味着 Stan 算法的最佳性能不需要旋转或缩放。对于哈密顿蒙特卡罗，这意味着一个单位质量矩阵，它不需要自适应，因为它是算法初始化的地方。黎曼哈密顿蒙特卡罗在每一步都在动态地执行这种条件反射，但这种条件反射在计算上是昂贵的。
+理想情况下，所有参数都应该进行编程，以具有单位尺度并减少后验相关性；总之，这些性质意味着 Stan 算法的最佳性能不需要旋转或缩放。对于哈密顿蒙特卡罗，这意味着一个单位质量矩阵，它不需要自适应，因为它是算法初始化的地方。
 
 ### Varying curvature {-}
 
@@ -180,7 +181,7 @@ aimed at improving the conditioning of the Hessian and/or making it
 more consistent across the relevant portions of the density (or
 penalized maximum likelihood function) being fit.
 
-在除非常简单的模型（如多元正态）外的所有模型中，Hessian 将随着 $\theta$ 的变化而变化（一个极端的例子是 Neal 漏斗，这在数据很少或没有数据的分层模型中自然出现）。曲率变化越大，所有具有固定适应参数的算法（即，除了黎曼哈密顿蒙特卡罗之外的所有算法）就越难找到覆盖整个密度的适应。所提出的许多变量变换旨在改善 Hessian 的条件和/或使其在所拟合的密度（或惩罚最大似然函数）的相关部分之间更加一致。
+在除非常简单的模型（如多元正态）外的所有模型中，Hessian 将随着 $\theta$ 的变化而变化（一个极端的例子是 Neal 漏斗，这在数据很少或没有数据的分层模型中自然出现）。曲率变化越大，具有固定自适应参数的算法就越难找到覆盖整个密度的好自适应。所提出的许多变量变换旨在改善 Hessian 的条件，和/或使其在所拟合的密度（或惩罚最大似然函数）的相关部分之间更加一致。
 
 For all of Stan's algorithms, the curvature along the path from the
 initial values of the parameters to the solution is relevant.  For
@@ -191,7 +192,7 @@ which is the posterior volume where almost all draws from the
 posterior lies;  thus, the typical set contains almost all of the
 posterior probability mass.
 
-对于 Stan 的所有算法，从参数的初始值到解的路径上的曲率是相关的。对于惩罚最大似然和变分推理，迭代算法的解将是一个点，所以这才是最重要的。对于采样，相关的"解"是典型的集合，即几乎所有从后部提取的后部体积；因此，典型集合包含了几乎所有的后验概率质量。
+对于 Stan 的所有算法，从参数初始值到解的路径上的曲率是相关的。对于惩罚最大似然和变分推断，迭代算法的解将是一个点，所以这才是最重要的。对于采样，相关的"解"是典型集，即几乎所有后验抽样所在的区域；因此，典型集包含了几乎所有的后验概率质量。
 
 With sampling, the curvature may vary dramatically between the points
 on the path from the initialization point to the typical set and
@@ -205,7 +206,7 @@ first effective draw is ready to be realized).  Whether adaptation has
 run long enough can be measured by comparing the adaptation parameters
 derived from a set of diffuse initial parameter values.
 
-通过采样，曲率可以在从初始化点到典型集合的路径上的点之间以及在典型集合内显著变化。这就是为什么自适应需要运行足够长的时间来访问典型集中的足够多的点，以获得典型集合中曲率的良好一阶估计。如果自适应运行的时间不够长，则在自适应之后在典型集合内进行采样将是无效的。我们通常建议在达到典型集合后至少进行一百次迭代（并且第一次有效绘制已准备好实现）。自适应是否已经运行足够长可以通过比较从一组扩散初始参数值导出的自适应参数来测量。
+通过采样，曲率可以在从初始化点到典型集的路径上的点之间以及在典型集内显著变化。这就是为什么自适应需要运行足够长的时间来访问典型集中的足够多的点，以获得典型集中曲率的良好一阶估计。如果自适应运行的时间不够长，则在自适应之后在典型集内进行采样将是低效的。我们通常建议在达到典型集后至少进行一百次迭代（并且第一次有效抽样已准备好实现）。自适应是否已经运行足够长可以通过比较从一组扩散初始参数值导出的自适应参数来测量。
 
 ### Reparameterizing with a change of variables {-}
 
@@ -218,18 +219,18 @@ the example of reparameterizing Neal's funnel for an example, and also
 the examples in the [change of variables
 chapter](reparameterization.qmd).
 
-统计效率的提高可以通过对模型进行重新参数化，从而可以使用条件更好的密度或惩罚最大似然来计算相同的结果来实现。再次，请参阅重新参数化 Neal 漏斗的示例，以及[变量变化章节](#change-of-variables.chapter)中的示例。
+统计效率的提高可以通过对模型进行重新参数化来实现，从而可以使用条件更好的密度或惩罚最大似然来计算相同的结果。再次，请参阅重新参数化 Neal 漏斗的示例，以及[变量变换章节](#change-of-variables.chapter)中的示例。
 
 One has to be careful in using change-of-variables reparameterizations
 when using maximum likelihood estimation, because they can change the
 result if the Jacobian term is inadvertently included in the revised
 likelihood model.
 
-在使用最大似然估计时，必须小心使用变量变化重新参数化，因为如果雅可比项恰巧包含在修正的似然模型中，它们可能会改变结果。
+在使用最大似然估计时，必须小心使用变量变换重新参数化，因为如果雅可比行列式项无意中包含在修正的似然模型中，可能会改变结果。
 
 ## Well-specified models
 
-## 指定良好的模型
+## 指定良好的模型 {-}
 
 Model misspecification, which roughly speaking means using a model
 that doesn't match the data, can be a major source of slow code.  This
@@ -240,7 +241,7 @@ While some of the techniques recommended in the remaining sections of
 this chapter may mitigate the problem, the best remedy is a
 better model specification.
 
-模型的错误指定，大意上是指使用一个与数据不匹配的模型，这可能是慢代码的主要来源。这体现在这样的情况中：根据模型模拟的数据运行稳健而高效，而它所针对的真实数据的真实数据运行缓慢，甚至可能出现收敛和混合的问题。虽然本章其余部分推荐的一些技术可以缓解这个问题，但最好的补救措施是更好的模型指定。
+模型误设，大致是指使用一个与数据不匹配的模型，这可能是慢代码的主要来源。这体现在这样的情况中：根据模型模拟的数据运行稳健而高效，而其预期的真实数据运行缓慢，甚至可能出现收敛和混合的问题。虽然本章其余部分推荐的一些技术可以缓解这个问题，但最好的补救措施是更好的模型设定。
 
 Counterintuitively, more complicated models often run faster
 than simpler models.  One common pattern is with a group of parameters
@@ -252,12 +253,12 @@ the fixed prior with a hierarchical prior such as `normal(mu,
   sigma)`, where `mu` and `sigma` are new parameters with
 their own hyperpriors, can be beneficial.
 
-与此相反的是，更复杂的模型往往比更简单的模型运行更快。一个常见的模式是，一组参数有一个广泛的固定先验，如 `normal(0, 1000)`。由于先验和后验的不匹配（先验对上百甚至上千的值有支持，而后验可能集中在零附近），这可能适合得很慢。在这种情况下，用 `normal(mu,sigma)` 这样的分层先验代替固定先验可能会有好处，其中 `mu` 和 `sigma` 是有自己超先验的新参数。
+反直觉的是，更复杂的模型往往比更简单的模型运行更快。一个常见的模式是，一组参数有一个宽泛的固定先验，如 `normal(0, 1000)`。由于先验和后验的不匹配（先验对上百甚至上千的值有支持，而后验可能集中在零附近），这可能导致拟合缓慢。在这种情况下，用 `normal(mu, sigma)` 这样的分层先验代替固定先验可能会有好处，其中 `mu` 和 `sigma` 是有自己超先验的新参数。
 
 
 ## Avoiding validation
 
-## 避免验证
+## 避免验证 {-}
 
 Stan validates all of its data structure constraints.  For example,
 consider a transformed parameter defined to be a covariance matrix and
@@ -283,7 +284,7 @@ also validates that `Sigma` is positive definite.  This test is
 expensive, having cubic run time (i.e., $\mathcal{O}(N^3)$ for
 $N \times N$ matrices), so it should not be done twice.
 
-因为 `Sigma` 被声明为协方差矩阵，它将在转换参数块的末尾被因子化以确保它是正定的。多变量正态对数密度函数也验证了 `Sigma` 是正定的。这个验证很昂贵，有三次方运行时间（即 $N\times N $ 矩阵的 $\mathcal{O}(N^3)$），所以不能做两次。
+因为 `Sigma` 被声明为协方差矩阵，它将在转换参数块的末尾进行分解以确保它是正定的。多元正态对数密度函数也验证 `Sigma` 是正定的。这个测试很昂贵，具有三次方运行时间（即 $N \times N$ 矩阵的 $\mathcal{O}(N^3)$），所以不应该做两次。
 
 The test may be avoided by simply declaring `Sigma` to be a simple
 unconstrained matrix.
@@ -302,11 +303,11 @@ model {
 
 Now the only validation is carried out by the multivariate normal.
 
-现在，唯一的验证是由多变量正态进行的。
+现在，唯一的验证由多元正态分布执行。
 
 ## Reparameterization {#reparameterization.section}
 
-## 重新参数化 {#reparameterization.section--cn}
+## 重新参数化 {-#reparameterization.section--cn}
 
 Stan's sampler can be slow in sampling from distributions with
 difficult posterior geometries.  One way to speed up such models is
@@ -315,11 +316,11 @@ dramatically increase effective sample size for the same number of
 iterations or even make programs that would not converge well
 behaved.
 
-Stan 的采样器在从具有困难后验几何的分布中采样时可能很慢。加快此类模型的一种方法是通过重新参数化。在某些情况下，重新参数化可以在相同的迭代次数下大大增加有效样本量，甚至可以使不会收敛的程序表现良好。
+Stan 的采样器在从具有困难后验几何的分布中采样时可能很慢。加快此类模型的一种方法是通过重新参数化。在某些情况下，重新参数化可以在相同的迭代次数下大大增加有效样本量，甚至可以使原本不会收敛的程序表现良好。
 
 ### Example: Neal's funnel {- #funnel.figure}
 
-### 例：Neal 漏斗 {-}
+### 例：Neal 漏斗 {-#funnel.figure--cn}
 
 In this section, we discuss a general transform from a centered to a
 non-centered parameterization [@papa-et-al:2007].^[This parameterization came to be known on our mailing lists as the "Matt trick" after Matt Hoffman, who independently came up with it while fitting hierarchical models in Stan.]
@@ -330,7 +331,7 @@ This reparameterization is helpful when there is not much data,
 because it separates the hierarchical parameters and lower-level
 parameters in the prior.
 
-在数据不多的情况下，这种重新参数化很有帮助，因为它将先验中的层次参数和低层次参数分开。
+在数据不多的情况下，这种重新参数化很有帮助，因为它将先验中的高层参数和低层参数分开。
 
 @Neal:2003 defines a distribution that exemplifies the difficulties of
 sampling from some hierarchical models.  Neal's example is fairly
@@ -1150,7 +1151,7 @@ model {
 
 ## Vectorization
 
-## 向量化
+## 向量化 {-}
 
 ### Gradient bottleneck {-}
 
@@ -1464,7 +1465,7 @@ should be faster.
 
 ## Exploiting sufficient statistics
 
-## 利用充分统计量
+## 利用充分统计量 {-}
 
 In some cases, models can be recoded to exploit sufficient statistics
 in estimation.  This can lead to large efficiency gains compared to an
@@ -1474,6 +1475,8 @@ other members of the exponential family.
 
 
 ### Bernoulli sufficient statistics {-}
+
+### 伯努利充分统计量 {-}
 
 Consider the following Bernoulli sampling model.
 
@@ -1549,6 +1552,8 @@ The same trick works for combining multiple binomial observations.
 
 ### Normal sufficient statistics {-}
 
+### 正态充分统计量 {-}
+
 Consider the following Stan model for fitting a normal distribution to data.
 
 ```stan
@@ -1616,6 +1621,8 @@ of variables in the variance.
 
 ### Poisson sufficient statistics {-}
 
+### 泊松充分统计量 {-}
+
 The Poisson distribution is the easiest case, because the sum of
 observations is sufficient.  Specifically, we can replace
 
@@ -1635,7 +1642,7 @@ adjustment is required for summation.
 
 ## Aggregating common subexpressions
 
-## 聚合常见子表达式
+## 聚合常见子表达式 {-}
 
 If an expression is calculated once, the value should be saved and
 reused wherever possible.  That is, rather than using
@@ -1666,7 +1673,7 @@ Then the sum can be replaced with `a_b[ii[n], jj[n]]`.
 
 ## Exploiting conjugacy
 
-## 利用共轭性
+## 利用共轭性 {-}
 
 Continuing the model from the previous section, the conjugacy of the
 beta prior and binomial distribution allow the model to be
@@ -1685,7 +1692,7 @@ defined to be `sum(y)` could be used in the place of `sum(y)`.
 
 ## Standardizing predictors
 
-## 标准化预测变量和输出变量
+## 标准化预测变量和输出变量 {-}
 
 Standardizing the data so that all predictors have a zero sample mean and
 unit sample variance has the following potential benefits:
@@ -1807,12 +1814,14 @@ by declaring these variables in the `transformed data` block, they will be avail
 in all following blocks, and therefore can be used in the `generated quantities` block
 to record the "natural" parameters `alpha` and `beta`.
 
+参数被重新命名以表示它们不是"自然"参数。转换后的数据 `x_std` 根据变量 `mean_x` 和 `sd_x` 定义；通过在 `transformed data` 块中声明这些变量，它们将在所有后续块中可用，因此可以在 `generated quantities` 块中用来记录"自然"参数 `alpha` 和 `beta`。
+
 The fairly diffuse priors on the coefficients are the same.
 These could have been transformed as well, but
 here they are left as is, because the scales make sense as
 diffuse priors for standardized data.
 
-参数被重新命名以表示它们不是"自然"参数，但模型本质上是相同的。特别是，对系数和误差尺度的相当扩散的先验是相同的。这些也可以被转换，但是在这里保持原样，因为对于标准化数据来说，这些尺度作为扩散先验是有意义的;可以使先验更加信息丰富。例如，由于输出 $y$ 已被标准化，误差 $\sigma$ 不应大于1，因为这是预测变量 $\alpha = \beta = 0$ 的噪声尺度。
+对系数的相当扩散的先验是相同的。这些也可以进行转换，但在这里保持原样，因为对于标准化数据来说，这些尺度作为扩散先验是有意义的。
 
 The original regression
 $$
@@ -1833,49 +1842,6 @@ Thus, the formulas to retrieve $\alpha$ and $\beta$ from $\alpha'$ and $\beta'$ 
 \beta = \frac{\beta'}{\sigma_x} \\
 \alpha = \alpha' - \beta' \frac{\mu_x}{\sigma_x}
 \end{align*}
-
-原始回归
-$$
-y_n
-= \alpha + \beta x_n + \epsilon_n
-$$
-已被转换为标准化变量的回归,
-$$
-\textrm{z}_y(y_n)
-= \alpha'
-+ \beta' \textrm{z}_x(x_n)
-+ \epsilon'_n.
-$$
-一些代数运算可以恢复原始参数，
-\begin{align*}
-y_n &= \textrm{z}_y^{-1}(\textrm{z}_y(y_n)) \\
-    &= \textrm{z}_y^{-1}
-\left( \alpha' + \beta' \textrm{z}_x(x_n) + \epsilon_n' \right) \\
-    &= \textrm{z}_y^{-1}
-\left( \alpha' + \beta' \left( \frac{x_n - \bar{x}}{\texttt{sd}(x)} \right) + \epsilon_n' \right) \\
-    &= \texttt{sd}(y)
-\left( \alpha' + \beta' \left( \frac{x_n - \bar{x}}{\texttt{sd}(x)} \right) + \epsilon_n' \right) + \bar{y} \\
-    &=
-\left( \texttt{sd}(y) \left( \alpha' - \beta' \frac{\bar{x}}{\texttt{sd}(x)} \right) + \bar{y} \right)
-+ \left( \beta' \frac{\texttt{sd}(y)}{\texttt{sd}(x)} \right) x_n
-+ \texttt{sd}(y) \epsilon'_n,
-\end{align*} ，
-从中可以读取原始尺度参数值，
-$$
-\alpha
-=
-\texttt{sd}(y)
-      \left(
-          \alpha'
-          - \beta' \frac{\bar{x}}{\texttt{sd}(x)}
-      \right)
-  + \bar{y};
-\qquad
-\beta = \beta' \frac{\texttt{sd}(y)}{\texttt{sd}(x)};
-\qquad
-\sigma = \texttt{sd}(y) \sigma'.
-$$
-
 
 These recovered parameter values on the original scales can be
 calculated within Stan using a generated quantities block following
@@ -1909,7 +1875,7 @@ For many applications on the standard scale, normal distributions with
 location zero and scale one will be used.  In these cases, it is more
 efficient to use
 
-对于标准尺度上的许多应用，正态分布 将使用位置参数0和尺度参数 1。在这些情况下，使用第一个比第二个代码更高效
+对于标准尺度上的许多应用，将使用位置参数为0、尺度参数为1的正态分布。在这些情况下，使用第一个比第二个代码更高效
 
 ```stan
 y ~ std_normal();
@@ -1924,18 +1890,18 @@ y ~ normal(0, 1);
 because the subtraction of the location and division by the scale
 cancel, as does subtracting the log of the scale.
 
-因为位置的减法和除以比例的方法 互相抵消，就像减去尺度的对数一样。
+因为位置的减法和除以尺度的运算相互抵消，减去尺度的对数也是如此。
 
 ## Using map-reduce
 
-## 使用map-reduce
+## 使用 map-reduce {-}
 
 The map-reduce operation, even without multi-core MPI support, can be
 used to make programs more scalable and also more efficient.  See the
 [map-reduce chapter](parallelization.qmd) for more information on
 implementing map-reduce operations.
 
-即使没有多核 MPI 支持，map-reduce 操作也可以 用来使程序更具可扩展性，也更有效率。参见 [map-reduce 章节](#map-reduce.chapter) 了解更多关于实现 map-reduce 操作的信息。
+即使没有多核 MPI 支持，map-reduce 操作也可以用来使程序更具可扩展性，也更有效率。参见 [map-reduce 章节](parallelization.qmd#map-reduce.chapter) 了解更多关于实现 map-reduce 操作的信息。
 
 Map-reduce allows greater scalability because only the Jacobian of the
 mapped function for each shard is stored.  The Jacobian consists of
@@ -1946,4 +1912,4 @@ reduced memory overhead leads to increased memory locality and faster
 execution.  The Jacobians are all computed with local memory and their
 outputs stored contiguously in memory.
 
-Map-reduce 允许更大的可扩展性，因为每个分片的 Jacobian 只有 映射函数的 Jacobian 被存储。Jacobian 包括了所有 的输出相对于参数的导数。在执行过程中 执行过程中，分片的导数是使用嵌套的 自动微分。 正如现代 CPU 经常发生的那样，内存开销的减少导致了内存位置的增加和更快的执行。 Jacobians 的计算都是在本地内存中进行的，其输出 在内存中连续存储。
+Map-reduce 允许更大的可扩展性，因为只存储每个分片映射函数的雅可比矩阵。雅可比矩阵包含了所有输出相对于参数的导数。在执行过程中，分片的导数使用嵌套的自动微分进行评估。正如现代 CPU 经常发生的那样，内存开销的减少导致内存局部性增加和执行速度加快。雅可比矩阵都是在本地内存中计算的，其输出在内存中连续存储。

@@ -502,6 +502,30 @@
 | | unconstrained parameters | 无约束参数 | |
 | | constrained parameters | 约束参数 | |
 | | varying bounds | 可变边界 | |
+| **27. 效率调优** | efficiency tuning | 效率调优 | |
+| | wall time | 墙上时间 | |
+| | asymptotic efficiency | 渐近效率 | |
+| | constant factor | 常数因子 | |
+| | probabilistic algorithm | 概率性算法 | |
+| | deterministic algorithm | 确定性算法 | |
+| | variational inference | 变分推断 | |
+| | statistical efficiency | 统计效率 | |
+| | computational efficiency | 计算效率 | |
+| | model conditioning | 模型条件化 | |
+| | curvature | 曲率 | |
+| | Hessian matrix | Hessian 矩阵 | |
+| | condition number | 条件数 | |
+| | unit scale | 单位尺度 | |
+| | varying curvature | 变曲率 | |
+| | typical set | 典型集 | |
+| | model misspecification | 模型误设 | |
+| | sufficient statistics | 充分统计量 | |
+| | Jacobian determinant | 雅可比行列式 | |
+| | gradient bottleneck | 梯度瓶颈 | |
+| | algorithmic differentiation | 算法微分 | |
+| | map-reduce | Map-Reduce | |
+| | shard | 分片 | |
+| | memory locality | 内存局部性 | |
 | **28. 并行化** | parallelization | 并行化 | |
 | | Intel Threading Building Blocks (TBB) | 英特尔线程构建模块 (TBB) | |
 | | Message Passing Interface (MPI) | 消息传递接口 (MPI) | |
