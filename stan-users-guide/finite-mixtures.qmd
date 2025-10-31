@@ -521,7 +521,7 @@ approaches can be coded directly in the generated quantities block of
 the program.  Here's an example of the direct (non-sampling) approach.
 
 前一节中的正态混合模型，其中 $\theta =
-(\mu, \sigma, \lambda)$，表明似然函数在标签交换下返回相同的密度，因此预测推断是可靠的。在 Stan 中，可以通过计算 $p(\tilde{y} \mid y)$（在有效样本量方面更加高效）或模拟抽取$\tilde{y}$ 来进行预测推断，后者更容易结合进其他推断中。这两种方法都可以直接编写在程序的 generated quantities 块中。这里是直接（非采样）方法的一个例子。
+(\mu, \sigma, \lambda)$，表明似然函数在标签切换下返回相同的密度，因此预测推断是可靠的。在 Stan 中，可以通过计算 $p(\tilde{y} \mid y)$（在有效样本量方面更加高效）或模拟抽取$\tilde{y}$ 来进行预测推断，后者更容易结合进其他推断中。这两种方法都可以直接编写在程序的 generated quantities 块中。这里是直接（非采样）方法的一个例子。
 
 ```stan
 data {

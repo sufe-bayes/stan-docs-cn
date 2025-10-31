@@ -239,7 +239,7 @@ discussion related to the non-identifiability due to label switching
 in the [label switching
 section](problematic-posteriors.qmd#label-switching-problematic.section).
 
-两个问题使得对聚类模型进行完整的贝叶斯推断几乎不可能：参数不可识别性和后验的极端多模态性。关于由标签交换引起的非识别性的更多讨论，请参见[标签交换](problematic-posteriors.qmd#label-switching-problematic.section)一节。
+两个问题使得对聚类模型进行完整的贝叶斯推断几乎不可能：参数不可识别性和后验的极端多模态性。关于由标签切换引起的非识别性的更多讨论，请参见[标签切换](problematic-posteriors.qmd#label-switching-problematic.section)一节。
 
 ### Non-identifiability {-}
 
