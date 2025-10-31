@@ -526,6 +526,19 @@
 | | map-reduce | Map-Reduce | |
 | | shard | 分片 | |
 | | memory locality | 内存局部性 | |
+| | Cholesky factor | Cholesky 因子 | |
+| | conjugacy | 共轭性 | |
+| | L-BFGS | L-BFGS 算法 | |
+| | ADVI | ADVI 算法 | |
+| | Markov chain Monte Carlo (MCMC) | 马尔可夫链蒙特卡罗 | |
+| | Hamiltonian Monte Carlo | 哈密顿蒙特卡罗 | |
+| | eigenvalue | 特征值 | |
+| | affine transform | 仿射变换 | |
+| | location-scale family | 位置-尺度族 | |
+| | inverse Wishart distribution | 逆 Wishart 分布 | |
+| | standard normal distribution | 标准正态分布 | |
+| | Neal's funnel | Neal 的漏斗分布 | |
+| | centered parameterization | 中心化参数化 | |
 | **28. 并行化** | parallelization | 并行化 | |
 | | Intel Threading Building Blocks (TBB) | 英特尔线程构建模块 (TBB) | |
 | | Message Passing Interface (MPI) | 消息传递接口 (MPI) | |
