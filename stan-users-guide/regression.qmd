@@ -26,7 +26,7 @@ predictor and a slope and intercept coefficient, and normally
 distributed noise.  This model can be written using standard
 regression notation as
 
-最简单的线性回归模型包含一个自变量、斜率、截距以及服从正态分布的噪声项。使用标准回归符号，可以将该模型写成如下形式：
+最简单的线性回归模型包含一个预测变量、斜率、截距以及服从正态分布的噪声项。使用标准回归符号，可以将该模型写成如下形式：
 
 $$
 y_n = \alpha + \beta x_n + \epsilon_n
@@ -76,7 +76,7 @@ There are `N` observations and for each observation, $n \in N$,  we have predict
 distributed noise term with scale `sigma`.  This model has
 improper priors for the two regression coefficients.
 
-这里共有 `N` 个观测值，对于每个观测值 $n \in N$，都包含一个自变量 `x[n]` 和对应的因变量 `y[n]`。截距参数为 `alpha`，斜率参数为 `beta`。该模型假设噪声项服从尺度参数为 `sigma` 的正态分布。该模型对于两个回归系数采用了非正规先验分布。
+这里共有 `N` 个观测值，对于每个观测值 $n \in N$，都包含一个预测变量 `x[n]` 和对应的因变量 `y[n]`。截距参数为 `alpha`，斜率参数为 `beta`。该模型假设噪声项服从尺度参数为 `sigma` 的正态分布。该模型对于两个回归系数采用了非正规先验分布。
 
 ### Matrix notation and vectorization {- #vectorization.section}
 
@@ -118,7 +118,7 @@ because `x` is of type `vector` and `beta` of type
 Because Stan supports vectorization, a regression model with more than
 one predictor can be written directly using matrix notation.
 
-这种写法的另一个优势在于，Stan 的算术运算符经过重载后可以直接执行矩阵运算。在这种情况下，因为 `x` 的类型是 `vector`，`beta` 的类型是 `real`，所以表达式 `beta * x` 的类型是 `vector`。由于 Stan 支持向量化，可以直接使用矩阵符号编写具有多个自变量的回归模型。
+这种写法的另一个优势在于，Stan 的算术运算符经过重载后可以直接执行矩阵运算。在这种情况下，因为 `x` 的类型是 `vector`，`beta` 的类型是 `real`，所以表达式 `beta * x` 的类型是 `vector`。由于 Stan 支持向量化，可以直接使用矩阵符号编写具有多个预测变量的回归模型。
 
 ```stan
 data {
@@ -153,7 +153,7 @@ the entire model may be written using matrix arithmetic as shown.  It
 would be possible to include a column of ones in the data matrix `x` to
 remove the `alpha` parameter.
 
-在上述模型中，`x` 是一个 $N \times K$ 的自变量矩阵或数据矩阵，`beta` 是一个 $K$ 维的系数向量，因此 `x * beta` 是一个 $N$ 维的预测值向量，每个元素对应于 $N$ 个数据项中的一个。这些预测值与 $N$ 维向量 `y` 中的观测结果对应，因此整个模型可以使用矩阵运算来表示。如果希望消除 `alpha` 参数，可以在数据矩阵 `x` 中添加一列全为1的向量。
+在上述模型中，`x` 是一个 $N \times K$ 的预测变量矩阵或数据矩阵，`beta` 是一个 $K$ 维的系数向量，因此 `x * beta` 是一个 $N$ 维的预测值向量，每个元素对应于 $N$ 个数据项中的一个。这些预测值与 $N$ 维向量 `y` 中的观测结果对应，因此整个模型可以使用矩阵运算来表示。如果希望消除 `alpha` 参数，可以在数据矩阵 `x` 中添加一列全为1的向量。
 
 The distribution statement in the model above is just a more efficient,
 vector-based approach to coding the model with a loop, as in the
@@ -371,7 +371,7 @@ function, are both sigmoid functions (i.e., they are both *S*-shaped).
 A logistic regression model with one predictor and an intercept is coded as
 follows.
 
-具有一个自变量和截距项的 Logistic 回归模型可以按以下方式进行编码。
+具有一个预测变量和截距项的 Logistic 回归模型可以按以下方式进行编码。
 
 ```stan
 data {
@@ -522,7 +522,7 @@ efficiency.  Like the Bernoulli-logit, the categorical-logit
 distribution applies softmax internally to convert an arbitrary vector
 to a simplex,
 
-其中 `x_beta[n]'` 是 `x_beta[n]` 的转置。`beta` 的先验也是向量形式。截至 Stan 2.18版本，分类-逻辑分布（categorical-logit distribution）的参数未进行向量化处理，因此需要使用循环。这里用矩阵乘法来定义一个对应所有自变量的局部变量，以提高效率。与伯努利-逻辑（Bernoulli-logit）分布一样，分类-逻辑分布在内部应用 softmax 函数将任意向量转换为单纯形，
+其中 `x_beta[n]'` 是 `x_beta[n]` 的转置。`beta` 的先验也是向量形式。截至 Stan 2.18版本，分类-逻辑分布（categorical-logit distribution）的参数未进行向量化处理，因此需要使用循环。这里用矩阵乘法来定义一个对应所有预测变量的局部变量，以提高效率。与伯努利-逻辑（Bernoulli-logit）分布一样，分类-逻辑分布在内部应用 softmax 函数将任意向量转换为单纯形，
 
 $$
 \texttt{categorical}\mathtt{\_}\texttt{logit}\left(y \mid \alpha\right)
@@ -581,7 +581,7 @@ appropriate argument for `softmax()`.  The categorical outcomes
 `y[n]` must be between `1` and `K` in order for the
 discrete sampling to be well defined.
 
-这些约束是因为在分类模型中，类别数量 `K` 必须至少为2才能有用。数据项数量 `N` 可以为零，但不能为负数；与 R 不同，Stan 的 for 循环总是向前移动，因此当 `N` 等于零时，循环范围为 `1:N` 可确保循环体不会被执行。自变量的数量 `D` 必须至少为 1，以便 `beta * x[n]` 生成 `softmax()` 的适当参数。分类结果 `y[n]` 必须在 `1` 和 `K` 之间，以使离散采样定义良好。
+这些约束是因为在分类模型中，类别数量 `K` 必须至少为2才能有用。数据项数量 `N` 可以为零，但不能为负数；与 R 不同，Stan 的 for 循环总是向前移动，因此当 `N` 等于零时，循环范围为 `1:N` 可确保循环体不会被执行。预测变量的数量 `D` 必须至少为 1，以便 `beta * x[n]` 生成 `softmax()` 的适当参数。分类结果 `y[n]` 必须在 `1` 和 `K` 之间，以使离散采样定义良好。
 
 Constraints on data declarations are optional.  Constraints on
 parameters declared in the `parameters` block, on the other hand,

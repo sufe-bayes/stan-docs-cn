@@ -20,7 +20,7 @@ practical applied statistical modeling, we are mainly concerned with
 reducing wall time (how long a program takes as measured by a clock on
 the wall) and keeping memory requirements within available bounds.
 
-本章提供了一系列优化 Stan 代码的技术，包括向量化、充分统计量和共轭性。粗略而言，效率包括计算所需的时间和所需的内存量。对于实际应用的统计建模，我们主要关注减少墙上时间（通过墙上时钟测量程序所需的时间），并将内存需求保持在可用范围内。
+本章提供了一系列优化 Stan 代码的技术，包括向量化、充分统计量和共轭性。粗略地讲，效率包括计算所需的时间和内存需求。对于实际应用的统计建模，我们主要关注减少墙上时间（用墙上时钟测量的程序执行时间），并将内存需求保持在可用范围内。
 
 ## What is efficiency?
 
@@ -55,7 +55,7 @@ inference algorithm (ADVI) is probabilistic despite being an
 optimization algorithm; the randomization lies in a nested Monte Carlo
 calculation for an expected gradient.
 
-Stan 程序表达的模型本质上是统计的。应用于这些模型的算法本身可能是概率性的，也可能不是概率性的。例如，给定参数的初始值（其本身可以是确定性的或随机生成的），用于惩罚最大似然估计的 Stan 优化算法（L-BFGS）是纯确定性的。Stan 的采样算法基于马尔可夫链蒙特卡罗（Markov Chain Monte Carlo, MCMC）算法，该算法在每一步都具有概率性。Stan 的变分推断算法（ADVI）虽然是一种优化算法，但却是概率性的，其随机化在于对期望梯度的嵌套蒙特卡罗计算。
+Stan 程序所表达的模型本质上是统计性的。应用于这些模型的算法本身可能是概率性的，也可能不是。例如，给定参数的初始值（其本身可以是确定性的或随机生成的），用于惩罚最大似然估计的 Stan 优化算法（L-BFGS）是纯确定性的。Stan 的采样算法基于马尔可夫链蒙特卡罗（Markov Chain Monte Carlo, MCMC）算法，该算法在每一步都具有概率性。Stan 的变分推断算法（ADVI）虽然是一种优化算法，但却是概率性的，其随机化在于对期望梯度的嵌套蒙特卡罗计算。
 
 With probabilistic algorithms, there will be variation in run times
 (and maybe memory usage) based on the randomization involved.  For
@@ -66,7 +66,7 @@ variation will be limited;  when there is a lot of variation it can be
 a sign that there is a problem with the model's parameterization in
 a Stan program or with initialization.
 
-对于概率性算法，由于涉及随机化，运行时间（可能还有内存使用）会有所变化。例如，由于从尾部太远处开始，后续的迭代算法，如常微分方程的求解器，可能需要不同数量的步骤。理想情况下，这种变化是有限的；当有较大变化时，这可能意味着 Stan 程序中模型的参数化或初始化出现问题。
+对于概率性算法，由于涉及随机化，运行时间（可能还有内存使用）会有所变化。例如，由于从分布尾部过远处开始，底层的迭代算法（如常微分方程求解器）可能需要不同数量的步骤。理想情况下，这种变化是有限的；当有较大变化时，这可能意味着 Stan 程序中模型的参数化或初始化出现问题。
 
 A well-behaved Stan program will have low variance between runs with
 different random initializations and differently seeded random number
@@ -81,7 +81,7 @@ rate in order to target a lower step size.  This is because smaller
 step sizes allow Stan's gradient-based algorithms to better follow the
 curvature in the density or penalized maximum likelihood being fit.
 
-一个表现良好的 Stan 程序在不同随机初始化和不同随机数种子下运行时具有较低的方差。但有时算法可能会陷入后验分布的某个区域，通常是由于高曲率造成的。这种停滞几乎总是表明需要重新对模型进行参数化。仅仅丢弃具有明显不良行为（缓慢或停滞）的马尔可夫链可能导致后验估计的偏差。这种陷入停滞的问题通常可以通过降低初始步长来克服，以避免在自适应过程中陷入困境，并增加目标接受率以达到较低的步长。这是因为较小的步长允许 Stan 的基于梯度的算法更好地遵循密度中的曲率或被惩罚的最大似然。
+一个表现良好的 Stan 程序在不同随机初始化和不同随机数种子下的运行结果具有较低的方差。但有时算法可能会陷入后验分布的某个区域，通常是由于高曲率造成的。这种停滞几乎总是表明需要对模型进行重参数化。仅仅丢弃具有明显不良行为（缓慢或停滞）的马尔可夫链可能导致后验估计的偏差。这种陷入停滞的问题通常可以通过降低初始步长来克服，以避免在自适应过程中陷入困境，并增加目标接受率以达到较低的步长。这是因为较小的步长允许 Stan 的基于梯度的算法更好地遵循密度中的曲率或被惩罚的最大似然。
 
 ## Statistical vs.\  computational efficiency
 
@@ -101,7 +101,7 @@ behaved.  The typical way to do this is by applying a change of
 variables (i.e., reparameterization) so that sampling algorithms mix
 better or optimization algorithms require less adaptation.
 
-统计效率通常通过使模型的统计公式表现得更好来减少算法所需的步骤。实现这一点的典型方法是应用变量变换（即重参数化），以便采样算法更好地混合，或者优化算法需要更少的自适应。
+统计效率通常通过改善模型统计公式的表现来减少算法所需的步骤。实现这一点的典型方法是应用变量变换（即重参数化），以便采样算法更好地混合，或者优化算法需要更少的自适应。
 
 ## Model conditioning and curvature
 
@@ -154,7 +154,7 @@ log densities or penalized likelihood functions, it is easier for
 Stan's adaptation, especially the diagonal adaptations that are used
 as defaults.
 
-Hessian 矩阵 $H$ 的条件数给出了曲率问题难度的一个很好的衡量标准，它是 $H$ 最大特征值与最小特征值的比值（假设 Hessian 是正定的）。这基本上衡量了最平坦的方向和最弯曲的方向之间的差异。通常，基于梯度的算法的步长受到最陡峭弯曲方向的限制。有了条件更好的对数密度或惩罚似然函数，Stan 的自适应更容易，尤其是用作默认值的对角自适应。
+Hessian 矩阵 $H$ 的条件数很好地衡量了曲率问题的难度，它是 $H$ 最大特征值与最小特征值的比值（假设 Hessian 是正定的）。这本质上衡量了最平坦的方向与最弯曲的方向之间的差异。通常，基于梯度的算法的步长受到最陡峭弯曲方向的限制。具有条件更好的对数密度或惩罚似然函数时，Stan 的自适应更容易，尤其是用作默认值的对角自适应。
 
 ### Unit scales without correlation {-}
 
@@ -167,7 +167,7 @@ optimal performance of Stan's algorithms.  For Hamiltonian Monte
 Carlo, this implies a unit mass matrix, which requires no adaptation
 as it is where the algorithm initializes.
 
-理想情况下，所有参数都应该编程为具有单位尺度并减少后验相关性；这些性质意味着 Stan 算法的最佳性能不需要旋转或缩放。对于 Hamiltonian Monte Carlo（哈密顿蒙特卡罗），这意味着单位质量矩阵，它不需要自适应，因为这是算法初始化时所使用的。
+理想情况下，所有参数都应该设置为具有单位尺度并减少后验相关性；这些性质意味着 Stan 算法的最佳性能不需要旋转或缩放。对于 Hamiltonian Monte Carlo（哈密顿蒙特卡罗），这意味着单位质量矩阵，由于这是算法初始化时使用的，因此不需要自适应。
 
 ### Varying curvature {-}
 
@@ -183,7 +183,7 @@ aimed at improving the conditioning of the Hessian and/or making it
 more consistent across the relevant portions of the density (or
 penalized maximum likelihood function) being fit.
 
-在除非常简单的模型（如多元正态）外的所有模型中，Hessian 将随着 $\theta$ 的变化而变化（一个极端的例子是 Neal 的漏斗分布，这在数据很少或没有数据的分层模型中自然出现）。曲率变化越大，具有固定自适应参数的算法就越难找到覆盖整个密度的好自适应。所提出的许多变量变换旨在改善 Hessian 的条件，和/或使其在所拟合的密度（或惩罚最大似然函数）的相关部分之间更加一致。
+在除非常简单的模型（如多元正态）外的所有模型中，Hessian 将随着 $\theta$ 的变化而变化（一个极端的例子是 Neal 的漏斗分布，这在数据很少或没有数据的分层模型中自然出现）。曲率变化越大，具有固定自适应参数的算法就越难找到能覆盖整个密度的良好自适应。所提出的许多变量变换旨在改善 Hessian 的条件，和/或使其在所拟合的密度（或惩罚最大似然函数）的相关部分之间更加一致。
 
 For all of Stan's algorithms, the curvature along the path from the
 initial values of the parameters to the solution is relevant.  For
@@ -194,7 +194,7 @@ which is the posterior volume where almost all draws from the
 posterior lies;  thus, the typical set contains almost all of the
 posterior probability mass.
 
-对于 Stan 的所有算法，从参数初始值到解的路径上的曲率是相关的。对于惩罚最大似然和变分推断，迭代算法的解将是一个点，所以这才是最重要的。对于采样，相关的“解”是典型集，即几乎所有后验抽样所在的区域；因此，典型集包含了几乎所有的后验概率质量。
+对于 Stan 的所有算法，从参数初始值到解的路径上的曲率是相关的。对于惩罚最大似然和变分推断，迭代算法的解将是一个点，所以这才是最重要的。对于采样，相关的“解”是典型集，即几乎所有后验抽样所在的后验区域；因此，典型集包含了几乎所有的后验概率质量。
 
 With sampling, the curvature may vary dramatically between the points
 on the path from the initialization point to the typical set and
@@ -305,7 +305,7 @@ model {
 
 Now the only validation is carried out by the multivariate normal.
 
-现在，唯一的验证由多元正态分布执行。
+现在，唯一的验证由多元正态函数执行。
 
 ## Reparameterization {#reparameterization.section}
 
@@ -318,7 +318,7 @@ dramatically increase effective sample size for the same number of
 iterations or even make programs that would not converge well
 behaved.
 
-Stan 的采样器在从具有困难后验几何的分布中采样时可能很慢。加快此类模型的一种方法是通过重参数化。在某些情况下，重参数化可以在相同的迭代次数下大大增加有效样本量，甚至可以使原本不会收敛的程序表现良好。
+Stan 的采样器在从具有困难后验几何的分布中采样时可能很慢。加快此类模型的一种方法是通过重参数化。在某些情况下，重参数化可以在相同迭代次数下大幅增加有效样本量，甚至可以使原本不会收敛的程序表现良好。
 
 ### Example: Neal's funnel {- #funnel.figure}
 
@@ -341,7 +341,7 @@ extreme, but can be trivially reparameterized in such a way as to make
 sampling straightforward.  Neal's example has support for $y \in
 \mathbb{R}$ and $x \in \mathbb{R}^9$ with density
 
-@Neal:2003 定义了一个分布，体现了从一些层次模型中取样的困难。Neal 的例子是相当极端的，但是可以以一种简单的方式重参数化，从而使抽样变得简单。Neal 的例子对 $y\in \mathbb{R}$和$x\in \mathbb{R}^9$ 有支持，密度为
+@Neal:2003 定义了一个分布，体现了从一些层次模型中取样的困难。Neal 的例子是相当极端的，但是可以以一种简单的方式重参数化，从而使抽样变得简单。Neal 的例子对 $y \in \mathbb{R}$ 和 $x \in \mathbb{R}^9$ 有支持，密度为
 
 $$
 p(y,x) = \textsf{normal}(y \mid 0,3) \times \prod_{n=1}^9
@@ -431,7 +431,7 @@ Stan code, it is useful to provide a comment indicating what the
 distribution for the parameter implies for the distribution of the
 transformed parameter.
 
-在这里的第二个模型中，参数 `x_raw` 和 `y_raw` 是按照独立标准正态分布采样的，这对 Stan 来说很容易。然后这些被转换为漏斗的采样样本。在这种情况下，同样的转换可以用来直接定义基于独立标准正态分布采样样本的蒙特卡洛样本；马尔科夫链蒙特卡洛方法不是必要的。如果在 Stan 代码中使用这样的重参数化，那么提供一个说明参数分布对于转化后参数的分布的意义的注释是很有用的。
+在第二个模型中，参数 `x_raw` 和 `y_raw` 是按照独立标准正态分布采样的，这对 Stan 来说很容易。然后这些被转换为漏斗的采样样本。在这种情况下，同样的转换可以用来直接定义基于独立标准正态分布采样样本的蒙特卡洛样本；马尔科夫链蒙特卡洛方法不是必要的。如果在 Stan 代码中使用这样的重参数化，那么提供一个说明参数分布对于转化后参数的分布的意义的注释是很有用的。
 
 ### Reparameterizing the Cauchy {-}
 
@@ -441,7 +441,7 @@ Sampling from heavy tailed distributions such as the Cauchy is
 difficult for Hamiltonian Monte Carlo, which operates within a
 Euclidean geometry.
 
-从 Cauchy 等重尾分布中取样对哈密顿蒙特卡洛来说是困难的，它是在欧几里得几何中运行的。^[黎曼曼福哈密顿蒙特卡洛（RRMMC）通过在具有位置相关度量的空间中模拟哈密顿动力学来克服这一困难；见 @GirolamiCalderhead:2011 和 @Betancourt:2012。]
+从 Cauchy 等重尾分布中采样对哈密顿蒙特卡洛来说是困难的，它是在欧式几何中运行的。
 
 The practical problem is that tail of the Cauchy
 requires a relatively large step size compared to the trunk.  With a
@@ -453,7 +453,7 @@ Cauchy-distributed variable as the transform of a uniformly
 distributed variable using the Cauchy inverse cumulative distribution
 function.
 
-实际问题是 Cauchy 的尾部与主干相比需要相对较大的步长。如果步长小，No-U-Turn 采样器在分布的尾部开始时需要很多步长；如果步长大，在分布的中心部分会有太多的拒绝。这个问题可以通过将 Cauchy 分布的变量定义为使用 Cauchy 反累积分布函数的均匀分布变量的变换来缓解。
+实际问题是 Cauchy 的尾部与主干相比需要相对较大的步长。步长较小时，No-U-Turn 采样器在分布的尾部开始时需要很多步；步长较大时，在分布的中心部分会有过多的拒绝。这个问题可以通过将 Cauchy 分布的变量定义为使用 Cauchy 反累积分布函数的均匀分布变量的变换来缓解。
 
 Suppose a random variable of interest $X$ has a Cauchy distribution
 with location $\mu$ and scale $\tau$, so that $X \sim
@@ -501,7 +501,7 @@ This declaration of `beta` as a parameter may be replaced with a
 transformed parameter `beta` defined in terms of a
 uniform-distributed parameter `beta_unif`.
 
-这种将 `beta` 作为参数的声明，可以用一个以均匀分布参数 `beta_unif` 定义的转换参数 `beta` 来代替。
+这种将 `beta` 作为参数的声明，可以用基于均匀分布参数 `beta_unif` 定义的转换参数 `beta` 来代替。
 
 ```stan
 parameters {
@@ -525,7 +525,7 @@ themselves be parameters.  The variable `beta` could also be
 defined as a local variable if it does not need to be included in the
 sampler's output.
 
-在 Stan 中，在 $(-\pi/2, \pi/2)$ 上变换一个均匀变量比在 $(0,1)$ 上变换更方便。Cauchy 位置和尺度参数，`mu` 和 `tau`，可以定义为数据，也可以本身是参数。变量 `beta` 如果不需要包含在采样器的输出中，也可以定义为一个局部变量。
+在 Stan 中，对 $(-\pi/2, \pi/2)$ 上的均匀变量进行变换比对 $(0,1)$ 上的变量更方便。Cauchy 位置和尺度参数，`mu` 和 `tau`，可以定义为数据，也可以本身是参数。变量 `beta` 如果不需要包含在采样器的输出中，也可以定义为一个局部变量。
 
 The uniform distribution on `beta_unif` is defined explicitly in
 the model block, but it could be safely removed from the program
@@ -537,7 +537,7 @@ some time checking that that `beta_unif` is between
 `-pi() / 2` and `pi() / 2`, but this condition is guaranteed by
 the constraints in the declaration of `beta_unif`.
 
-`beta_unif` 上的均匀分布是在模型块中明确定义的，但它可以安全地从程序中删除，而不会改变采样行为。这是因为 $\log\textsf{uniform}(\beta_{\textsf{unif}} \mid -\pi/2,\pi/2) = -\log \pi$ 是一个常数，而 Stan 只需要总的对数概率，直到一个加法常数。Stan 会花一些时间检查 `beta_unif` 是否在 `-pi() / 2` 和 `pi() / 2` 之间，但是这个条件是由 `beta_unif` 的声明中的约束条件保证的。
+`beta_unif` 上的均匀分布是在模型块中明确定义的，但可以安全地从程序中删除而不会改变采样行为。这是因为 $\log\textsf{uniform}(\beta_{\textsf{unif}} \mid -\pi/2,\pi/2) = -\log \pi$ 是一个常数，而 Stan 只需要总的对数概率到一个加法常数。Stan 会花一些时间检查 `beta_unif` 是否在 `-pi() / 2` 和 `pi() / 2` 之间，但是这个条件是由 `beta_unif` 的声明中的约束条件保证的。
 
 ### Reparameterizing a Student-t distribution {-}
 
@@ -616,11 +616,11 @@ regression predictor $x$.  Then the reparameterization $\mu = \alpha
 parameterization, $\beta$ has (potentially) heavy tails, whereas in
 the second, neither $\tau$ nor $\alpha$ have heavy tails.
 
-现在假设 $\mu = \beta x$ 是 $\beta$ 与回归预测器 $x$ 的乘积。那么，重参数化的 $\mu = \alpha \tau^{-\frac{1}{2}} x$ 具有相同的分布，但在最初的直接参数化中，$\beta$ 具有（潜在的）重尾，而在第二个参数化中，$\tau$ 和 $\alpha$ 都没有重尾。
+现在假设 $\mu = \beta x$ 是 $\beta$ 与回归预测变量 $x$ 的乘积。那么重参数化的 $\mu = \alpha \tau^{-\frac{1}{2}} x$ 具有相同的分布，但在最初的直接参数化中，$\beta$ 具有（潜在的）重尾，而在第二个参数化中，$\tau$ 和 $\alpha$ 都没有重尾。
 
 To translate into Stan notation, this reparameterization replaces
 
-为了转化为 Stan 的符号，这种重参数化取消了
+为了转化为 Stan 的表示，这种重参数化替换了
 
 ```stan
 parameters {
@@ -636,7 +636,7 @@ model {
 
 with
 
-取而代之的是
+替换为
 
 ```stan
 parameters {
@@ -666,7 +666,7 @@ higher; when `nu` is 1, the result is a Cauchy distribution with
 distribution approaches a normal distribution.  Thus the parameter
 `nu` characterizes the heaviness of the tails of the model.
 
-虽然这里设置为 `0`，但在大多数情况下，自由度参数 `nu` 的下限可以设置为 `1` 或更高；当 `nu` 为1时，结果是具有厚尾的 Cauchy 分布，当 `nu` 接近无穷大时，Student-t 分布接近正态分布。因此，参数 `nu` 表征了模型尾部的肥厚程度。
+虽然这里设置为 `0`，但在大多数情况下，自由度参数 `nu` 的下限可以设置为 `1` 或更高；当 `nu` 为1时，结果是具有厚尾的 Cauchy 分布，当 `nu` 接近无穷大时，Student-t 分布接近正态分布。因此，参数 `nu` 表征了模型的厚尾程度。
 
 ### Hierarchical models and the non-centered parameterization {-}
 
@@ -677,7 +677,7 @@ involves complex geometries and interactions that are not known
 analytically.  Nevertheless, the non-centered parameterization
 can still be effective for separating parameters.
 
-然而，在应用贝叶斯建模中，通常涉及复杂的几何形状和相互作用，而这些都是无法用分析方法知道的。尽管如此，重参数化对于分离参数仍然是有效的。
+然而，在应用贝叶斯建模中，通常涉及复杂的几何形状和相互作用，而这些都无法通过解析方法获知。尽管如此，非中心参数化对于分离参数仍然是有效的。
 
 #### Centered parameterization {-}
 
@@ -687,7 +687,7 @@ For example, a vectorized hierarchical model might draw a vector of
 coefficients $\beta$ with definitions as follows.  The so-called
 centered parameterization is as follows.
 
-例如，一个向量化分层模型可能会画出一个系数向量 $\beta$，定义如下。所谓的中心化参数化如下。
+例如，一个向量化分层模型可能包含一个系数向量 $\beta$，定义如下。所谓的中心化参数化如下。
 
 ```stan
 parameters {
@@ -723,7 +723,7 @@ parameterization is more efficient.  See
 @Betancourt-Girolami:2013 for more information on the effects of
 centering in hierarchical models fit with Hamiltonian Monte Carlo.
 
-像上面这样的分层模型会出现和 Neal 的漏斗分布一样的低效率，因为 `beta`、`mu_beta` 和 `sigma_beta` 的值在后验中是高度相关的。相关性的极端性取决于数据量，Neal 的漏斗分布是没有数据的极端情况。在这些情况下，下一节讨论的非中心参数化比较好；当有大量数据时，中心参数化更有效。关于用哈密顿蒙特卡洛拟合的分层模型中心化的影响，更多信息见 @Betancourt-Girolami:2013。
+像上面这样的分层模型会遭遇与 Neal 的漏斗分布相同的低效率问题，因为 `beta`、`mu_beta` 和 `sigma_beta` 的值在后验中是高度相关的。相关性的极端程度取决于数据量，Neal 的漏斗分布是没有数据的极端情况。在这些情况下，下一节讨论的非中心参数化更优；当有大量数据时，中心参数化更有效。关于用哈密顿蒙特卡洛拟合的分层模型中心化的影响，更多信息见 @Betancourt-Girolami:2013。
 
 ### Non-centered parameterization {-}
 
@@ -739,7 +739,7 @@ effective sample size when there is not much data (see
 @Betancourt-Girolami:2013), and in more extreme cases will be
 necessary to achieve convergence.
 
-有时，组别层面的影响并不能严格约束层次分布。当组别不多，或者组间差异很大时，就会出现这种情况。在这种情况下，通过将数据与参数的相关性转移到超参数上，可以使层次模型的效率大大提升。与漏斗的例子类似，当数据不多时，这在有效样本量方面会更有效率（见 @Betancourt-Girolami:2013），而在更极端的情况下，则需要实现收敛。
+有时，组别层面的影响并不能严格约束层次分布。当组别数量不多，或者组间差异很大时，就会出现这种情况。在这种情况下，通过将数据与参数的相关性转移到超参数上，可以使层次模型的效率大大提升。与漏斗的例子类似，当数据量不足时，在有效样本量方面会更有效率（见 @Betancourt-Girolami:2013），而在更极端的情况下，则是实现收敛的必要条件。
 
 ```stan
 parameters {
@@ -762,7 +762,7 @@ model {
 Any priors defined for `mu_beta` and `sigma_beta` remain as
 defined in the original model.
 
-任何为 `mu_beta` 和 `sigma_beta` 定义的预设值都与原始模型中的定义相同。
+任何为 `mu_beta` 和 `sigma_beta` 定义的先验都与原始模型中的定义相同。
 
 Alternatively, Stan's
 [affine transform](https://mc-stan.org/docs/reference-manual/types.html#affinely-transformed-real)
@@ -800,7 +800,7 @@ scale implies a prior distribution on $\beta$ with location $l$ and
 scale $s$. Doing so would reduce the dependence between $\alpha$,
 $l$, and $s$.
 
-分层模型的重参数化并不限于正态分布，尽管正态分布是最好的候选分布。一般来说，位置尺度族中的任何参数分布都是重参数化的良好备选者。令 $\beta=l+s\alpha$，其中 $l$ 是一个位置参数，$s$ 是一个尺度参数。参数 $l$ 不需要是平均值，$s$ 不需要是标准差，平均值和标准差都不需要存在。如果 $\alpha$ 和 $\beta$ 来自同一个分布族，但 $\alpha$ 的位置为零，尺度为单位，而 $\beta$ 的位置为 $l$，尺度为 $s$，那么这个分布就是一个位置-尺度分布。因此，如果 $\alpha$ 是一个参数，$\beta$ 是一个转换后的参数，那么在 $\alpha$ 上有一个位置为零和单位尺度的位置-尺度族的先验分布就意味着在 $\beta$ 上有一个位置为 $l$ 和尺度为 $s$ 的先验分布。这样做会减少 $\alpha$、$l$ 和 $s$ 之间的依赖性。
+分层模型的重参数化并不仅限于正态分布，尽管正态分布是最理想的候选分布。一般来说，位置尺度族中的任何参数分布都是重参数化的良好选择。令 $\beta=l+s\alpha$，其中 $l$ 是一个位置参数，$s$ 是一个尺度参数。参数 $l$ 不需要是平均值，$s$ 不需要是标准差，平均值和标准差都不需要存在。如果 $\alpha$ 和 $\beta$ 来自同一个分布族，但 $\alpha$ 的位置为零，尺度为单位，而 $\beta$ 的位置为 $l$，尺度为 $s$，那么这个分布就是一个位置-尺度分布。因此，如果 $\alpha$ 是一个参数，$\beta$ 是一个转换后的参数，那么在 $\alpha$ 上有一个位置为零和单位尺度的位置-尺度族的先验分布就意味着在 $\beta$ 上有一个位置为 $l$ 和尺度为 $s$ 的先验分布。这样做会减少 $\alpha$、$l$ 和 $s$ 之间的依赖性。
 
 There are several univariate distributions in the location-scale
 family, such as the Student t distribution, including its special
@@ -812,7 +812,7 @@ logistic, the double exponential, the generalized extreme value
 distributions, and the stable distribution are also in the
 location-scale family.
 
-在位置-尺度族中有几个单变量分布，如 Student-t 分布，包括其特殊情况下的 Cauchy 分布（自由度为1）和正态分布（自由度为无穷）。如上所示，如果 $\alpha$ 是标准正态分布，那么 $\beta$ 也是正态分布，其平均值 $\mu=l$，标准 差 $\sigma=s$。Logistic、双指数、广义极值分布和稳定分布也属于位置-尺度族。
+位置-尺度族中有几个单变量分布，如 Student-t 分布，包括其特殊情况下的 Cauchy 分布（自由度为1）和正态分布（自由度为无穷）。如上所示，如果 $\alpha$ 是标准正态分布，那么 $\beta$ 也服从正态分布，其平均值 $\mu=l$，标准差 $\sigma=s$。Logistic、双指数、广义极值分布和稳定分布也属于位置-尺度族。
 
 Also, if $z$ is distributed standard normal, then $z^2$ is distributed
 chi-squared with one degree of freedom. By summing the squares of $K$
@@ -822,7 +822,7 @@ for large $K$, the computational gains of this reparameterization may
 be overwhelmed by the computational cost of specifying $K$ primitive
 parameters just to obtain one transformed parameter to use in a model.
 
-另外，如果 $z$ 是标准正态分布，那么 $z^2$ 是自由度为1的卡方分布。通过对 $K$ 个独立标准正态分布变量的平方求和，可以得到一个单一变量，该变量是自由度为 $K$ 的卡方分布。然而，对于大的 $K$，这种重参数化的计算收益可能会被确定 $K$ 原始参数的计算成本所掩盖，而这些参数只是为了获得一个模型中使用的转换参数。
+另外，如果 $z$ 服从标准正态分布，那么 $z^2$ 服从自由度为1的卡方分布。通过对 $K$ 个独立标准正态分布变量的平方求和，可以得到一个服从自由度为 $K$ 的卡方分布的单一变量。然而，对于较大的 $K$，这种重参数化的计算收益可能会被指定 $K$ 个原始参数的计算成本所抵消，而这些参数仅仅是为了获得一个在模型中使用的转换参数。
 
 
 ### Multivariate reparameterizations {-}
@@ -836,7 +836,7 @@ the prior for $\beta$ to be multivariate normal with mean vector $\mu$
 and covariance matrix $\Sigma$. Such a belief is reflected by the
 following code.
 
-重参数化的好处不仅限于单变量分布。服从多元正态先验分布的参数也是重参数化的优秀候选者。假设你想要 $\beta$ 的先验分布是具有均值向量 $\mu$ 和协方差矩阵 $\Sigma$ 的多元正态分布。这个想法可以通过以下代码来实现。
+重参数化的好处不仅限于单变量分布。服从多元正态先验分布的参数也是重参数化的理想候选者。假设你希望 $\beta$ 的先验分布是具有均值向量 $\mu$ 和协方差矩阵 $\Sigma$ 的多元正态分布。这种设定可以通过以下代码实现。
 
 
 ```stan
@@ -902,7 +902,7 @@ reduces dependence among the elements of `alpha` and second, it
 avoids the need to invert `Sigma` every time `multi_normal`
 is evaluated.
 
-这种重参数化有两个优点。首先，它减少了 $\alpha$ 元素之间的相关性；其次，它避免了每次评估 `multi_normal` 时需要求逆 `Sigma` 的需要。
+这种重参数化有两个优点：首先，它减少了 $\alpha$ 元素之间的相关性；其次，它避免了每次评估 `multi_normal` 时需要对 `Sigma` 求逆。
 
 The Cholesky factor is also useful when a covariance matrix is
 decomposed into a correlation matrix that is multiplied from both
@@ -918,7 +918,7 @@ vector of standard deviations `sigma` were unknown parameters,
 then a reparameterization of `beta` in terms of `alpha`
 could be implemented as follows.
 
-当将协方差矩阵分解为两边同时乘以标准差对角矩阵的相关系数矩阵时，这个 Cholesky 分解也非常有用，其中标准差或相关系数是未知参数。协方差矩阵的 Cholesky 分解等于标准差对角矩阵和相关矩阵的 Cholesky 分解的乘积。此外，标准差对角矩阵和向量的乘积等于标准差和该向量的逐元素乘积。因此，如果相关系数矩阵 `Tau` 是固定数据，但标准差向量 `sigma` 是未知参数，则可以如下实现 `beta` 相对于 `alpha` 的重参数化。
+当将协方差矩阵分解为相关系数矩阵并两边同时乘以标准差对角矩阵时，Cholesky 分解也特别有用，其中标准差或相关系数是未知参数。协方差矩阵的 Cholesky 分解等于标准差对角矩阵和相关矩阵的 Cholesky 分解的乘积。此外，标准差对角矩阵和向量的乘积等于标准差和该向量的逐元素乘积。因此，如果相关系数矩阵 `Tau` 是固定数据，但标准差向量 `sigma` 是未知参数，则可以如下实现 `beta` 相对于 `alpha` 的重参数化。
 
 ```stan
 data {
@@ -956,7 +956,7 @@ distributions that can be conceptualized as contaminations of the
 multivariate normal, such as the multivariate Student t and the skew
 multivariate normal distribution.
 
-这种标准正态分布的多元正态分布重参数化的方法可以扩展到其他被概念化为多元正态分布混合的分布，比如多元 t 分布和偏斜多元正态分布。
+这种基于标准正态分布变量的多元正态分布重参数化方法可以扩展到其他可被概念化为多元正态分布扰动的分布，如多元 t 分布和偏斜多元正态分布。
 
 A Wishart distribution can also be reparameterized in terms of standard
 normal variates and chi-squared variates. Let $L$ be the Cholesky factor
@@ -979,7 +979,7 @@ $W = LAA^{\top}L^{\top}$ is distributed Wishart with scale matrix
 $S = LL^{\top}$ and degrees of freedom $\nu$. Such a reparameterization
 can be implemented by the following Stan code:
 
-其中每个 $c_i$ 是自由度为 $\nu-i+1$ 的卡方分布，每个 $z_{ij}$ 是标准正态分布，那么 $W = LAA^{\top}L^{\top}$ 是具有比例矩阵 $S = LL^{\top}$ 和自由度 $\nu$ 的 Wishart 分布。这样的重参数化可以通过以下的 Stan 代码实现：
+其中每个 $c_i$ 服从自由度为 $\nu-i+1$ 的卡方分布，每个 $z_{ij}$ 服从标准正态分布，那么 $W = LAA^{\top}L^{\top}$ 服从具有尺度矩阵 $S = LL^{\top}$ 和自由度 $\nu$ 的 Wishart 分布。这样的重参数化可以通过以下 Stan 代码实现：
 
 ```stan
 data {
@@ -1033,7 +1033,7 @@ multivariate normal distribution, you can pass $L A$ to the more
 efficient `multi_normal_cholesky` function, rather than passing
 $W$ to `multi_normal`.
 
-这种重参数化有三个优点：首先，它减少了 `z` 元素之间的依赖性；其次，它避免了每次计算 `wishart` 时都需要求解协方差矩阵 $W$ 的逆；第三，在将 $W$ 与多元正态分布一起使用时，可以将 $L A$ 传递给更有效的 `multi_normal_cholesky` 函数，而不是将 $W$ 传递给 `multi_normal` 函数。
+这种重参数化有三个优点：首先，它减少了 `z` 元素之间的依赖性；其次，它避免了每次评估 `wishart` 时都需要对协方差矩阵 $W$ 求逆；第三，当将 $W$ 与多元正态分布一起使用时，可以将 $L A$ 传递给更高效的 `multi_normal_cholesky` 函数，而不是将 $W$ 传递给 `multi_normal` 函数。
 
 If $W$ is distributed Wishart with scale matrix $S$ and degrees of
 freedom $\nu$, then $W^{-1}$ is distributed inverse Wishart with inverse
@@ -1154,7 +1154,7 @@ differentiation require a template expression to be allocated
 and constructed for each subexpression of a Stan program involving
 parameters or transformed parameters.^[Stan uses its own arena-based allocation, so allocation and deallocation are faster than with a raw call to `new`.]  This section defines optimization strategies based on vectorizing these subexpressions to reduce the work done during algorithmic differentiation.
 
-Stan 花费了大部分时间计算对数概率函数的梯度, 因此梯度是优化的明显目标。Stan 使用算 法微分进行的梯度计算需要为涉及参数或转换参数的 Stan 程序的每个子表达式分配和构造一 个模板表达式。^[Stan 使用自己的基于区域的分配，因此分配和解除分配比原始调用 `new` 更快。]本节定义了基于向量化这些子表达式以减少算法微分期间所做的工作量的优化策略。
+Stan 花费绝大部分时间计算对数概率函数的梯度，因此梯度是优化的明显目标。Stan 使用算法微分进行的梯度计算需要为涉及参数或转换参数的 Stan 程序的每个子表达式分配和构造一个模板表达式。^[Stan 使用自己的基于区域的内存分配，因此分配和释放比原始调用 `new` 更快。]本节定义了基于向量化这些子表达式以减少算法微分期间工作量的优化策略。
 
 ### Vectorizing summations {-}
 
@@ -1167,7 +1167,7 @@ continually increment a variable by assignment and addition.  For
 example, consider the following code snippet, where `foo()` is
 some operation that depends on `n`.
 
-由于前一节中描述的梯度瓶颈,将一系列加和项收集到向量或数组中, 然后应用 `sum()` 操 作比通过赋值和加法不断递增变量更有效率。例如, 考虑以下代码片段, 其中 `foo()` 是依赖于 `n` 的某个操作。
+由于前一节中描述的梯度瓶颈，将一系列加和项收集到向量或数组中，然后应用 `sum()` 操作比通过赋值和加法不断递增变量更有效率。例如，考虑以下代码片段，其中 `foo()` 是依赖于 `n` 的某个操作。
 
 ```stan
 for (n in 1:N) {
@@ -1183,7 +1183,7 @@ of the `N` summands.
 A faster alternative is to copy the values into a vector, then
 apply the `sum()` operator, as in the following refactoring.
 
-更快的替代方法是将这些值复制到一个向量中, 然后应用 `sum()` 运算符, 如以下重构所 示。
+更快的替代方法是将这些值复制到一个向量中，然后应用 `sum()` 运算符，如以下重构所示。
 
 ```stan
 {
@@ -1218,7 +1218,7 @@ unit noise using a two-dimensional array `x` of predictors, an
 array `y` of outcomes, and an array `beta` of regression
 coefficients.
 
-下面的程序使用二维数组 `x` 作为预测变量，数组 `y` 作为结果 和回归系数的数组 `beta` 直接编 码了一个具有固定单位噪声的线性回归。
+下面的程序使用二维数组 `x` 作为预测变量，数组 `y` 作为结果，以及数组 `beta` 作为回归系数，直接编码了一个具有固定单位噪声的线性回归。
 
 ```stan
 data {
@@ -1278,7 +1278,7 @@ that the transposition operator allocates a new vector into which the
 result of the transposition is copied.  This consumes both time
 and memory.^[Future versions of Stan may remove this inefficiency by more fully exploiting expression templates inside the Eigen C++ matrix library.  This will require enhancing Eigen to deal with mixed-type arguments, such as the type `double` used for constants and the algorithmic differentiation type `stan::math::var` used for variables.]
 
-转置和乘法的相对低效率在于，转置操作会分配一个新向量，将转置的结果复制到其中。这样会消耗时间和内存。可以通过重新排序乘积并将转置从循环中提取出来来减轻转置的低效率，如下所示。^[未来版本的 Stan 可能会通过更充分地利用 Eigen C++ 矩阵库内部的表达式模板来消除这种低效率。这将需要增强 Eigen 来处理混合类型的参数，例如用于常量的 `double` 类型和用于变量的算法微分类型 `stan::math::var`。]
+转置和乘法的相对低效率在于，转置操作会分配一个新向量并将转置结果复制到其中，这样会消耗时间和内存。可以通过重新排序乘积并将转置从循环中提取出来来减轻转置的低效率，如下所示。^[未来版本的 Stan 可能会通过更充分地利用 Eigen C++ 矩阵库内部的表达式模板来消除这种低效率。这将需要增强 Eigen 来处理混合类型的参数，例如用于常量的 `double` 类型和用于变量的算法微分类型 `stan::math::var`。]
 
 The inefficiency of transposition could itself be mitigated  by
 reordering the product and pulling the transposition out of the loop,
@@ -1303,7 +1303,7 @@ The problem with transposition could be completely solved by directly
 encoding the `x` as a row vector, as in the
 following example.
 
-换位问题可以通过将 `x` 编码为行向量直接完全解决 ，如以下示例所示。
+转置问题可以通过将 `x` 直接编码为行向量来完全解决，如以下示例所示。
 
 ```stan
 data {
@@ -1325,12 +1325,12 @@ Declaring the data as a matrix and then computing all the predictors
 at once using matrix multiplication is more efficient still, as in the
 example discussed in the next section.
 
-声明数据为矩阵, 然后使用矩阵乘法一次性计算所有预测值会更加高效, 例如下一节中讨论 的示例
+声明数据为矩阵，然后使用矩阵乘法一次性计算所有预测值会更加高效，例如下一节中讨论的示例。
 
 Having said all this, the most efficient way to code this model is
 with direct matrix multiplication, as in
 
-总之，编写代码的最高效方法是使用直接矩阵乘法，如下所示
+总之，编码该模型最有效的方法是使用直接矩阵乘法，如下所示：
 
 ```stan
 data {
@@ -1350,7 +1350,7 @@ will be more efficient in their encapsulated forms.  Rather than
 performing a sequence of row-vector/vector multiplications, it is
 better to encapsulate it as a single matrix/vector multiplication.
 
-通常, 执行循环工作的封装单个操作在其封装形式中更有效。与执行一系列行向量/向量乘法 相比, 更好的方法是将其封装为单个矩阵/向量乘法。
+通常，执行循环工作的封装化单操作在其封装形式中更有效。与执行一系列行向量/向量乘法相比，更好的方法是将其封装为单个矩阵/向量乘法。
 
 ### Vectorized probability functions {-}
 
@@ -1360,7 +1360,7 @@ The final and most efficient version replaces the loops and
 transformed parameters by using the vectorized form of the normal
 probability function, as in the following example.
 
-最终且最有效的版本通过使用正态概率函数的向量化形式来替换循环和转换的参数, 如下面的示例所示。
+最终且最有效的版本通过使用正态概率函数的向量化形式来替换循环和转换参数，如下面的示例所示。
 
 ```stan
 data {
@@ -1392,7 +1392,7 @@ arguments are the same dimensionality.  In the example above, `y` is a
 vector of size `N`, `x * beta` is a vector of size `N`, and `1` is a
 scalar.
 
-在函数参考手册中, 概率函数文档会指出哪些 Stan 的概率函数支持向量化; 详细信息请参见 函数参考手册。向量化概率函数接受所有参数的向量或标量输入, 唯一的限制是所有向量参 数的维度相同。在上面的示例中, `y` 是大小为 `N` 的向量, `x * beta` 是大小为 `N` 的向 量, `1` 是标量。
+在函数参考手册中，概率函数文档会指出哪些 Stan 的概率函数支持向量化；详细信息请参见函数参考手册。向量化概率函数接受所有参数的向量或标量输入，唯一的限制是所有向量参数的维度相同。在上面的示例中，`y` 是大小为 `N` 的向量，`x * beta` 是大小为 `N` 的向量，`1` 是标量。
 
 ### Reshaping data for vectorization {-}
 
@@ -1402,13 +1402,13 @@ Sometimes data does not arrive in a shape that is ideal for
 vectorization, but can be put into such shape with some munging
 (either inside Stan's transformed data block or outside).
 
-有时, 数据的形状不适合向量化, 但可以通过一些变换（在 Stan 的变换数据块内部或外部） 将其转换为适合的形状。
+有时，数据的形状不适合向量化，但可以通过一些变换（在 Stan 的转换数据块内部或外部）将其转换为适合的形状。
 
 John Hall provided a simple example on the Stan users group.
 Simplifying notation a bit, the original model had a sampling
 statement in a loop, as follows.
 
-John Hall 在 Stan 用户组中提供了一个简单的例子。稍微简化一下符号, 原始模型在循环中有 一个采样语句, 如下所示。
+John Hall 在 Stan 用户组中提供了一个简单的例子。稍微简化一下符号，原始模型在循环中有一个采样语句，如下所示。
 
 ```stan
 for (n in 1:N) {
@@ -1419,7 +1419,7 @@ for (n in 1:N) {
 The brute force vectorization would build up a mean vector and then
 vectorize all at once.
 
-粗暴的向量化会建立一个均值向量, 然后一次性向量化所有值。
+粗放的向量化会建立一个均值向量，然后一次性向量化所有值。
 
 ```stan
 {
@@ -1437,7 +1437,7 @@ Rather than having a single observation vector `y`, there are K of them.
 And because Stan doesn't support ragged arrays, it means K
 declarations.  For instance, with 5 levels, we have
 
-如果没有很多级别（值 `ii[n]` 可以取）, 那么在这种情况下, 将数据按组重新组织会更有 利。与其拥有单个观测向量 `y`, 不如拥有 $K$ 个向量。由于 Stan 不支持不规则数组, 这意味着 K 个声明。例如，有5个级别，我们有
+如果没有很多级别（值 `ii[n]` 可以取），那么在这种情况下，将数据按组重新组织会更有利。与其拥有单个观测向量 `y`，不如拥有 $K$ 个向量。由于 Stan 不支持不规则数组，这意味着 K 个声明。例如，有5个级别，我们有
 
 ```stan
 y_1 ~ normal(mu[1], sigma);
@@ -1451,7 +1451,7 @@ the data; if the sizes are  small, the simple vectorization may be
 faster, but for moderate to large sized groups, the full expansion
 should be faster.
 
-这种方式, `mu` 和 `sigma` 参数都是共享的。哪种方式更有效取决于数据的形状; 如果规模较 小, 则简单的向量化可能更快, 但对于中等到大型规模, 完全展开应该更快。
+这种方式，`mu` 和 `sigma` 参数都是共享的。哪种方式更有效取决于数据的形状；如果规模较小，则简单的向量化可能更快，但对于中等到大型规模，完全展开应该更快。
 
 ## Exploiting sufficient statistics
 
@@ -1507,7 +1507,7 @@ Because truth is represented as one and falsehood as zero, the sum
 `sum(y)` of a binary vector `y` is equal to the number of
 positive outcomes out of a total of `N` trials.
 
-因为真相用一表示，虚假用零表示，二进制向量 `y` 的总和 `sum(y)` 等于 N 次试验中的正结果数量。
+因为真值用1表示，假值用0表示，二进制向量 `y` 的总和 `sum(y)` 等于 N 次试验中的正结果数量。
 
 This can be generalized to other discrete cases (one wouldn't expect
 continuous observations to be duplicated if they are random).  Suppose
@@ -1516,7 +1516,7 @@ there are $N$ observations, where $N$ is much larger than $K$.  If
 $f_k$ is the frequency of outcome $z_k$, then the entire likelihood
 with distribution `foo` can be coded as follows.
 
-这可以推广到其他离散情况（如果观测值是连续的随机变量，就不会期望它们重复）。假设只有 $K$ 种可能的离散结果 $z_1, \dotsc, z_K$，但有 $N$ 个观测值，其中 $N$ 远大于 $K$。如果 $f_k$ 是结果 $z_k$ 的出现频数，则具有分布 `foo` 的整个似然函数可以编码如下：
+这可以推广到其他离散情况（如果观测值是连续随机变量，则不会期望它们重复）。假设只有 $K$ 种可能的离散结果 $z_1, \dotsc, z_K$，但有 $N$ 个观测值，其中 $N$ 远大于 $K$。如果 $f_k$ 是结果 $z_k$ 的出现频数，则具有分布 `foo` 的整个似然函数可以编码如下：
 
 ```stan
 for (k in 1:K) {
@@ -1661,14 +1661,14 @@ reused wherever possible.  That is, rather than using
 `exp(theta)` in multiple places, declare a local variable to
 store its value and reuse the local variable.
 
-如果计算表达式一次，则应将值保存并在可能的地方重复使用。也就是说，不要在多个位置使用 \~exp(theta)，而是声明一个本地变量来存储其值，并重复使用该本地变量。
+如果表达式只计算一次，则应将其值保存并在可能的地方重复使用。也就是说，不要在多个位置使用 `exp(theta)`，而是声明一个局部变量来存储其值，并重复使用该局部变量。
 
 Another case that may not be so obvious is with two multilevel
 parameters, say `a[ii[n]] + b[jj[n]]`.  If `a` and `b`
 are small (i.e., do not have many levels), then a table `a_b` of
 their sums can be created, with
 
-另一个可能不太明显的情况是两个多层参数，例如 `a[ii[n]] + b[jj[n]]`。如果 `a` 和 `b` 很小（即没有许多层级），则可以创建它们的总和表 `a_b`，其中
+另一个可能不太明显的情况是涉及两个多层参数，例如 `a[ii[n]] + b[jj[n]]`。如果 `a` 和 `b` 很小（即没有许多层级），则可以创建它们的总和表 `a_b`，其中
 
 ```stan
 matrix[size(a), size(b)] a_b;
@@ -1856,14 +1856,14 @@ by declaring these variables in the `transformed data` block, they will be avail
 in all following blocks, and therefore can be used in the `generated quantities` block
 to record the "natural" parameters `alpha` and `beta`.
 
-参数被重命名以表明它们不是"自然"参数。转换数据 `x_std` 根据 `mean_x` 和 `sd_x` 变量定义；通过在 `transformed data` 块中声明这些变量，它们将在所有后续块中可用，因此可以在 `generated quantities` 块中用来记录“自然”参数 `alpha` 和 `beta`。
+参数被重命名以表明它们不是“自然”参数。转换数据 `x_std` 根据 `mean_x` 和 `sd_x` 变量定义；通过在 `transformed data` 块中声明这些变量，它们将在所有后续块中可用，因此可以在 `generated quantities` 块中用来记录“自然”参数 `alpha` 和 `beta`。
 
 The fairly diffuse priors on the coefficients are the same.
 These could have been transformed as well, but
 here they are left as is, because the scales make sense as
 diffuse priors for standardized data.
 
-对系数的相当扩散的先验是相同的。这些也可以进行转换，但在这里保持原样，因为对于标准化数据来说，这些尺度作为扩散先验是有意义的。
+对系数的相当弥散的先验是相同的。这些也可以进行转换，但在这里保持原样，因为对于标准化数据来说，这些尺度作为弥散先验是有意义的。
 
 The original regression
 
@@ -1947,7 +1947,7 @@ cancel, as does subtracting the log of the scale.
 
 ## Using map-reduce
 
-## 使用 map-reduce {-}
+## 使用 Map-Reduce {-}
 
 The map-reduce operation, even without multi-core MPI support, can be
 used to make programs more scalable and also more efficient.  See the
