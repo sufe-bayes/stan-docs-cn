@@ -4,10 +4,8 @@
 |------|---------|---------|------|
 | **基础术语** | noninformative prior | 无信息的先验 | |
 | | meta analysis | 元分析 | |
-| | cluster | 聚类 | |
-| | multimodality | 多峰性 | |
 | **1. 回归模型** | multilevel generalized linear models | 多层次广义线性模型 | |
-| | predictor | 自变量 | |
+| | predictor | 预测变量 | |
 | | outcome | 因变量 | |
 | | sampling | 采样 | |
 | | overloaded | 重载 | |
@@ -67,7 +65,6 @@
 | | stochastic volatility models | 随机波动率模型 | |
 | | autoregressive conditional heteroscedasticity (ARCH) | 自回归条件异方差 | |
 | | generalized autoregressive conditional heteroscedasticity (GARCH) | 广义自回归条件异方差 | |
-| | noise term | 噪声项 | |
 | | error scale | 误差尺度 | |
 | | conditional distribution | 条件分布 | |
 | | Hidden Markov model (HMM) | 隐马尔可夫模型 | |
@@ -126,7 +123,6 @@
 | | log sum of exponentials | 指数的对数和 | |
 | | multimodal densities | 多峰密度分布 | |
 | | label switching | 标签切换 | |
-| | identifiability | 可识别性 | |
 | | exchangeable prior | 可交换先验 | |
 | | ordered vector | 有序向量 | |
 | | collapsing components | 退化成分 | |
@@ -137,7 +133,6 @@
 | | probability mass function | 概率质量函数 | |
 | | zero outcomes | 零结果 | |
 | | intensity parameter | 强度参数 | |
-| | conditional distribution | 条件分布 | |
 | | effective data size | 有效数据大小 | |
 | | posterior responsibility | 后验责任 | |
 | | model averaging | 模型平均 | |
@@ -181,12 +176,10 @@
 | | soft K-means | 软 K-均值 | |
 | | latent Dirichlet allocation | 潜在狄利克雷分配 | |
 | | naive Bayes | 朴素贝叶斯 | |
-| | mixture model | 混合模型 | |
 | | multinomial distribution | 多项分布 | |
 | | Dirichlet distribution | 狄利克雷分布 | |
-| | identifiability | 可识别性 | |
-| | multimodality | 多峰性 | |
 | | correlated topic model | 相关主题模型 | |
+| | multimodality | 多峰性 | |
 | | logistic normal distribution | Logistic-正态分布 | |
 | **10. 高斯过程** | Gaussian process | 高斯过程 | |
 | | covariance function | 协方差函数 | |
@@ -195,7 +188,6 @@
 | | squared exponential | 平方指数 | |
 | | length-scale | 长度尺度 | |
 | | marginal standard deviation | 边际标准差 | |
-| | Cholesky decomposition | Cholesky 分解 | |
 | | latent variable GP | 潜变量高斯过程 | |
 | | marginal likelihood GP | 边际似然高斯过程 | |
 | | automatic relevance determination | 自动相关性确定 | |
@@ -206,7 +198,6 @@
 | | dependence structure | 依赖结构 | |
 | | probability integral transform | 概率积分变换 | |
 | | tail dependence | 尾部依赖 | |
-| | correlation matrix | 相关矩阵 | |
 | | multivariate distribution | 多元分布 | |
 | | Gaussian copula | 高斯 Copula 模型 | |
 | | Student-t copula | 学生 t Copula 模型 | |
@@ -369,8 +360,6 @@
 | | Welford's algorithm | Welford 算法 | |
 | | CCDF | 互补累积分布函数 | |
 | | normal number | 正规数 | |
-| | subnormal number | 次正规数 | |
-| | rounding | 舍入 | |
 | | transitivity | 传递性 | |
 | **20. 矩阵、向量和数组** | container type | 容器类型 | |
 | | tuple | 元组 | |
@@ -552,7 +541,7 @@
 | | reduce with summation | 求和归约 | |
 | | rectangular map | 矩形映射 | |
 | | Amdahl's law | 阿姆达尔定律 | |
-| | map-reduce | 映射-归约 | |
+| | map-reduce | Map-Reduce | |
 | | partial sum function | 部分和函数 | |
 | | dynamic scheduling algorithm | 动态调度算法 | |
 | | grainsize | 粒度大小 | |
