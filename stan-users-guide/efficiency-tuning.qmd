@@ -394,8 +394,7 @@ some draws fell outside of the displayed area as would be expected given
 the density.  The draws are consistent with the marginal density
 $p(y) = \textsf{normal}(y \mid 0,3)$, which has mean 0 and standard
 deviation 3.
-
-Neal 的漏斗分布。（左图）上层变量 $y$ 和一个下层变量 $x_1$ 在 Neal 漏斗分布中的边际密度（公式见文中）。蓝色区域的对数密度大于-8，黄色区域密度大于-16，而灰色背景的密度小于-16。（右图）使用默认设置，从 Stan 采样器中取出了4000个采样点。两幅图都限制在所显示的 $x_1$ 和 $y$ 值的窗口内；有些采样点在所显示的区域之外，考虑到密度的取值，这是可以预期的。这些采样点与边际密度 $p(y)=\textsf{normal}(y \mid 0,3)$ 一致，其平均值为0，标准差为3。
+【Neal 的漏斗分布。（左图）上层变量 $y$ 和一个下层变量 $x_1$ 在 Neal 漏斗分布中的边际密度（公式见文中）。蓝色区域的对数密度大于-8，黄色区域密度大于-16，而灰色背景的密度小于-16。（右图）使用默认设置，从 Stan 采样器中取出了4000个采样点。两幅图都限制在所显示的 $x_1$ 和 $y$ 值的窗口内；有些采样点在所显示的区域之外，考虑到密度的取值，这是可以预期的。这些采样点与边际密度 $p(y)=\textsf{normal}(y \mid 0,3)$ 一致，其平均值为0，标准差为3。】
 :::
 
 In this particular instance, because the analytic form of the density
