@@ -52,7 +52,7 @@ By the definition of conditional densities, the simulated data and
 parameters constitute an independent draw from the model's joint
 distribution,
 
-根据条件密度的定义，模拟的数据和参数构成了模型联合分布的独立抽样，
+根据条件密度的定义，模拟的数据和参数构成了模型联合分布的独立采样点，
 
 $$
 (y^{\textrm{sim}}, \theta^{\textrm{sim}}) \sim p(y, \theta).
@@ -67,7 +67,7 @@ $$
 Therefore, the simulated parameters constitute a
 draw from the posterior for the simulated data,
 
-因此，模拟的参数构成了基于模拟数据的后验抽样，
+因此，模拟的参数构成了基于模拟数据的后验采样点，
 
 $$
 \theta^{\textrm{sim}} \sim p(\theta \mid y^{\textrm{sim}}).
@@ -75,7 +75,7 @@ $$
 Now consider an algorithm that produces a
 sequence of draws from the posterior given this simulated data,
 
-现在考虑一种算法，基于这些模拟数据产生一系列后验抽样，
+现在考虑一种算法，基于这些模拟数据产生一系列后验采样点，
 
 $$
 \theta^{(1)}, \ldots, \theta^{(M)}
@@ -85,7 +85,7 @@ Because $\theta^{\textrm{sim}}$ is also distributed as a draw from the
 posterior, the rank statistics of $\theta^{\textrm{sim}}$ with respect
 to $\theta^{(1)}, \ldots \theta^{(M)}$ should be uniform.
 
-因为 $\theta^{\textrm{sim}}$ 也服从后验分布，所以 $\theta^{\textrm{sim}}$ 相对于 $\theta^{(1)}, \ldots \theta^{(M)}$ 的秩统计量应该是均匀分布的。
+因为 $\theta^{\textrm{sim}}$ 也服从后验分布，所以 $\theta^{\textrm{sim}}$ 相对于采样点 $\theta^{(1)}, \ldots \theta^{(M)}$ 的秩统计量应服从均匀分布。
 
 This is one way to define calibration, because it follows that
 posterior intervals will have appropriate coverage [@Dawid:1982;
@@ -96,7 +96,7 @@ $\theta^{\textrm{sim}}$ falls in it will also be 90%.  The same goes
 for any other posterior interval.
 
 这是定义校准的一种方式，因为由此可得后验区间将具有适当的覆盖率 [@Dawid:1982;
-@GneitingEtAl:2007]。如果 $\theta^{\textrm{sim}}$ 的秩在抽样 $\theta^{(1)}, \ldots, \theta^{(M)}$ 中是均匀分布的，那么对于任何选定的 90% 区间，真实值 $\theta^{\textrm{sim}}$ 落在其中的概率也是 90%。其他任何后验区间也是如此。
+@GneitingEtAl:2007]。如果 $\theta^{\textrm{sim}}$ 的秩在采样点 $\theta^{(1)}, \ldots, \theta^{(M)}$ 中服从均匀分布，那么对于任何选定的 90% 区间，真实值 $\theta^{\textrm{sim}}$ 落在其中的概率也是 90%。其他任何后验区间也是如此。
 
 
 ## Simulation-based calibration
@@ -125,7 +125,7 @@ For each simulated data set $y^{\textrm{sim}(n)}$, use the algorithm
 to be tested to generate $M$ posterior draws, which if everything is
 working properly, will be distributed marginally as
 
-对于每个模拟数据集 $y^{\textrm{sim}(n)}$，使用待测试的算法生成 $M$ 个后验抽样，如果一切正常，它们的边际分布为
+对于每个模拟数据集 $y^{\textrm{sim}(n)}$，使用待测试的算法生成 $M$ 个后验采样点，如果一切正常，它们的边际分布为
 
 $$
 \theta^{(n, 1)}, \ldots, \theta^{(n, M)}
@@ -134,7 +134,7 @@ $$
 For a simulation $n$ and parameter $k$, the rank of the simulated
 parameter among the posterior draws is
 
-对于模拟 $n$ 和参数 $k$，模拟参数在后验抽样中的秩为
+对于模拟 $n$ 和参数 $k$，模拟参数在后验采样点中的秩为
 
 \begin{eqnarray*}
 r_{n, k}
@@ -149,13 +149,13 @@ r_{n, k}
 That is, the rank is the number of posterior draws $\theta^{(n,m)}_k$
 that are less than the simulated draw $\theta^{\textrm{sim}(n)}_k.$
 
-也就是说，秩是小于模拟抽样 $\theta^{\textrm{sim}(n)}_k$ 的后验抽样 $\theta^{(n,m)}_k$ 的数量。
+也就是说，秩是小于模拟值 $\theta^{\textrm{sim}(n)}_k$ 的后验采样点 $\theta^{(n,m)}_k$ 的数量。
 
 If the algorithm generates posterior draws according to the posterior,
 the ranks should be uniformly distributed from $0$ to $M$, so that
 the ranks plus one are uniformly distributed from $1$ to $M + 1$,
 
-如果算法根据后验生成后验抽样，则秩应该从 $0$ 到 $M$ 均匀分布，因此秩加一从 $1$ 到 $M + 1$ 均匀分布，
+如果算法根据后验生成后验采样点，则秩应该从 $0$ 到 $M$ 均匀分布，因此秩加一从 $1$ 到 $M + 1$ 均匀分布，
 
 $$
 r_{n, k} + 1
@@ -168,7 +168,7 @@ calibration of each parameter of a model on simulated data.
 k}$ for different parameters $k$;  @CookGelmanRubin:2006
 automate the process with a hypothesis test for uniformity.
 
-基于模拟的校准使用这种预期行为来测试模型每个参数在模拟数据上的校准。@TaltsEtAl:2018 建议绘制不同参数 $k$ 的 $r_{1:N,k}$ 的分箱计数图；@CookGelmanRubin:2006 通过均匀性假设检验实现了该过程的自动化。
+基于模拟的校准利用这种预期行为来测试模型各参数在模拟数据上的校准情况。@TaltsEtAl:2018 建议绘制不同参数 $k$ 的 $r_{1:N,k}$ 的分箱计数图；@CookGelmanRubin:2006 通过均匀性假设检验实现了该过程的自动化。
 
 ## SBC in Stan
 
@@ -182,7 +182,7 @@ program.  Then Stan's posterior sampler has to be run multiple times.
 Each run produces a rank for each parameter being assessed for
 uniformity.  The total set of ranks can then be tested for uniformity.
 
-在 Stan 中运行基于模拟的校准将测试 Stan 的采样算法是否能够从与根据模型生成的数据相关的后验中采样。数据模拟、后验拟合和秩计算都可以在单个 Stan 程序中完成。然后需要多次运行 Stan 的后验采样器。每次运行都会为每个待评估均匀性的参数产生一个秩。然后可以测试整个秩集合的均匀性。
+在 Stan 中运行基于模拟的校准将测试 Stan 的采样算法能否从根据模型生成的数据所对应的后验中进行采样。数据模拟、后验拟合和秩计算都可以在单个 Stan 程序中完成。然后需要多次运行 Stan 的后验采样器。每次运行都会为每个待评估均匀性的参数产生一个秩。然后可以测试整个秩集合的均匀性。
 
 ### Example model {-}
 
@@ -242,7 +242,7 @@ Then data $y^{\textrm{sim}(1)} \sim p(y \mid \mu^{\textrm{sim(1)}},
 distribution.  Next, $M = 4$ draws are taken from the posterior
 $\mu^{(1,m)}, \sigma^{(1,m)} \sim p(\mu, \sigma \mid y^{\textrm{sim}(1)})$,
 
-然后根据抽样分布抽取数据 $y^{\textrm{sim}(1)} \sim p(y \mid \mu^{\textrm{sim(1)}}, \sigma^{\textrm{sim(1)}})$。接下来，从后验 $\mu^{(1,m)}, \sigma^{(1,m)} \sim p(\mu, \sigma \mid y^{\textrm{sim}(1)})$ 中抽取 $M = 4$ 个样本，
+然后根据抽样分布抽取数据 $y^{\textrm{sim}(1)} \sim p(y \mid \mu^{\textrm{sim(1)}}, \sigma^{\textrm{sim(1)}})$。接下来，从后验 $\mu^{(1,m)}, \sigma^{(1,m)} \sim p(\mu, \sigma \mid y^{\textrm{sim}(1)})$ 中抽取 $M = 4$ 个采样点，
 
 $$
 \begin{array}{r|rr}
@@ -280,7 +280,7 @@ Because the simulated parameters are distributed according to the posterior,
 these ranks should be distributed uniformly between $0$ and $M$, the
 number of posterior draws.
 
-秩是列和，$r_{1,1} = 2$ 和 $r_{1,2} = 1$。因为模拟参数是根据后验分布的，这些秩应该在 $0$ 和 $M$（后验抽样的数量）之间均匀分布。
+秩是列和，$r_{1,1} = 2$ 和 $r_{1,2} = 1$。因为模拟参数是根据后验分布的，这些秩应该在 $0$ 和 $M$（后验采样点的数量）之间均匀分布。
 
 ### Testing a Stan program with simulation-based calibration {-}
 
@@ -334,7 +334,7 @@ chance for errors.  The blessing is that by implementing the model
 twice and comparing results, the chance of there being a mistake
 in the model is reduced.
 
-该模型实现了两次——一次作为数据生成过程在 transformed data 块中使用随机数生成器，然后在 parameters 和 model 块中再次实现。这种重复既是福也是祸。祸的是工作量更多，出错的可能性加倍。福的是，通过两次实现模型并比较结果，可以减少模型中出错的可能性。
+该模型实现了两次——一次作为数据生成过程在 transformed data 块中使用随机数生成器，然后在 parameters 和 model 块中再次实现。这种重复既有利也有弊。弊的是工作量更多，出错的可能性加倍。利的是，通过两次实现模型并比较结果，可以减少模型中出错的可能性。
 
 ### Pseudocode for simulation-based calibration {-}
 
@@ -362,7 +362,7 @@ The entire simulation-based calibration process is as follows, where
 
 * `M` is the number of posterior draws per simulated data set
 
-* `M` 是每个模拟数据集的后验抽样数
+* `M` 是每个模拟数据集的后验采样点数
 
 ```
 SBC(p(theta), p(y | theta), K, N, M)
@@ -389,7 +389,7 @@ for (k in 1:K) {
 
 ### The importance of thinning {-}
 
-### 细化的重要性 {-}
+### 抽稀的重要性 {-}
 
 The draws from the posterior are assumed to be roughly independent.
 If they are not, artifacts may arise in the uniformity tests due to
@@ -402,7 +402,7 @@ put into a loop that doubles the number of iterations until all
 parameters have an effective sample size of `M`, then thinning down to
 `M` draws.
 
-假设来自后验的抽样大致是独立的。如果不是，由于后验抽样中的相关性，均匀性测试中可能会出现伪影。因此，最好将后验抽样细化到有效样本量与细化抽样数大致相同的程度。这可能需要运行几次代码来判断产生目标有效样本量所需的抽样数。这个操作可以放入一个循环中，该循环将迭代次数加倍，直到所有参数的有效样本量为 `M`，然后细化到 `M` 个抽样。
+假设来自后验的采样点大致是独立的。如果不是，由于后验采样点中的相关性，均匀性测试中可能会出现伪影。因此，最好将后验采样点抽稀到有效样本量与抽稀后采样点数大致相同的程度。这可能需要运行几次代码来判断产生目标有效样本量所需的采样点数。这个操作可以放入一个循环中，该循环将迭代次数加倍，直到所有参数的有效样本量为 `M`，然后抽稀到 `M` 个采样点。
 
 ## Testing uniformity
 
@@ -417,14 +417,14 @@ using the inverse cumulative distribution function for the standard
 normal and then perform a test for normality.  @TaltsEtAl:2018
 recommend visual inspection of the binned plots.
 
-一个简单但功效不是很高的 $\chi^2$ 均匀性检验可以通过将秩 $0:M$ 分箱到 $J$ 个箱中，并检验所有箱中都有大致期望数量的抽样来制定。许多其他均匀性检验也是可能的。例如，@CookGelmanRubin:2006 使用标准正态的逆累积分布函数转换秩，然后执行正态性检验。@TaltsEtAl:2018 建议对分箱图进行视觉检查。
+一个简单但功效较低的 $\chi^2$ 均匀性检验可以通过将秩 $0:M$ 分入 $J$ 个箱中，并检验所有箱中都有大致期望数量的采样点来制定。许多其他均匀性检验也是可能的。例如，@CookGelmanRubin:2006 使用标准正态的逆累积分布函数转换秩，然后执行正态性检验。@TaltsEtAl:2018 建议对分箱图进行视觉检查。
 
 The bins don't need to be exactly the same size.  In general, if $b_j$
 is the number of ranks that fall into bin $j$ and $e_j$ is the number
 of ranks expected to fall into bin $j$ (which will be proportional to
 its size under uniformity), the test statistic is
 
-箱不需要完全相同的大小。一般来说，如果 $b_j$ 是落入箱 $j$ 的秩数，$e_j$ 是期望落入箱 $j$ 的秩数（在均匀性下与其大小成比例），则检验统计量为
+箱的大小不需要完全相同。一般来说，如果 $b_j$ 是落入第 $j$ 个箱的秩数，$e_j$ 是期望落入第 $j$ 个箱的秩数（在均匀性下与其大小成比例），则检验统计量为
 
 $$
 X^2 = \sum_{j = 1}^J \frac{(b_j - e_j)^2}{e_j}.
@@ -460,7 +460,7 @@ Distributing the ranks into bins is another fiddly operation
 that can be done with integer arithmetic or the floor operation.
 Using floor, the following function determines the bin for a rank,
 
-将秩分配到箱中是另一个繁琐的操作，可以使用整数算术或向下取整操作完成。使用向下取整，以下函数确定秩的箱，
+将秩分配到箱中是另一个繁琐的操作，可以使用整数算术或向下取整操作完成。使用向下取整，以下函数确定秩所在的箱，
 
 $$
 \textrm{bin}(r_{n, m}, M, J)
@@ -469,7 +469,7 @@ $$
 For example, with $M = 999$ and $J = 20$, $(M + 1) / J = 50$.
 The lowest rank checks out,
 
-例如，当 $M = 999$ 且 $J = 20$ 时，$(M + 1) / J = 50$。最低秩的验证，
+例如，当 $M = 999$ 且 $J = 20$ 时，$(M + 1) / J = 50$。最低秩的计算验证如下，
 
 $$
 \textrm{bin}(0, 999, 20) = 1 + \lfloor 0 / 50 \rfloor = 1,
@@ -581,15 +581,14 @@ After running this for enough iterations so that the effective sample
 size is larger than $M$, then thinning to $M$ draws (here $M = 999$),
 the ranks are computed and binned, and then plotted.
 
-在运行足够的迭代使有效样本量大于 $M$ 后，然后细化到 $M$ 个抽样（这里 $M = 999$），计算并分箱秩，然后绘图。
+在运行足够的迭代使有效样本量大于 $M$ 后，然后抽稀到 $M$ 个采样点（这里 $M = 999$），计算并分箱秩，然后绘图。
 
 ::: {#fig-sbc-good}
 
 ![](./img/sbc-normal-normal.png){width=90%}
 
 Simulation based calibration plots for location and scale of a normal model with standard normal prior on the location, standard lognormal prior on the scale.  Both histograms appear uniform, which is consistent with inference being well calibrated.
-
-基于模拟的校准图，用于正态模型的位置和尺度参数，位置参数具有标准正态先验，尺度参数具有标准对数正态先验。两个直方图都显示均匀，这与推断被良好校准一致。
+【基于模拟的校准图，显示正态模型的位置和尺度参数，位置参数具有标准正态先验，尺度参数具有标准对数正态先验。两个直方图都呈现均匀分布，这与推断被良好校准一致。】
 :::
 
 
@@ -602,15 +601,14 @@ Compare the apparent uniformity of the well specified model with the
 ill-specified situation with Student-t generative process and normal
 model.
 
-现在考虑使用 Student-t 数据生成过程与正态模型。比较良好指定模型的表观均匀性与 Student-t 生成过程和正态模型的错误指定情况。
+现在考虑使用 Student-t 数据生成过程配合正态模型。比较良好设定模型的表观均匀性与 Student-t 生成过程和正态模型的错误设定情况。
 
 ::: {#fig-sbc-bad}
 
 ![](./img/sbc-student-t-normal.png){width=90%}
 
 Simulation based calibration plots for location and scale of a normal model with standard normal prior on the location standard lognormal prior on the scale with mismatched generative model using a Student-t data model with 4 degrees of freedom.  The mean histogram appears uniform, but the scale parameter shows simulated values much smaller than fit values, clearly signaling the lack of calibration.
-
-基于模拟的校准图，用于正态模型的位置和尺度参数，位置参数具有标准正态先验，尺度参数具有标准对数正态先验，但生成模型不匹配，使用自由度为 4 的 Student-t 数据模型。均值直方图显示均匀，但尺度参数显示模拟值远小于拟合值，清楚地表明缺乏校准。
+【基于模拟的校准图，显示正态模型的位置和尺度参数，位置参数具有标准正态先验，尺度参数具有标准对数正态先验，但生成模型不匹配，使用自由度为 4 的 Student-t 数据模型。均值直方图呈现均匀分布，但尺度参数显示模拟值远小于拟合值，清楚地表明缺乏校准。】
 :::
 
 
@@ -736,8 +734,7 @@ SBC 也诊断出了问题。这是运行 $N = 200$ 次模拟的秩图，其中�
 
 Simulation based calibration plots for the eight-schools model with centered parameterization in Stan.
 The geometry is too difficult for the NUTS sampler to handle, as indicated by the plot for $\theta_1$ (@fig-theta1).
-
-Stan 中使用中心参数化的八所学校模型的基于模拟的校准图。几何形状对于 NUTS 采样器来说太困难了，如 $\theta_1$ 的图所示（@fig-theta1）。
+【Stan 中使用中心参数化的八所学校模型的基于模拟的校准图。几何形状对于 NUTS 采样器来说太困难了，如 $\theta_1$ 的图所示（@fig-theta1）。】
 :::
 
 

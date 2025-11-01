@@ -381,7 +381,7 @@ Because all none of the input arguments are a function of parameters, the ODE
 solver is called in the generated quantities block. The random measurement noise
 is added to each of the `T` outputs with `normal_rng`.
 
-由于所有输入参数均为已知数据（即它们不依赖于模型参数），因此在生成的数量块中调用 ODE 求解器。使用 `normal_rng` 将随机测量噪声添加到每个 `T` 输出中。
+由于所有输入参数均为已知数据（即它们不依赖于模型参数），因此在 generated quantities 块中调用 ODE 求解器。使用 `normal_rng` 将随机测量噪声添加到每个 `T` 输出中。
 
 ![Typical realization of harmonic oscillator trajectory.](./img/sho-ode-trajectory.png){width=50%}
 
@@ -526,7 +526,7 @@ quantities. User-defined function arguments may be qualified as only
 allowing data arguments using the `data` qualifier.
 
 这些控制参数必须是数据变量 --
-它们不能是参数或依赖于参数的表达式，包括转换数据（transformed data ）和生成数量（generated quantities ）以外的任何块中的局部变量。用户定义的函数参数可以使用
+它们不能是参数或依赖于参数的表达式，包括 transformed data 和 generated quantities 以外的任何块中的局部变量。用户定义的函数参数可以使用
 `data` 限定符限定为仅允许数据参数。
 
 For the RK45 and Cash-Karp solvers, the default values for relative and absolute tolerance are
@@ -801,4 +801,4 @@ random measurement error, producing observations `y_sim`. Because the
 ODEs are linear, we can use the `matrix_exp` function to solve the
 system.
 
-这个 Stan 程序模拟了一个简谐振子的带噪声的测量。线性微分方程组编码为矩阵形式。系统参数 `theta` 和初始状态 `y0` 作为数据与观测时间 `ts` 一起读入。生成的量块用于在指定的时间内解决 ODE，然后添加随机测量误差，生成观测值 `y_sim`。由于 ODE 是线性的，我们可以使用 `matrix_exp` 函数来求解 ODE 系统。
+这个 Stan 程序模拟了一个简谐振子的带噪声的测量。线性微分方程组编码为矩阵形式。系统参数 `theta` 和初始状态 `y0` 作为数据与观测时间 `ts` 一起读入。generated quantities 块用于在指定的时间内解决 ODE，然后添加随机测量误差，生成观测值 `y_sim`。由于 ODE 是线性的，我们可以使用 `matrix_exp` 函数来求解 ODE 系统。

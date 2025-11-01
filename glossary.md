@@ -253,7 +253,7 @@
 | | system function | 系统函数 | |
 | | time derivative | 时间导数 | |
 | | initial condition | 初始条件 | |
-| | generated quantities block | 生成数量块 | |
+| | generated quantities block | generated quantities 块 | Stan 中用于生成计算量的代码块 |
 | | initial value problem (IVP) | 初值问题 | |
 | | state variable | 状态变量 | |
 | | multivariate Student-t | 多元 Student-t 分布 | |
@@ -537,7 +537,23 @@
 | | OpenCL backend | OpenCL 后端 | |
 | | ragged inputs | 不规则输入 | |
 | | ragged outputs | 不规则输出 | |
-| **30. 基于模拟的校准** | Simulation-Based Calibration (SBC) | 基于模拟的校准 | |
+| **29. 后验预测抽样** | posterior predictive sampling | 后验预测采样 | |
+| | posterior predictive sampling | 后验预测采样 | |
+| | posterior predictive density | 后验预测密度 | |
+| | posterior predictive distribution | 后验预测分布 | |
+| | posterior predictive quantities | 后验预测量 | |
+| | posterior predictive simulation | 后验预测模拟 | |
+| | aleatoric uncertainty | 偶然不确定性 | |
+| | epistemic uncertainty | 认知不确定性 | |
+| | Monte Carlo sampling | 蒙特卡洛采样 | |
+| | draws | 采样点 | |
+| | posterior draws | 后验采样点 | |
+| | event probabilities | 事件概率 | |
+| | indicator function | 指示函数 | |
+| | indicator variable | 指示变量 | |
+| | log-sum-exp function | 对数指数和函数 | |
+| | analytic posterior | 解析后验 | |
+| **30. 基于模拟的校准** | simulation-based calibration (SBC) | 基于模拟的校准 | |
 | | posterior intervals | 后验区间 | |
 | | coverage | 覆盖率 | |
 | | posterior sampler | 后验采样器 | |
@@ -546,19 +562,38 @@
 | | joint distribution | 联合分布 | |
 | | rank statistics | 秩统计量 | |
 | | uniformity test | 均匀性检验 | |
-| | thinning | 细化 | |
-| | posterior draws | 后验抽样 | |
+| | thinning | 抽稀 | |
+| | posterior draws | 后验采样点 | |
 | | hypothesis test for uniformity | 均匀性假设检验 | |
 | | binned counts | 分箱计数 | |
 | | chi-squared test | 卡方检验 | |
 | | complementary cumulative distribution function (CCDF) | 互补累积分布函数 | |
 | | hierarchical model | 分层模型 | |
-| | meta-analysis | 元分析 | |
 | | population-level parameters | 总体水平参数 | |
 | | divergence warnings | 发散警告 | |
-| | no-U-turn sampler | 无-U-转采样器 | |
+| | no-U-turn sampler | no-U-turn 采样器 | |
 | | posterior geometry | 后验几何形状 | |
 | | reparameterization | 重参数化 | |
+| | school-level effects | 学校层面效应 | |
+| | artifacts (in statistical tests) | 伪影（统计检验中的） | |
+| | data generating process | 数据生成过程 | |
+| | well-specified model | 良好设定模型 | |
+| | ill-specified model | 错误设定模型 | |
+| | apparent uniformity | 表观均匀性 | |
+| | off-by-one errors | 差一错误 | |
+| | vectorized sampling statements | 向量化采样语句 | |
+| **31. 后验和先验预测检查** | prior predictive check | 先验预测检查 | |
+| | replicated data set | 复制数据集 | |
+| | test statistic | 检验统计量 | |
+| | posterior p-value | 后验 p 值 | |
+| | mixed predictive replication | 混合预测复制 | |
+| | weakly informative prior | 弱信息先验 | |
+| | over-dispersed data | 过度离散数据 | |
+| | random number generation | 随机数生成 | |
+| | fixed-parameter sampler | 固定参数采样器 | |
+| | hyperparameter | 超参数 | |
+| | lower-level parameter | 低层参数 | |
+| | ancillary statistic | 辅助统计量 | |
 | **32. Held-Out 评估与交叉验证** | Held-out evaluation | Held-Out 评估 | |
 | | Cross-validation | 交叉验证 | |
 | | Posterior predictive density | 后验预测密度 | |
