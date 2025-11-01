@@ -84,7 +84,7 @@ improper priors for the two regression coefficients.
 
 The distribution statement in the previous model is vectorized, with
 
-前面模型中的分布语句进行向量化处理后，有如下表达形式，
+前面模型中的分布语句是向量化的，有如下表达形式，
 
 ```stan
 y ~ normal(alpha + beta * x, sigma);
@@ -109,7 +109,7 @@ In general, Stan allows the arguments to distributions such as
 arrays, they have to be the same size.  If any of the other arguments
 is a scalar, it is reused for each vector entry.
 
-在 Stan 中，像 `normal`（正态分布）这样的分布函数通常允许使用向量作为参数。如果其他参数中有向量或数组，则它们必须具有相同的大小。如果其他参数是标量，则会为每个向量条目重复使用该标量。
+在 Stan 中，像 `normal`（正态分布）这样的分布通常允许使用向量作为参数。如果其他参数中有向量或数组，则它们必须具有相同的大小。如果其他参数是标量，则会为每个向量条目重复使用该标量。
 
 The other reason this works is that Stan's arithmetic operators are
 overloaded to perform matrix arithmetic on matrices.  In this case,
