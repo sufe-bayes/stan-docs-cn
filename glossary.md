@@ -594,7 +594,7 @@
 | | hyperparameter | 超参数 | |
 | | lower-level parameter | 低层参数 | |
 | | ancillary statistic | 辅助统计量 | |
-| **32. 留出（Held-Out）评估与交叉验证** | held-out evaluation | 留出评估 | |
+| **32. 留出评估与交叉验证** | held-out evaluation | 留出评估 | |
 | | training data set | 训练数据集 | |
 | | test data set | 测试数据集 | |
 | | cross-validation | 交叉验证 | |

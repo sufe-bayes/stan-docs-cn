@@ -2,7 +2,7 @@
 pagetitle: Held-Out Evaluation and Cross-Validation
 ---
 
-# 留出（Held-Out）评估与交叉验证
+# 留出评估与交叉验证
 
 # Held-Out Evaluation and Cross-Validation {-}
 
