@@ -2,7 +2,7 @@
 pagetitle: Held-Out Evaluation and Cross-Validation
 ---
 
-# Held-Out 评估与交叉验证
+# 留出（Held-Out）评估与交叉验证
 
 # Held-Out Evaluation and Cross-Validation {-}
 
@@ -73,7 +73,7 @@ $$
 where the $\theta^{(m)} \sim p(\theta \mid x, y)$ are draws from the
 posterior given only the training data $(x, y).$
 
-其中 $\theta^{(m)} \sim p(\theta \mid x, y)$ 是仅基于训练数据 $(x, y)$ 的后验抽样。
+其中 $\theta^{(m)} \sim p(\theta \mid x, y)$ 是仅基于训练数据 $(x, y)$ 的后验采样。
 
 To avoid underflow in calculations, it will be more stable
 to compute densities on the log scale.  Taking the logarithm and
@@ -127,13 +127,13 @@ block.  The log sum of exponentials calculation must be done on the
 outside of Stan using the posterior draws of $\log p(\tilde{y} \mid \tilde{x},
 \theta^{(m)}).$
 
-要评估模型的对数预测密度，只需在 generated quantities 块中实现测试数据的对数预测密度即可。对数指数和的计算必须在 Stan 外部使用 $\log p(\tilde{y} \mid \tilde{x}, \theta^{(m)})$ 的后验抽样完成。
+要评估模型的对数预测密度，只需在 generated quantities 块中实现测试数据的对数预测密度即可。对数指数和的计算必须在 Stan 外部使用 $\log p(\tilde{y} \mid \tilde{x}, \theta^{(m)})$ 的后验采样完成。
 
 Here is the code for evaluating the log posterior predictive density
 in a simple linear regression of the test data $\tilde{y}$ given
 predictors $\tilde{x}$ and training data $(x, y).$
 
-以下是在给定预测变量 $\tilde{x}$ 和训练数据 $(x, y)$ 的简单线性回归中评估测试数据 $\tilde{y}$ 的对数后验预测密度的代码
+以下是在给定预测变量 $\tilde{x}$ 和训练数据 $(x, y)$ 的简单线性回归中评估测试数据 $\tilde{y}$ 的对数后验预测密度的代码。
 
 ```stan
 data {
@@ -171,7 +171,7 @@ available, so that the log posterior predictive density of the test
 data given training data and predictors is just `log_sum_exp(log_p) -
 log(M)`.
 
-给定来自 Stan 的 $M$ 个后验抽样，序列 `log_p[1:M]` 将可用，因此给定训练数据和预测变量的测试数据的对数后验预测密度就是 `log_sum_exp(log_p) - log(M)`。
+给定来自 Stan 的 $M$ 个后验采样，序列 `log_p[1:M]` 将可用，因此给定训练数据和预测变量的测试数据的对数后验预测密度就是 `log_sum_exp(log_p) - log(M)`。
 
 ## Estimation error
 
@@ -270,7 +270,7 @@ of $\tilde{y}$ given the predictors and training data,
 \end{eqnarray*}
 where $\tilde{y}_n^{(m)}$ is drawn from the data model
 
-其中 $\tilde{y}_n^{(m)}$ 从数据模型中抽取
+其中 $\tilde{y}_n^{(m)}$ 从数据模型中抽取。
 
 $$
 \tilde{y}_n^{(m)}
@@ -289,7 +289,7 @@ carried out, the first of which helpfully reduces the variance of the
 estimator. First, rather than averaging draws $\tilde{y}_n^{(m)}$,
 the same result is obtained by averaging linear predictions,
 
-在线性回归的情况下，可以进行两个阶段的简化，第一个阶段有助于减少估计量的方差。首先，不是平均采样样本 $\tilde{y}_n^{(m)}$，而是通过平均线性预测获得相同的结果，
+在线性回归的情况下，可以进行两个阶段的简化，第一个阶段有助于减少估计量的方差。首先，不是平均采样点 $\tilde{y}_n^{(m)}$，而是通过平均线性预测获得相同的结果，
 
 \begin{eqnarray*}
 \hat{\tilde{y}}_n
@@ -316,7 +316,7 @@ $\tilde{y}_n^{(m)}$ is the same as $\alpha^{(m)} + \beta^{(m)} \cdot
 its expectation is a general variance reduction technique for Monte
 Carlo estimates known as *Rao-Blackwellization* [@Rao:1945; @Blackwell:1947].
 
-正态分布具有对称误差，因此 $\tilde{y}_n^{(m)}$ 的期望与 $\alpha^{(m)} + \beta^{(m)} \cdot \tilde{x}_n$ 相同。用期望替换采样量 $\tilde{y}_n^{(m)}$ 是蒙特卡罗估计的一般方差减少技术，称为 *Rao-Blackwellization* [@Rao:1945; @Blackwell:1947]。
+以及正态分布具有对称误差，因此 $\tilde{y}_n^{(m)}$ 的期望与 $\alpha^{(m)} + \beta^{(m)} \cdot \tilde{x}_n$ 相同。用期望替换采样量 $\tilde{y}_n^{(m)}$ 是蒙特卡罗估计的一般方差减少技术，称为 *Rao-Blackwellization* [@Rao:1945; @Blackwell:1947]。
 
 In the linear case, because the predictor is linear in the
 coefficients, the estimate can be further simplified to use the
@@ -385,7 +385,7 @@ test/training splits and can be easily implemented in Stan.  The
 drawback is that the variance of the resulting estimate is higher than
 with a balanced block partition.
 
-划分数据并重用分区在索引处理上非常繁琐，可能不会导致数据的均匀划分。使用随机分区要容易得多，它支持任意大小的测试/训练分割，并且可以在 Stan 中轻松实现。缺点是结果估计的方差高于平衡块分区。
+划分数据并重用分区在索引处理方面非常繁琐，可能不会导致数据的均匀划分。使用随机分区要容易得多，它支持任意大小的测试/训练分割，并且可以在 Stan 中轻松实现。缺点是结果估计的方差高于平衡块分区。
 
 ### Stan implementation with random folds {-}
 
@@ -531,7 +531,7 @@ cross-validation, results should be presented on a per-item scale,
 such as average absolute error or root mean square error, not on the
 scale of error in the fold being evaluated.
 
-因为在交叉验证中为了方便选择测试集大小，结果应该以每个项目的尺度呈现，如平均绝对误差或均方根误差，而不是以被评估折叠的误差尺度呈现。
+因为在交叉验证中为了方便选择测试集大小，结果应该以每个项目的尺度呈现，如平均绝对误差或均方根误差，而不是以被评估折的误差尺度呈现。
 
 ### User-defined permutations {-}
 
@@ -542,7 +542,7 @@ data block instead of the transformed data block and read it in as
 data.  This allows an external program to control the blocking,
 allowing non-random partitions to be evaluated.
 
-在 data 块而不是 transformed data 块中声明变量 `permutation` 并将其作为数据读入是很简单的。这允许外部程序控制分块，允许评估非随机分区。
+在 data 块中而非 transformed data 块中声明变量 `permutation` 并将其作为数据读入是很简单的。这允许外部程序控制分块，允许评估非随机分区。
 
 ### Cross-validation with structured data {-}
 

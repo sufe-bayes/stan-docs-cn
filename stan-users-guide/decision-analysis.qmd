@@ -20,7 +20,7 @@ equivalently, minimizes expected loss).  This chapter shows how Stan
 can be used to simultaneously estimate the distribution of outcomes
 based on decisions and compute the required expected utilities.
 
-统计决策分析涉及在不确定性下做出决策。为了做出决策，结果必须与某种"效用"概念相关联。所谓的"贝叶斯最优"决策是最大化期望效用（或等价地，最小化期望损失）的决策。本章展示了如何使用 Stan 同时估计基于决策的结果分布并计算所需的期望效用。
+统计决策分析是在不确定性下做出决策的方法。为了做出决策，结果必须与某种"效用"概念相关联。所谓的"贝叶斯最优"决策是能够最大化期望效用（或等价地，最小化期望损失）的决策。本章展示了如何使用 Stan 同时估计基于决策的结果分布并计算所需的期望效用。
 
 ## Outline of decision analysis
 
@@ -94,7 +94,7 @@ time and cost.  More formally,
   types walking, bicycling, public transportation, and cab,
   respectively, and
 
-* 决策集合为 $D = 1:4$，分别对应步行、骑自行车、公共交通和出租车等通勤类型，
+* 决策集合为 $D = 1:4$，分别对应步行、自行车、公共交通和出租车等通勤类型，
 
 * the set of outcomes $X = \mathbb{R} \times \mathbb{R}_+$ contains
   pairs of numbers $x = (c, t)$ consisting of a cost $c$ and
@@ -142,7 +142,7 @@ transportation used for trip $n$.  For example if trip $n$ was by
 bicycle, then $t_n \sim \textrm{lognormal}(\mu_2, \sigma_2),$ where
 $\mu_2$ and $\sigma_2$ are the lognormal parameters for bicycling.
 
-为了理解这个符号，$d_n$（也写作 $d[n]$）是行程 $n$ 使用的交通方式。例如，如果行程 $n$ 是骑自行车，那么 $t_n \sim \textrm{lognormal}(\mu_2, \sigma_2)$，其中 $\mu_2$ 和 $\sigma_2$ 是骑自行车的对数正态参数。
+为了理解这个符号，$d_n$（也写作 $d[n]$）是行程 $n$ 使用的交通方式。例如，如果行程 $n$ 是自行车出行，那么 $t_n \sim \textrm{lognormal}(\mu_2, \sigma_2)$，其中 $\mu_2$ 和 $\sigma_2$ 是自行车出行的对数正态参数。
 
 Simple fixed priors are used for each mode of transportation $k \in 1:4,$
 
@@ -158,13 +158,13 @@ more realistic model each commute mode would have its own prior based
 on knowledge of the city and the time of day would be used as a covariate;
 here the commutes are taken to be exchangeable.
 
-这些先验与广泛的通勤时间范围一致；在更现实的模型中，每种通勤方式都会基于对城市的了解有自己的先验，并且一天中的时间会作为协变量使用；这里的通勤被视为可交换的。
+这些先验与广泛的通勤时间范围一致；在更现实的模型中，每种通勤方式都会基于对城市的了解有其各自的先验，并且一天中的时间会作为协变量使用；这里的通勤被视为可交换的。
 
 Cost is usually a constant function for public transportation,
 walking, and bicycling.  Nevertheless, for simplicity, all costs will
 be modeled as lognormal,
 
-对于公共交通、步行和骑自行车，费用通常是常数函数。尽管如此，为简单起见，所有费用都将建模为对数正态分布，
+对于公共交通、步行和自行车，费用通常是常数函数。尽管如此，为简单起见，所有费用都将建模为对数正态分布，
 
 $$
 c_n \sim \textrm{lognormal}(\nu_{d[n]}, \tau_{d[n]}).
@@ -216,7 +216,7 @@ being late, different costs for different modes of transportation
 because of their comfort and environmental impact, and non-linearity
 of utility in cost.
 
-符号为负是因为高费用是不希望的。更好的效用函数可能包含阶跃函数或迟到的递增成本，不同交通方式因其舒适度和环境影响而有不同的成本，以及效用在费用上的非线性。
+符号为负是因为高费用是不可取的。更好的效用函数可能包含阶跃函数或迟到的递增成本，不同交通方式因其舒适度和环境影响而有不同的成本，以及效用在费用上的非线性。
 
 
 ### Step 4. Maximize expected utility {-}
@@ -231,7 +231,7 @@ the observed data is coded as data, the model parameters coded as
 parameters, and the model block itself coded to follow the sampling
 distributions of each parameter.
 
-此时，剩下的就是计算每个决策的期望效用并选择最优决策。如果决策由少量离散选择组成，期望效用可以很容易地在 Stan 中编码。效用函数编码为函数，观测数据编码为数据，模型参数编码为参数，模型块本身编码为遵循每个参数的抽样分布。
+此时，只需计算每个决策的期望效用并选择最优解。如果决策由少量离散选择组成，期望效用可以很容易地在 Stan 中编码。效用函数编码为函数，观测数据编码为数据，模型参数编码为参数，模型块本身编码为遵循每个参数的采样分布。
 
 ```stan
 functions {
@@ -331,7 +331,7 @@ carried out with the `lognormal_rng` operations after $\theta^{(m)}$
 is drawn from the model posterior.  The average is then calculated
 after multiple chains are run and combined.
 
-就 Stan 的执行而言，$x^{(m)}$ 的随机生成是在从模型后验中抽取 $\theta^{(m)}$ 之后使用 `lognormal_rng` 操作进行的。然后在运行并组合多条链之后计算平均值。
+在 Stan 的执行过程中，$x^{(m)}$ 的随机生成是在从模型后验中抽取 $\theta^{(m)}$ 之后使用 `lognormal_rng` 操作进行的。然后在运行并组合多条链之后计算平均值。
 
 It only remains to make the decision `k` with highest expected
 utility, which will correspond to the choice with the highest
@@ -355,4 +355,4 @@ difficult without gradient information.  Gradients could be supplied
 by automatic differentiation, but Stan is not currently instrumented
 to calculate those derivatives.
 
-许多选择，如为退休投资多少或在健身房花多长时间，不是离散的而是连续的。在这些情况下，连续选择可以在 Stan 程序中编码为数据。然后可以计算期望效用。换句话说，Stan 可以用作从选择到期望效用的函数。然后外部优化器可以调用该函数。没有梯度信息，这种优化可能很困难。梯度可以通过自动微分提供，但 Stan 目前还没有实现计算这些导数的功能。
+许多选择，如为退休投资多少或在健身房花多长时间，不是离散的而是连续的。在这些情况下，连续选择可以在 Stan 程序中编码为数据。然后可以计算期望效用。换句话说，Stan 可以用作从选择到期望效用的函数。然后外部优化器可以调用该函数。没有梯度信息，这种优化可能很困难。梯度可以通过自动微分提供，但 Stan 目前尚未配备计算这些导数的功能。

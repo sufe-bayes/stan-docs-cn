@@ -2,12 +2,15 @@
 pagetitle: Poststratification
 ---
 
-# Poststratification
-
 # 事后分层
 
+# Poststratification {-}
+
 本节译者：隋阳
-本节校审：张梓源
+
+初次校审：张梓源
+
+二次校审：邱怡轩（Claude Code+GLM 辅助）
 
 Stratification is a technique developed for survey sampling in which a
 population is partitioned into subgroups (i.e., stratified) and each
@@ -31,13 +34,15 @@ partial pooling to apply in the regressions, leading to the popularity
 of the combination of multilevel regression and poststratification
 (MRP) [@Park:2004].
 
-事后分层是一种调整非代表性样本（如简便样本或其他观察数据）的技术，这些样本具有描述分层特征的总体预测器。这是在对观察到的数据进行模型拟合之后进行的，因此得名“事后分层”[Little:1993]。事后分层可以有效地与回归建模（或更一般的参数建模）相结合，后者提供的估计基于预测因素（或通用参数）的组合，而不是每个分层的原始计数。多级建模在确定应在回归中应用多少部分池化方面很有用，这导致了多层回归和事后分层（MRP）的组合变得流行[Park:2004]。
+事后分层是一种调整非代表性样本（如简便样本或其他观察数据）的技术，这些样本具有描述分层特征的人口统计预测变量。这是在对观察到的数据进行模型拟合之后进行的，因此得名"事后分层"[Little:1993]。事后分层可以有效地与回归建模（或更一般的参数建模）相结合，后者提供的估计基于预测变量（或通用参数）的组合，而不是每个分层的原始计数。多级建模在确定应在回归中应用多少部分池化方面很有用，这导致了多层回归和事后分层（MRP）的组合变得流行[Park:2004]。
 
 ## Some examples
 
+## 一些例子 {-}
+
 ### Earth science {-}
 
-### 地球科学
+### 地球科学 {-}
 
 Stratification and poststratification can be applied to many
 applications beyond survey sampling [@Kennedy:2019].  For example,
@@ -55,11 +60,11 @@ the grid [@Paustian:1997].  Dynamic models can then be constructed by
 layering a time-series component, varying the poststratification
 predictors over time, or both [@Field:1998].  
 
-分层和事后分层可以应用到许多超越调查抽样的应用中 [Kennedy:2019]。例如，大规模的全球土壤碳模型是使用参数模型来拟合的，这些模型描述了土壤碳如何依赖于某个地区的特征，如土壤成分、植被、动物、温度、湿度等。给定一个模型，该模型预测了在这些特征下的土壤碳浓度，可以通过将地球划分为一个个网格，比如每个网格10公里 x 10公里的“正方形”（它们不能真正成为正方形，因为地球的表面在拓扑上是一个球体）来创建全球模型。每个网格区域都有一个预计的土壤类型、森林覆盖、气候等构成。然后使用事后分层通过简单地将每个网格中预计的土壤碳估计求和来估计全球土壤碳水平[Paustian:1997]。进一步，通过叠加时间序列组件，或随时间变化的后分层预测因子，或结合两者，来构建动态模型[Field:1998]。
+分层和事后分层可以应用到许多超越调查抽样的应用中 [Kennedy:2019]。例如，大规模的全球土壤碳模型是使用参数模型来拟合的，这些模型描述了土壤碳如何依赖于某个地区的特征，如土壤成分、植被、动物、温度、湿度等。给定一个模型，该模型预测了在这些特征下的土壤碳浓度，可以通过将地球划分为一个个网格，比如每个网格10公里 x 10公里的“正方形”（它们不能真正成为正方形，因为地球的表面在拓扑上是一个球体）来创建全球模型。每个网格区域都有一个预计的土壤类型、森林覆盖、气候等构成。然后使用事后分层通过简单地将每个网格中预计的土壤碳估计求和来估计全球土壤碳水平[Paustian:1997]。进一步，通过叠加时间序列组件，或随时间变化的后分层预测变量，或结合两者，来构建动态模型[Field:1998]。
 
 ### Polling {-}
 
-### 民意调查
+### 民意调查 {-}
 
 Suppose a university's administration would like to estimate the
 support for a given proposal among its students.  A poll is carried
@@ -96,7 +101,7 @@ $N = (20\,000,\, 5\,000,\, 2\,000)$ be the subgroup sizes, the
 poststratified estimate of support in the population $\phi^*$ is
 estimated by 
 
-通过简单地将每个群体中估计的支持率与每个群体的大小相乘，可以构造出学生中对问题支持的人口普遍率的估计。用 $N = (20\,000,\, 5\,000,\, 2\,000)$ 表示子群体的大小，那么人口中支持率的后分层估计 $\phi^*$ 是通过以下方式估计的：
+通过简单地将每个群体中估计的支持率与每个群体的大小相乘，可以构造出学生中对问题支持的总体普遍率的估计。用 $N = (20\,000,\, 5\,000,\, 2\,000)$ 表示子群体的大小，那么总体中支持率的后分层估计 $\phi^*$ 是通过以下方式估计的：
 $$
 \phi^*
 = \frac{\displaystyle \sum_{j = 1}^3 \theta_j^* \cdot N_j}
@@ -116,7 +121,7 @@ Plugging in our estimates and population counts yields
 
 ## Bayesian poststratification
 
-## 贝叶斯事后分层
+## 贝叶斯事后分层 {-}
 
 Considering the same polling data from the previous section in a
 Bayesian setting, the uncertainty in the estimation of subgroup
@@ -132,14 +137,14 @@ $$
 where $jj[n] \in 1:J$ is the group to which item $n$ belongs and
 $\theta_j$ is the proportion of support in group $j$.
 
-其中，$jj[n] \in 1:J$ 是项目 $n$ 所属的群体，而 $\theta_j$ 是群体 $j$ 中的支持率。
+其中，$jj[n] \in 1:J$ 是个体 $n$ 所属的群体，而 $\theta_j$ 是群体 $j$ 中的支持率。
 
 This can be reformulated from a Bernoulli model to a binomial model in
 the usual way.  Letting $A_j$ be the number of respondents in group
 $j$ and $a_j$ be the number of positive responses in group $j$, the
 data model may be reduced to the form
 
-这通常用伯努利模型重新构建为二项模型。设 $A_j$ 为群体 $j$ 中的回应者数量，$a_j$ 为群体 $j$ 中的正反馈数量，其分布可以简化为以下形式：
+这通常用伯努利模型重新构建为二项模型。设 $A_j$ 为群体 $j$ 中的回应者数量，$a_j$ 为群体 $j$ 中的肯定性回答数量，其分布可以简化为以下形式：
 
 $$
 a_j \sim \textrm{binomial}(A_j, \theta_j).
@@ -160,7 +165,7 @@ Using sampling, draws $\theta^{(m)} \sim p(\theta \mid y)$ from the
 posterior may be combined with the population sizes $N$ to estimate
 $\phi$, the proportion of support in the population,
 
-通过采样，后验分布中的抽样值 $\theta^{(m)} \sim p(\theta \mid y)$ 可以与人口大小 $N$ 结合估计 $\phi$，即人口中的支持率，
+通过采样，后验分布中的采样点 $\theta^{(m)} \sim p(\theta \mid y)$ 可以与总体大小 $N$ 结合估计 $\phi$，即总体中的支持率，
 $$
 \phi^{(m)}
 = \frac{\displaystyle \sum_{j = 1}^J \theta_j^{(m)} \cdot N_j}
@@ -172,11 +177,11 @@ estimate expected support (the average of the $\phi^{(m)}$),
 posterior intervals (quantiles of the $\phi^{(m)}$), or to plot a
 histogram. 
 
-后验抽样值 $\phi^{(m)}$ 描述了整个人口中对问题的预期支持。这些抽样值可用于估计预期支持（$\phi^{(m)}$ 的平均值）、后验间隔（$\phi^{(m)}$ 的分位数）或绘制直方图。
+后验采样点 $\phi^{(m)}$ 描述了整个总体中对问题的预期支持。这些采样点可用于估计预期支持（$\phi^{(m)}$ 的平均值）、后验区间（$\phi^{(m)}$ 的分位数）或绘制直方图。
 
 ## Poststratification in Stan
 
-## Stan中的事后分层
+## Stan 中的事后分层 {-}
 
 The maximum likelihood and Bayesian estimates can be handled with the
 same Stan program.  The model of individual votes is collapsed to a
@@ -184,7 +189,7 @@ binomial, where $A_j$ is the number of voters from group $j$, $a_j$ is
 the number of positive responses from group $j$, and $N_j$ is the size
 of group $j$ in the population.
 
-极大似然估计和贝叶斯估计可以使用同一个 Stan 程序处理。单个投票的模型被压缩为二项分布，其中 $A_j$ 是来自群体 $j$ 的选民数量，$a_j$ 是来自群体 $j$ 的正反馈数量，$N_j$ 是人口中群体 $j$ 的大小。
+极大似然估计和贝叶斯估计可以使用同一个 Stan 程序处理。单个投票的模型被压缩为二项分布，其中 $A_j$ 是来自群体 $j$ 的选民数量，$a_j$ 是来自群体 $j$ 的肯定性回答数量，$N_j$ 是总体中群体 $j$ 的大小。
 
 ```stan
 data {
@@ -210,11 +215,11 @@ The summation is computed using a dot product and the sum function,
 which is why `N` was declared as a vector rather than as an array of
 integers.
 
-极大似然估计和贝叶斯估计可以使用同一个 Stan 程序处理。单个投票的模型被压缩为二项分布，其中 $A_j$ 是来自群体 $j$ 的选民数量，$a_j$ 是来自群体 $j$ 的正反馈数量，$N_j$ 是人口中群体 $j$ 的大小。
+极大似然估计和贝叶斯估计可以使用同一个 Stan 程序处理。单个投票的模型被压缩为二项分布，其中 $A_j$ 是来自群体 $j$ 的选民数量，$a_j$ 是来自群体 $j$ 的肯定性回答数量，$N_j$ 是总体中群体 $j$ 的大小。
 
 ## Regression and poststratification
 
-## 回归和事后分层
+## 回归和事后分层 {-}
 
 In applications to polling, there are often numerous demographic
 features like age, gender, income, education, state of residence, etc.
@@ -236,7 +241,7 @@ for support in each stratum is unworkable in that many groups will
 have zero respondents and almost all groups will have very few
 respondents.
 
-面对按人口统计特征进行后分层的问题是，分层的数量随着特征数量的增加呈指数增长。例如，4个年龄档次，2种性别，5个收入档次，和50个居住州导致 $5 \cdot 2 \cdot 5 \cdot 50 = 2000$ 个分层。增加另一个5等分，例如教育程度，导致10,000个分层。像上一节中的简单模型，它对每个分层中的支持度取一个独立的参数 $\theta_j$，在许多群体中将没有回应者，几乎所有群体都将有很少的回应者，这是无法实现的。
+面对按人口统计特征进行后分层的问题是，分层的数量随着特征数量的增加呈指数增长。例如，4个年龄档次，2种性别，5个收入档次，和50个居住州导致 $5 \cdot 2 \cdot 5 \cdot 50 = 2000$ 个分层。增加另一个5等分，例如教育程度，导致10,000个分层。像上一节中的简单模型，它对每个分层中的支持度取一个独立的参数 $\theta_j$，在许多群体中将没有回应者，几乎所有群体都将有很少的回应者，这是不可行的。
 
 A practical approach to overcoming the problem of low data size per
 stratum is to use a regression model.  Each demographic feature will
@@ -250,7 +255,7 @@ $\textrm{sex}_n \in 1:2$, $\textrm{income}_n \in 1:5,$ and
 $\textrm{state}_n \in 1:50$.  A logistic regression may be formulated
 as
 
-克服每个分层的数据量低的问题的一个实用方法是使用回归模型。每个人口统计特征都需要为其子群体设定一个回归系数，但现在参数的数量是加和而不是乘积。例如，有4个年龄档次，2种性别，5个收入档次，和50个居住州，只需要估计 $4 + 2 + 5 + 50 = 61$ 个回归系数。现在假设项目 $n$ 有人口统计特征 $\textrm{age}_n \in 1:5$，$\textrm{sex}_n \in 1:2$，$\textrm{income}_n \in 1:5$，和 $\textrm{state}_n \in 1:50$。我们可以构建逻辑回归为：
+克服每个分层的数据量低的问题的一个实用方法是使用回归模型。每个人口统计特征都需要为其子群体设定一个回归系数，但现在参数的数量是加和而不是乘积。例如，有4个年龄档次，2种性别，5个收入档次，和50个居住州，只需要估计 $4 + 2 + 5 + 50 = 61$ 个回归系数。现在假设个体 $n$ 有人口统计特征 $\textrm{age}_n \in 1:5$，$\textrm{sex}_n \in 1:2$，$\textrm{income}_n \in 1:5$，和 $\textrm{state}_n \in 1:50$。我们可以构建逻辑回归为：
 $$
 y_n \sim
 \textrm{bernoulli}(\textrm{logit}^{-1}(
@@ -273,7 +278,7 @@ To poststratify the results, the population size for each combination of
 predictors must still be known.  Then the population estimate is
 constructed as
 
-为了对结果进行后分层，仍然需要知道每个预测变量组合的人口规模。然后，人口估计被构建为
+为了对结果进行后分层，仍然需要知道每个预测变量组合的总体规模。然后，总体估计被构建为
 $$
 \sum_{i = 1}^5 \sum_{j = 1}^2 \sum_{k = 1}^5 \sum_{m = 1}^{50}
 \textrm{logit}^{-1}(\alpha + \beta_i + \gamma_j + \delta_k + \eta_m)
@@ -282,7 +287,7 @@ $$
 where $\textrm{pop}_{i, j, k, m}$ is the size of the subpopulation
 with age $i$, sex $j$, income level $k$, and state of residence $m$.
 
-其中 $\textrm{pop}_{i, j, k, m}$ 是年龄为 $i$，性别为 $j$，收入水平为 $k$，居住州为 $m$ 的子人口的规模。
+其中 $\textrm{pop}_{i, j, k, m}$ 是年龄为 $i$，性别为 $j$，收入水平为 $k$，居住州为 $m$ 的子总体的规模。
 
 As formulated, it should be clear that any kind of prediction could be
 used as a basis for poststratification.  For example, a Gaussian
@@ -293,7 +298,7 @@ model of outcomes $y$ given predictors $x$.
 
 ## Multilevel regression and poststratification
 
-## 多层回归和事后分层
+## 多层回归和事后分层 {-}
 
 With large numbers of demographic features, each cell may have very
 few items in it with which to estimate regression coefficients.  For
@@ -306,7 +311,7 @@ pooling among the groups.  The only drawback is that if the number of
 groups is small, it can be hard to fit these models without strong
 hyperpriors.
 
-在具有大量人口特征的情况下，每个单元可能只有很少的项目来估计回归系数。例如，即使在全国范围内的10,000个受访者的民意测验中，如果他们被分为50个州，那么平均每个州只有200个回应者。当数据量较小时，可以通过提供层次性先验来稳定和提高参数估计的精度。通过层次性先验，数据决定了各组之间的部分池化程度。唯一的缺点是，如果组的数量较少，那么在没有强超参数的情况下很难拟合这些模型。
+在具有大量人口特征的情况下，每个单元可能只有很少的个体来估计回归系数。例如，即使在全国范围内的10,000个受访者的民意测验中，如果他们被分为50个州，那么平均每个州只有200个回应者。当数据量较小时，可以通过提供层次先验来稳定和提高参数估计的精度。通过层次先验，数据决定了各组之间的部分池化程度。唯一的缺点是，如果组的数量较少，那么在没有强超先验的情况下很难拟合这些模型。
 
 The model introduced in the previous section had the data model
 
@@ -345,7 +350,7 @@ The other regression parameters can be given hierarchical priors,
 The hyperparameters for scale of variation within a group can
 be given simple standard hyperpriors,
 
-对于组内变化的尺度的超参数可以给定简单的标准超先验，
+对于组内变化尺度的超参数可以给定简单的标准超先验，
 $$
 \sigma^{\beta}, \sigma^{\gamma}, \sigma^{\delta}, \sigma^{\epsilon}
 \sim \textrm{normal}(0, 1).
@@ -358,7 +363,7 @@ standard (mean zero, unit variance).
 
 ### Dealing with small partitions and non-identifiability {-}
 
-### 处理小划分和不可识别性
+### 处理小划分和不可识别性 {-}
 
 The multilevel structure of the models used for multilevel regression
 and poststratification consist of a sum of intercepts that vary by
@@ -379,7 +384,7 @@ coefficients for binary features will be negations of each other.  For
 example, because there are only two sex categories, $\gamma_2 =
 -\gamma_1.$
 
-这种不可识别性只能通过（层次性）先验来缓解。当人口分区较小，如示例中的几个类别时，对系数进行求和为零约束可能更具计算可行性。除零以外的其他值必然会被吸收到截距中，这就是为什么即使在标准化数据中，截距通常也会得到更广泛的先验。具有求和为零约束的情况下，二元特征的系数将是彼此的否定。例如，因为只有两个性别类别，所以 $\gamma_2 = -\gamma_1$。
+这种不可识别性只能通过（层次）先验来缓解。当人口分区较小，如示例中的几个类别时，对系数进行求和为零约束可能更具计算可行性。除零以外的其他值必然会被吸收到截距中，这就是为什么即使在标准化数据中，截距通常也会得到更广泛的先验。具有求和为零约束的情况下，二元特征的系数将是彼此的相反数。例如，因为只有两个性别类别，所以 $\gamma_2 = -\gamma_1$。
 
 To implement sum-to-zero constraints,
 
@@ -410,7 +415,7 @@ interpret.
 Soft constraints can be more computationally tractable.  They are also
 simpler to implement.
 
-软约束在计算上可能更具可行性。它们也更容易实现
+软约束在计算上可能更具可行性。它们也更容易实现。
 
 ```stan
 parameters {
@@ -429,7 +434,7 @@ need to be established on a problem and data-set specific basis so
 that it doesn't shrink the estimates beyond the shrinkage of the
 hierarchical scale parameters.
 
-这保留了常规的先验，但添加了一个第二个先验，使得总和接近于零。第二个先验的尺度需要根据问题和特定的数据集来确定，以便不会将估计值缩小到层次尺度参数的收缩程度之外。
+这保留了常规的先验，但添加了第二个先验，使得总和接近于零。第二个先验的尺度需要根据具体问题和数据集来确定，以免将估计值收缩超过层次尺度参数的收缩程度。
 
 Note that in the hierarchical model, the values of the coefficients
 when there are only two coefficients should be the same absolute value
@@ -441,7 +446,7 @@ posterior.  Enforcing a (hard or soft) sum-to-zero constraint can help
 mitigate non-identifiability.  Whatever prior is chosen, prior
 predictive checks can help diagnose problems with it.
 
-请注意，在层次模型中，当只有两个系数时，系数的值应该具有相同的绝对值但符号相反。任何其他的差异都可以被合并到总体截距 $\alpha$ 中。即使截距的先验较宽，$\sigma^{\gamma}$ 的超先验可能也不足以强制执行这一点，从而导致后验的弱形式不可识别性。执行（硬或软）的求和为零约束可以帮助减轻不可识别性。无论选择哪种先验，先验预测检查都可以帮助诊断它的问题。
+请注意，在层次模型中，当只有两个系数时，系数的值应该具有相同的绝对值但符号相反。任何其他差异都可以合并到总体截距 $\alpha$ 中。即使截距的先验较宽，$\sigma^{\gamma}$ 的超先验可能也不足以强制执行这一点，从而导致后验中出现弱形式不可识别性。实施（硬或软）求和为零约束可以帮助缓解不可识别性。无论选择哪种先验，先验预测检查都可以帮助诊断相关问题。
 
 None of this work to manage identifiability in multilevel regressions
 has anything to do with the poststratification; it's just required to
@@ -449,11 +454,11 @@ fit a large multilevel regression with multiple discrete categories.
 Having multiple intercepts always leads to weak non-identifiability,
 even with the priors on the intercepts all centered at zero.
 
-在多层回归中处理可识别性的所有工作都与事后分层无关；它只是为了拟合具有多个离散类别的大型多层回归所必需的。具有多个截距总是会导致弱的不可识别性，即使截距的先验都集中在零点。
+在多层回归中处理不可识别性的所有工作都与事后分层无关；这只是拟合具有多个离散类别的大型多层回归所必需的。具有多个截距总是会导致弱不可识别性，即使截距的先验都以零为中心。
 
 ## Coding MRP in Stan
 
-## Stan中编码MRP
+## Stan 中编码 MRP {-}
 
 Multilevel regression and poststratification can be coded directly in
 Stan.  To code the non-centered parameterization for each coefficient,
@@ -480,7 +485,7 @@ Here is the full Stan model, which performs poststratification in the
 generated quantities using population sizes made available through
 data variable `P`.
 
-下面是完整的 Stan 模型，它在生成的数量中使用通过数据变量 `P` 提供的人口大小进行后分层。
+下面是完整的 Stan 模型，它在 generated quantities 块中使用通过数据变量 `P` 提供的总体规模进行后分层。
 
 ```stan
 data {
@@ -533,7 +538,7 @@ work in expectation if possible (the Rao-Blackwell theorem says it's
 at least as efficient to work in expectation, but in practice, it can
 be much much more efficient, especially for discrete quantities).
 
-与针对不确定性的后验预测推断不同，我们无需将二项抽样不确定性引入到预期积极投票的估计中。相反，生成的数量被计算为期望。一般来说，用期望值来工作是更有效率的（Rao-Blackwell 定理说明以期望值来工作至少是一样有效的，但在实践中，它可能会更有效率，特别是对于离散的数量）。
+与针对不确定性的后验预测推断不同，无需将二项采样不确定性引入预期肯定性投票的估计中。相反，generated quantities 块中的计算按期望进行。一般来说，尽可能使用期望进行计算会更有效率（Rao-Blackwell 定理表明使用期望计算至少同样有效率，但在实践中，特别是对于离散量，可能会大幅提高效率）。
 
 ### Binomial coding {-}
 
@@ -544,7 +549,7 @@ group.  Suppose there are $4 \times 5 \times 2 \times 50 = 2000$
 groups.  The data can be broken down into a size-2000 array, with
 entries corresponding to total vote counts in that group
 
-在某些情况下，按组划分数据可能更有效率。假设有 $4 \times 5 \times 2 \times 50 = 2000$ 个组。数据可以被划分为一个2000大小的数组，其中的条目对应于该组的总投票数。
+在某些情况下，按组划分数据可能更有效率。假设有 $4 \times 5 \times 2 \times 50 = 2000$ 个组。数据可以被划分为大小为2000的数组，其中条目对应于该组的总投票数。
 
 ```stan
 int<lower=0> G;
@@ -556,7 +561,7 @@ array[G] int<lower=1, upper=50> state;
 Then the number of positive votes and the number of total votes are
 collected into two parallel arrays indexed by group.
 
-然后，正面投票的数量和总投票的数量被收集到两个由组索引的平行数组中。
+然后，肯定性投票的数量和总投票数被收集到两个按组索引的平行数组中。
 
 ```stan
 array[G] int<lower=0> pos_votes;
@@ -574,11 +579,11 @@ pos_votes ~ binomial_logit(total_votes,
 The predictors look the same because of the way the `age` and other
 data items are coded.
 
-因为“年龄”和其他数据项的编码方式，预测因子看起来是相同的。
+由于 `age` 和其他数据项的编码方式，预测变量看起来是相同的。
 
 ### Coding binary groups {-}
 
-### 编码二分类组
+### 编码二分类组 {-}
 
 In this first model, sex is not included as a predictor.  With only
 two categories, it needs to be modeled separately, because it is not
@@ -586,7 +591,7 @@ feasible to build a hierarchical model with only two cases.
 A sex predictor is straightforward to add to the data block; it takes
 on values 1 or 2 for each of the `N` data points.
 
-在这个第一个模型中，性别并未被包括作为一个预测因子。只有两种类别，它需要被单独建模，因为对于仅有两种情况来说，建立一个分层模型是不可行的。将性别预测因子加入到数据块中是很直接的；对于每一个 `N` 的数据点，它的取值为1或2。
+在这个第一个模型中，性别并未被包括作为一个预测变量。只有两种类别，它需要被单独建模，因为对于仅有两种情况来说，建立一个分层模型是不可行的。将性别预测变量加入到数据块中是很直接的；对于每一个 `N` 的数据点，它的取值为1或2。
 
 ```stan
   array[N] int<lower=1, upper=2> sex;
@@ -594,7 +599,7 @@ on values 1 or 2 for each of the `N` data points.
 
 Then add a single regression coefficient as a parameter,
 
-然后作为参数，添加一个单一的回归系数，
+然后添加一个单一的回归系数作为参数，
 
 ```
   real epsilon;
@@ -625,7 +630,7 @@ coefficients. The `'` at the end transposes `[epsilon, -epsilon][sex]`
 which is a `row_vector` into a `vector` that can be added to the other
 variables.
 
-对于数据点 `n`，表达式 `[epsilon, -epsilon][sex]` 的值为 `[epsilon, -epsilon][sex][n]`，利用 Stan 的多索引，它简化为 `[epsilon, -epsilon][sex[n]]`。如果 `sex[n]` 为1，该项的值为 `epsilon`；如果 `sex[n]` 为2，则值为 `-epsilon`。结果实际上是两个性别系数的零和约束。末尾的 `'` 将 `[epsilon, -epsilon][sex]` 转置，它是一个 `row_vector`，转置为可以加到其他变量的 `vector`。
+对于数据点 `n`，表达式 `[epsilon, -epsilon][sex]` 的值为 `[epsilon, -epsilon][sex][n]`，利用 Stan 的多索引，它简化为 `[epsilon, -epsilon][sex[n]]`。如果 `sex[n]` 为1，该项的值为 `epsilon`；如果 `sex[n]` 为2，则值为 `-epsilon`。结果实际上是两个性别系数的求和为零约束。末尾的 `'` 将 `[epsilon, -epsilon][sex]` 转置，它是一个 `row_vector`，转置为可以加到其他变量的 `vector`。
 
 Finally, a prior is needed for the coefficient in the model block,
 
@@ -638,11 +643,11 @@ epsilon ~ normal(0, 2);
 As with other priors in multilevel models, the posterior for `epsilon`
 should be investigated to make sure it is not unrealistically wide.
 
-与多层模型中的其他先验一样，应检查 `epsilon` 的后验，以确保它的范围不是不切实际地宽。
+与多层模型中的其他先验一样，应检查 `epsilon` 的后验，以确保其分布范围不会过于宽泛。
 
 ## Adding group-level predictors
 
-## 添加组级预测因子
+## 添加组级预测变量 {-}
 
 If there are group-level predictors, such as average income in a
 state, or vote share in a previous election, these may be used as
@@ -651,7 +656,7 @@ poststratification because they are at the group level.  For example,
 suppose the average income level in the state is available as the data
 variable 
 
-如果存在组级预测因子，如一个州的平均收入，或者在之前选举中的投票份额，这些可以在回归中作为预测因子使用。它们不会对后分层构成障碍，因为它们处于组级别。例如，假设该州的平均收入水平可以作为数据变量使用。
+如果存在组级预测变量，如一个州的平均收入，或者在之前选举中的投票份额，这些可以在回归中作为预测变量使用。它们不会对后分层构成障碍，因为它们处于组级别。例如，假设该州的平均收入水平可以作为数据变量使用。
 
 ```stan
 array[50] real<lower=0> income;
@@ -677,7 +682,7 @@ psi ~ normal(0, 2);
 This prior assumes the `income` predictor has been standardized.
 Finally, a term is added to the regression for the fixed predictor,
 
-这个先验假设 `income` 预测器已经被标准化。最后，为固定预测器在回归中添加一项。
+这个先验假设 `income` 预测变量已经被标准化。最后，为固定预测变量在回归中添加一项。
 
 ```stan
 y ~ bernoulli_logit(alpha + beta[age] + ... + delta[state]
@@ -687,7 +692,7 @@ y ~ bernoulli_logit(alpha + beta[age] + ... + delta[state]
 And finally, the formula in the generated quantities block is also
 updated,
 
-最后，在生成的数量块中的公式也需要更新，
+最后，在 generated quantities 块中的公式也需要更新，
 
 ```stan
 expect_pos

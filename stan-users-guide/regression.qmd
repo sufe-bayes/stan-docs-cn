@@ -693,7 +693,7 @@ An alternative identification strategy that allows a symmetric prior
 is to enforce a sum-to-zero constraint on the varying effects, i.e.,
 $\sum_{k=1}^K \beta_k = 0.$
 
-另一种允许对称先验的识别策略是对变化效应施加总和为零的约束，即 $\sum_{k=1}^K \beta_k = 0$。
+另一种允许对称先验的识别策略是对变化效应施加求和为零约束，即 $\sum_{k=1}^K \beta_k = 0$。
 
 A parameter vector constrained to sum to zero may also be used to
 identify a multi-logit regression parameter vector (see the
@@ -702,7 +702,7 @@ used for ability or difficulty parameters (but not both) in an IRT
 model (see the [item-response model
 section](#item-response-models.section) for details).
 
-一个总和为零的参数向量也可以用于识别多类别 Logistic 回归的参数向量（详见[多类别 Logistic 回归章节](#multi-logit.section)），或者用于项目-响应理论（IRT）模型中的能力参数或难度参数（但不能同时用于两者，详见[项目-响应模型章节](#item-response-models.section)）。
+一个求和为零约束的参数向量也可以用于识别多类别 Logistic 回归的参数向量（详见[多类别 Logistic 回归章节](#multi-logit.section)），或者用于项目-响应理论（IRT）模型中的能力参数或难度参数（但不能同时用于两者，详见[项目-响应模型章节](#item-response-models.section)）。
 
 
 ### Built-in sum-to-zero vector {-}
@@ -746,7 +746,7 @@ last element to the negative sum of the first elements, i.e., $\beta_K
 = -\sum_{k=1}^{K-1} \beta_k.$ But that leads to high correlation among
 the $\beta_k$.
 
-和为零的约束可以通过简单地将最后一个元素设置为前几个元素的负和来实现，即 $\beta_K = -\sum_{k=1}^{K-1} \beta_k$。但这会导致 $\beta_k$ 之间的高度相关性。
+求和为零约束可以通过简单地将最后一个元素设置为前几个元素的负和来实现，即 $\beta_K = -\sum_{k=1}^{K-1} \beta_k$。但这会导致 $\beta_k$ 之间的高度相关性。
 
 The transform used in Stan eliminates these correlations by
 constructing an orthogonal basis and applying it to the
@@ -757,11 +757,11 @@ inverse isometric log transform because it is convenient to describe
 and the transform simplifies to efficient scalar operations rather
 than more expensive matrix operations.
 
-Stan 中使用的变换通过构建正交基并将其应用于和为零的约束来消除这些相关性；@seyboldt:2024 提供了相关解释。*Stan 参考手册*在变换章节中提供了详细信息。尽管可以使用任何正交基，但 Stan 使用逆等距对数变换，因为它便于描述，并且该变换可以简化为高效的标量操作，而不是更昂贵的矩阵操作。
+Stan 中使用的变换通过构建正交基并将其应用于求和为零约束来消除这些相关性；@seyboldt:2024 提供了相关解释。*Stan 参考手册*在变换章节中提供了详细信息。尽管可以使用任何正交基，但 Stan 使用逆等距对数变换，因为它便于描述，并且该变换可以简化为高效的标量操作，而不是更昂贵的矩阵操作。
 
 #### Marginal distribution of sum-to-zero components {-}
 
-#### 和为零的成分的边际分布 {-}
+#### 求和为零约束成分的边际分布 {-}
 
 On the Stan forums, Aaron Goodman provided the following code to
 produce a prior with standard normal marginals on the components of

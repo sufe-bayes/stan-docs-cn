@@ -2,12 +2,15 @@
 pagetitle: The Bootstrap and Bagging
 ---
 
-# The Bootstrap and Bagging
-
 # 自助法和袋装法
 
+# The Bootstrap and Bagging {-}
+
 本节译者：程书宁
-本节校审：张梓源
+
+初次校审：张梓源
+
+二次校审：邱怡轩（Claude Code+GLM 辅助）
 
 The bootstrap is a technique for approximately sampling from the error
 distribution for an estimator.  Thus it can be used as a Monte Carlo
@@ -18,16 +21,16 @@ subsample.  Like other Monte Carlo methods, the bootstrap is
 plug-and-play, allowing great flexibility in both model choice and
 estimator.
 
-自助法（bootstrap）是一种对估计量的误差分布进行近似抽样的方法，可以作为一种蒙特卡罗方法来估计点估计的标准差和置信区间[@EfronTibshirani1986;-@EfronTibshirani1994]。为了得到估计的标准差，它对原始数据多次进行子采样，并对每个子样本计算样本估计值。像其他蒙特卡罗方法一样，自助法是即插即用的，对于模型选择和参数估计具有很大的灵活性。
+自助法（bootstrap）是一种对估计量的误差分布进行近似抽样的方法，可以作为一种蒙特卡罗方法来估计点估计的标准误和置信区间[@EfronTibshirani1986;-@EfronTibshirani1994]。为了得到估计的标准误，它对原始数据多次进行子采样，并对每个子样本计算样本估计值。像其他蒙特卡罗方法一样，自助法是即插即用的，对于模型选择和参数估计具有很大的灵活性。
 
 Bagging is a technique for combining bootstrapped estimators for model
 criticism and more robust inference [@Breiman:1996; @HugginsMiller:2019].
 
-袋装算法（bagging）综合考虑自助法得到的多个估计量，建立更准确、更稳定的模型[@Breiman:1996;@HugginsMiller:2019]。
+袋装算法（bagging）综合考虑自助法得到的多个估计量，建立更准确、更稳定的模型 [@Breiman:1996;@HugginsMiller:2019]。
 
 ## The bootstrap
 
-## 自助法
+## 自助法 {-}
 
 ### Estimators {-}
 
@@ -38,19 +41,23 @@ or more numbers, which are called "estimates".  For example, the mean
 function maps a data set $y_{1,\ldots, N}$ to a number by
 
 估计量是将一个数据集映射到一个或多个数字的函数，这些数字被称为“估计值”。例如，均值函数将数据集 $y_{1,\ldots, N}$ 通过函数
+
 $$
 \textrm{mean}(y) = \frac{1}{N} \sum_{n=1}^N y_n,
 $$
 and hence meets the definition of an estimator.  Given the likelihood
 function
+
+映射到一个数，它满足估计量的定义。给定似然函数：
+
 $$
 p(y \mid \mu) = \prod_{n=1}^N \textrm{normal}(y_n \mid \mu, 1),
 $$
-映射到一个数，它满足估计量的定义。给定似然函数：
 
 the mean is the maximum likelihood estimator,
 
 均值使得似然函数取到最大值。
+
 $$
 \textrm{mean}(y) = \textrm{arg max}_{\mu} \ p(y \mid \mu, 1)
 $$
@@ -107,7 +114,7 @@ may show up more than once in `y_rep` and some may not appear at all.
 
 ## Coding the bootstrap in Stan
 
-## Stan 中自助法的代码实现
+## Stan 中自助法的代码实现 {-}
 
 The bootstrap procedure can be coded quite generally in Stan models.  The
 following code illustrates a Stan model coding the likelihood for a
@@ -170,7 +177,7 @@ x[3]]'` and `y[boot_idxs] = [y[2], y[1], y[1], y[3]]'`.  The predictor
 and outcome vectors remain aligned, with both elements of the pair
 `x[1]` and `y[1]` repeated twice.
 
-该模型参数是常用的回归参数：截距 `alpha`、斜率 `beta` 和误差尺度 `sigma`。该模型使用自助法索引变量 `boot_idx` 将自变量索引为 ` x[boot_idx]`，因变量索引为 `y[boot_idx]`，这会生成一个新的 $N$ 维向量，其条目为 `x[boot_idx][N] =x[boot_idx[N]]'`，`y` 也类似。例如，如果 $N = 4$，`boot_idxs ={2 1 1 3}`，那么有 `x[boot_idxs] = [x [2], x[1], x[1], x[3]]'` 和 `y[boot_idxs]= [y[2], y[1], y[1], y[3]]'`，自变量和因变量向量索引始终保持一致，`x[1]` 和 `y[1]` 这对元素重复出现两次。
+该模型参数是常用的回归参数：截距 `alpha`、斜率 `beta` 和误差尺度 `sigma`。该模型使用自助法索引变量 `boot_idxs` 将自变量索引为 `x[boot_idxs]`，因变量索引为 `y[boot_idxs]`，这会生成一个新的 $N$ 维向量，其条目为 `x[boot_idxs][n] = x[boot_idxs[n]]`，`y` 也类似。例如，如果 $N = 4$，`boot_idxs ={2 1 1 3}`，那么有 `x[boot_idxs] = [x [2], x[1], x[1], x[3]]'` 和 `y[boot_idxs]= [y[2], y[1], y[1], y[3]]'`，自变量和因变量向量索引始终保持一致，`x[1]` 和 `y[1]` 这对元素重复出现两次。
 
 With the model defined this way, if `resample` is 1, the model is fit
 to a bootstrap subsample of the data.  If `resample` is 0, the model
@@ -183,7 +190,7 @@ of the results.
 
 ## Error statistics from the bootstrap
 
-## 自助法的误差统计量
+## 自助法的误差统计量 {-}
 
 Running the model multiple times produces a Monte Carlo sample of
 estimates from multiple alternative data sets subsampled from the
@@ -219,7 +226,7 @@ provide the bootstrap estimate of the standard error in the estimate
 for $\alpha$.  Here's what it looks like for the above model with $M =
 100$
 
-下面是用 $N = 50$ 个数据点，在 $\alpha = 1.2, \beta = -0.5$ 和 $\sigma = 1.5$ 的设置下计算上述线性回归模型的标准差。总共有 $M = 100$ 个重抽样样本，分别得到100个 $\alpha$、$\beta$ 和 $\sigma$ 的估计值，将他们看作蒙特卡洛样本。如 $\alpha$ 的抽样标准差提供了 $\alpha$ 标准误的自助法估计。以下是上述模型得到的结果
+下面是用 $N = 50$ 个数据点，在 $\alpha = 1.2, \beta = -0.5$ 和 $\sigma = 1.5$ 的设置下计算上述线性回归模型的标准误。总共有 $M = 100$ 个重抽样样本，分别得到100个 $\alpha$、$\beta$ 和 $\sigma$ 的估计值，将他们看作蒙特卡洛样本。如 $\alpha$ 的抽样标准差提供了 $\alpha$ 标准误的自助法估计。以下是上述模型得到的结果
 ```
  parameter   estimate    std err
  ---------   --------    -------
@@ -232,7 +239,7 @@ some Monte Carlo error.  For example, here are the standard error
 estimates from five more runs holding the data the same, but allowing
 the subsampling to vary within Stan:
 
-固定数据集，这些标准误的估计会包含一些蒙特卡罗误差。如下是运行5次以上所得标准误估计，运行时保持数据相同，但允许子抽样在 Stan 内变化：
+固定数据集时，这些标准误估计会包含一些蒙特卡罗误差。以下是保持数据相同但允许子抽样在 Stan 内变化的情况下，运行5次得到的标准误估计：
 ```
  parameter   estimate    std err
  ---------   --------    -------
@@ -247,7 +254,7 @@ worth the extra computation time as there is so much other uncertainty
 due to the original data sample $y$.
 
 
-增加 $M$ 能够减少蒙特卡罗误差，但会使得计算时间开销过大，另外原始数据样本 $y$ 会带来很多其他随机性。
+增加 $M$ 能够减少蒙特卡罗误差，但会增加计算时间开销，此外原始数据样本 $y$ 本身也会带来很多不确定性。
 
 ### Confidence intervals {-}
 
@@ -262,11 +269,11 @@ accurate 97.5% quantile estimates requires a much larger number of
 Monte Carlo simulations (roughly twenty times as large as needed for
 the median).
 
-与一般蒙特卡罗方法一样，置信区间是由样本分位数来估计的，也就是说如果子样本有 $M = 1000$ 个 $\hat{\alpha}$ 的估计，那么由实际数据集 $y$ 得到的 $\alpha$ 的95%置信区间边界为2.5%和97.5%分位数。获得准确的97.5%分位数估计需要大量的蒙特卡罗模拟（大约是估计中位数所需模拟的20倍）。
+与一般的蒙特卡罗方法一样，置信区间是通过采样点的分位数来估计的。也就是说，如果有 $M = 1000$ 个不同子样本的 $\hat{\alpha}$ 估计值，那么由实际数据集 $y$ 得到的 $\alpha$ 的95%置信区间边界就是2.5%和97.5%分位数。获得准确的97.5%分位数估计需要大量的蒙特卡罗模拟（大约是估计中位数所需模拟的20倍）。
 
 ## Bagging
 
-## 袋装法
+## 袋装法 {-}
 
 When bootstrapping is carried through inference it is known as
 bootstrap aggregation, or *bagging*, in the machine-learning
@@ -278,20 +285,23 @@ bootstrapped data sets $y^{\textrm{boot}(1)}, \ldots,
 y^{\textrm{boot}(N)}$ are generated.  Each is used to generate an
 estimate $\hat{\sigma}^{\textrm{boot}(n)}.$ The final estimate is
 
-当自助法通过推断进行时，在机器学习文献中被称为自助整合（bootstrap aggregating），或*袋装法 bagging*[@Breiman:1996]。在最简单的情况下，首先对原始数据进行自助抽样，对得到的每个数据集拟合模型，然后对全部预测结果求平均。例如，不是使用原始数据集的估计 $\hat{\sigma}$，而是使用自助法生成数据集 $y^{\textrm{boot}(1)}, \ldots, y^{\textrm{boot}(N)}$，每个样本都得到一个估计 $\hat{\sigma}^{\textrm{boot}(n)}$。最后估计值是
+当自助法应用于推断过程时，在机器学习文献中被称为自助聚合（bootstrap aggregating），或*袋装法*（bagging）[@Breiman:1996]。在最简单的情况下，首先对原始数据进行自助抽样，对每个得到的数据集拟合模型，然后对所有预测结果求平均。例如，不是使用原始数据集的估计 $\hat{\sigma}$，而是使用自助法生成数据集 $y^{\textrm{boot}(1)}, \ldots, y^{\textrm{boot}(N)}$，每个样本都得到一个估计 $\hat{\sigma}^{\textrm{boot}(n)}$。最后估计值是
+
 $$
 \hat{\sigma} = \frac{1}{N} \sum_{n = 1}^N \hat{\sigma}^{\textrm{boot}(n)}.
 $$
 The same would be done to estimate a predictive quantity $\tilde{y}$
 for as yet unseen data.
-类似地，可以得到未观测数据 $\tilde{y}$ 的估计量。
+
+类似地，可以得到未观测数据 $\tilde{y}$ 的估计量：
+
 $$
 \hat{\tilde{y}} = \frac{1}{N} \sum_{n = 1}^N
 \hat{\tilde{y}}^{\textrm{boot}(n)}.
 $$
 For discrete parameters, voting is used to select the outcome.
 
-连续变量可以通过求平均得到最终结果，离散变量则可以使用投票的方法。
+对于离散参数，使用投票来选择结果。
 
 One way of viewing bagging is as a classical attempt to get something
 like averaging over parameter estimation uncertainty.
@@ -300,7 +310,7 @@ like averaging over parameter estimation uncertainty.
 
 ## Bayesian bootstrap and bagging
 
-## 贝叶斯自助和袋装
+## 贝叶斯自助和袋装 {-}
 
 A Bayesian estimator may be analyzed with the bootstrap in exactly the
 same way as a (penalized) maximum likelihood estimate.  For example,
@@ -319,4 +329,4 @@ Bayesian approach to updating, and indicating it would not be
 calibrated if the model were well specified.  The hope is that it
 can guard against over-certainty in a poorly specified model.
 
-[@HugginsMiller:2019]使用自助法来评估贝叶斯框架的模型校准和拟合，并进一步建议使用袋装估计量来防止模型误设。袋装后验的后验间隔通常比只使用原始数据拟合的后验间隔更宽，这表明该贝叶斯方法不是纯用于更新，并且如果模型正确预设它将不会被校准。因此它可以防止对一个不正确的模型过度自信。
+[@HugginsMiller:2019] 使用自助法来评估贝叶斯框架中的模型校准和拟合，并进一步建议使用袋装估计量来防止模型误设。袋装后验的后验区间通常比仅使用原始数据拟合得到的后验区间更宽，这表明该方法不是纯粹的贝叶斯更新方法，并且如果模型设定正确，它将不会被校准。其目的是防止在模型设定不当的情况下产生过度自信。

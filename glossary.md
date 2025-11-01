@@ -32,7 +32,7 @@
 | | identifiability | 可识别性 | |
 | | additive identifiability | 加法可识别性 | |
 | | varying effects | 变化效应 | |
-| | sum-to-zero constraint | 和为零约束 | |
+| | sum-to-zero constraint | 求和为零约束 | |
 | | non-centered parameterization | 非中心参数化 | |
 | | ability parameter | 能力参数 | |
 | | difficulty parameter | 难度参数 | |
@@ -594,42 +594,116 @@
 | | hyperparameter | 超参数 | |
 | | lower-level parameter | 低层参数 | |
 | | ancillary statistic | 辅助统计量 | |
-| **32. Held-Out 评估与交叉验证** | Held-out evaluation | Held-Out 评估 | |
-| | Cross-validation | 交叉验证 | |
-| | Posterior predictive density | 后验预测密度 | |
+| **32. 留出（Held-Out）评估与交叉验证** | held-out evaluation | 留出评估 | |
+| | training data set | 训练数据集 | |
+| | test data set | 测试数据集 | |
+| | cross-validation | 交叉验证 | |
+| | predictive modeling | 预测建模 | |
+| | predictive statistics | 预测统计量 | |
+| | posterior predictive density | 后验预测密度 | |
+| | test predictors | 测试预测变量 | |
 | | Monte Carlo methods | 蒙特卡罗方法 | |
-| | Log-sum-exp | 对数指数和 | |
-| | Underflow | 下溢 | |
+| | log-sum-exp | 对数指数和 | |
+| | posterior draws | 后验采样点 | |
+| | parameter estimates | 参数估计 | |
+| | absolute error | 绝对误差 | |
+| | squared error | 平方误差 | |
+| | scoring rules | 评分规则 | |
+| | Bayesian posterior means | 贝叶斯后验均值 | |
+| | posterior medians | 后验中位数 | |
+| | maximum likelihood estimates (MLE) | 最大似然估计 | |
+| | maximum a posterior estimates (MAP) | 最大后验估计 | |
+| | predictive estimates | 预测估计 | |
+| | mean square error (MSE) | 均方误差 | |
+| | root mean square error (RMSE) | 均方根误差 | |
+| | variance reduction technique | 方差减少技术 | |
 | | Rao-Blackwellization | Rao-Blackwell 化 | |
-| | Absolute error | 绝对误差 | |
-| | Squared error | 平方误差 | |
-| | Mean square error (MSE) | 均方误差 | |
-| | Root mean square error (RMSE) | 均方根误差 | |
-| | Leave-one-out (LOO) cross-validation | 留一法交叉验证 | |
-| | Log probability density function (lpdf) | 对数概率密度函数 | |
-| | Posterior mean estimator | 后验均值估计量 | |
-| | Log Jacobian adjustment | 对数雅可比调整 | |
-| | Predictive log density | 预测对数密度 | |
-| | Parameter estimates | 参数估计 | |
-| | Consistent initial conditions | 一致的初始条件 | |
-| | Variance reduction | 方差减少 | |
-| **34. 决策分析** | Decision Analysis | 决策分析 | |
-| | Expected Utility | 期望效用 | |
-| | Bayes Optimal Decision | 贝叶斯最优决策 | |
-| | Utility Function | 效用函数 | |
-| | Posterior Predictive Distribution | 后验预测分布 | |
-| | Conditional Density Function | 条件密度函数 | |
-| | Marginal Utility | 边际效用 | |
-| | Lognormal Distribution | 对数正态分布 | |
-| | Prior Distribution | 先验分布 | |
-| | Posterior Mean | 后验均值 | |
-| | Generated Quantities | 生成量 | |
-| | Random Number Generation (RNG) | 随机数生成 | |
-| | Statistical Decision Theory | 统计决策理论 | |
-| | Loss Function | 损失函数 | |
-| | Exchangeability | 可交换性 | |
-| | Covariate | 协变量 | |
-| | Parameter Marginalization | 参数边缘化 | |
-| | Automatic Differentiation | 自动微分 | |
-| | Gradient Information | 梯度信息 | |
-| | Optimization | 优化 | |
+| | linear predictor | 线性预测器 | |
+| | folds (in cross-validation) | 折（交叉验证中） | |
+| | leave-one-out (LOO) cross-validation | 留一法交叉验证 | |
+| | random folds | 随机折叠 | |
+| | permutation | 排列 | |
+| | random number generator (RNG) | 随机数生成器 | |
+| | categorical distribution | 分类分布 | |
+| | transformed data block | transformed data 块 | |
+| | generated quantities block | generated quantities 块 | |
+| | user-defined permutations | 用户定义的排列 | |
+| | structured data | 结构化数据 | |
+| | spatio-temporal data | 时空数据 | |
+| | mixed replication | 混合复制 | |
+| | predictive goal | 预测目标 | |
+| | approximate cross-validation | 近似交叉验证 | |
+| | data point log likelihoods | 数据点对数似然 | |
+| | posterior mean estimator | 后验均值估计量 | |
+| | log Jacobian adjustment | 对数雅可比调整 | |
+| | predictive log density | 预测对数密度 | |
+| | consistent initial conditions | 一致的初始条件 | |
+| | variance reduction | 方差缩减 | |
+| **33. 事后分层** | poststratification | 事后分层 | |
+| | stratification | 分层 | |
+| | convenience sample | 简便样本 | |
+| | demographic predictors | 人口统计预测变量 | |
+| | multilevel regression and poststratification (MRP) | 多层回归和事后分层 | |
+| | soil-carbon concentration | 土壤碳浓度 | |
+| | positive responses | 肯定性回答 | |
+| | maximum likelihood estimate | 最大似然估计 | |
+| | posterior draws | 后验采样点 | |
+| | posterior intervals | 后验区间 | |
+| | hierarchical priors | 层次先验 | |
+| | partial pooling | 部分池化 | |
+| | non-identifiability | 不可识别性 | |
+| | soft constraints | 软约束 | |
+| | hard constraints | 硬约束 | |
+| | Rao-Blackwell theorem | Rao-Blackwell 定理 | |
+| | binomial coding | 二项编码 | |
+| | group-level predictors | 组级预测变量 | |
+| | fixed predictor | 固定预测变量 | |
+| **34. 决策分析** | decision analysis | 决策分析 | |
+| | expected utility | 期望效用 | |
+| | Bayes optimal decision | 贝叶斯最优决策 | |
+| | utility function | 效用函数 | |
+| | posterior predictive distribution | 后验预测分布 | |
+| | conditional density function | 条件密度函数 | |
+| | marginal utility | 边际效用 | |
+| | lognormal distribution | 对数正态分布 | |
+| | prior distribution | 先验分布 | |
+| | posterior mean | 后验均值 | |
+| | generated quantities | 生成量 | |
+| | random number generation (RNG) | 随机数生成 | |
+| | statistical decision theory | 统计决策理论 | |
+| | loss function | 损失函数 | |
+| | exchangeability | 可交换性 | |
+| | covariate | 协变量 | |
+| | parameter marginalization | 参数边缘化 | |
+| | automatic differentiation | 自动微分 | |
+| | gradient information | 梯度信息 | |
+| | optimization | 优化 | |
+| | commute mode | 通勤方式 | |
+| | mode of transportation | 交通方式 | |
+| | outcome space | 结果空间 | |
+| | decision space | 决策空间 | |
+| | cost function | 成本函数 | |
+| | time cost | 时间成本 | |
+| | concave function | 凹函数 | |
+| | fixed priors | 固定先验 | |
+| | constant function | 常数函数 | |
+| | step function | 阶跃函数 | |
+| | hardcoded values | 硬编码值 | |
+| | univariate distribution | 单变量分布 | |
+| | vectorized operations | 向量化操作 | |
+| | full conditioning | 完整条件 | |
+| | multiple chains | 多条链 | |
+| | summary statistics | 汇总统计 | |
+| | programmatic interfaces | 编程接口 | |
+| | continuous choices | 连续选择 | |
+| | external optimizer | 外部优化器 | |
+| **35. 自助法和袋装法** | bootstrap | 自助法 | |
+| | bagging | 袋装法 | |
+| | bootstrap aggregating | 自助聚合 | |
+| | standard error | 标准误 | |
+| | bootstrap sample | 自助样本 | |
+| | parameter estimation uncertainty | 参数估计不确定性 | |
+| | plug-and-play | 即插即用 | |
+| | Monte Carlo error | 蒙特卡罗误差 | |
+| | model misspecification | 模型误设 | |
+| | over-certainty | 过度自信 | |
