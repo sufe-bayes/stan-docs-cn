@@ -492,7 +492,7 @@ are arrays.  These arrays must all be the same size, as they will be
 mapped in parallel by the function `f`.  The value of `phi`
 is reused in each mapped operation.
 
-参数数组 `thetas`、实数数据 `x_rs` 和整数数据 `x_is` 具有后缀"`s`"表示它们是数组。这些数组必须都是相同的大小，因为它们将由函数 `f` 并行映射。`phi` 的值在每个映射操作中被重用。
+参数数组 `thetas`、实数数据 `x_rs` 和整数数据 `x_is` 具有后缀“`s`”表示它们是数组。这些数组必须都是相同的大小，因为它们将由函数 `f` 并行映射。`phi` 的值在每个映射操作中被重用。
 
 The `_rect` suffix in the name arises because the data
 structures it takes as arguments are rectangular.  In order to deal
@@ -653,7 +653,7 @@ rows of a database.  That is exactly what it is here if we think of
 rows of a dataframe.  Stan's shards are more general in that they need
 not correspond to rows of a dataframe.]
 
-数据如前所述被接收。有一个额外的转换数据块将数据分解为三个分片。^[术语"分片"借自数据库，它指的是数据库行的切片。如果我们考虑数据框的行，这正是这里的情况。Stan 的分片更通用，因为它们不需要对应于数据框的行。]
+数据如前所述被接收。有一个额外的转换数据块将数据分解为三个分片。^[术语“分片”借自数据库，它指的是数据库行的切片。如果我们考虑数据框的行，这正是这里的情况。Stan 的分片更通用，因为它们不需要对应于数据框的行。]
 
 The value `3` is also hard coded; a more practical program would
 allow the number of shards to be controlled.  There are three parallel

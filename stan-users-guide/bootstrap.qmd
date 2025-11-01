@@ -21,7 +21,7 @@ subsample.  Like other Monte Carlo methods, the bootstrap is
 plug-and-play, allowing great flexibility in both model choice and
 estimator.
 
-自助法（bootstrap）是一种对估计量的误差分布进行近似抽样的方法，可以作为一种蒙特卡罗方法来估计点估计的标准误和置信区间[@EfronTibshirani1986;-@EfronTibshirani1994]。为了得到估计的标准误，它对原始数据多次进行子采样，并对每个子样本计算样本估计值。像其他蒙特卡罗方法一样，自助法是即插即用的，对于模型选择和参数估计具有很大的灵活性。
+自助法（bootstrap）是一种对估计量的误差分布进行近似抽样的方法，可以作为一种蒙特卡罗方法来估计点估计的标准误和置信区间 [@EfronTibshirani1986;-@EfronTibshirani1994]。为了得到估计的标准误，它对原始数据多次进行子采样，并对每个子样本计算样本估计值。像其他蒙特卡罗方法一样，自助法是即插即用的，对于模型选择和参数估计具有很大的灵活性。
 
 Bagging is a technique for combining bootstrapped estimators for model
 criticism and more robust inference [@Breiman:1996; @HugginsMiller:2019].

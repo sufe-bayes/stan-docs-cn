@@ -424,6 +424,7 @@ But what about addition?  Given $\log a$ and
 $\log b$, how do we get $\log (a + b)$?  Working out the algebra,
 
 因此，乘法操作的序列可以保持在对数尺度上。但是加法呢？给定 $\log a$ 和 $\log b$，我们如何得到 $\log (a + b)$？通过计算代数式，我们可以得到：
+
 $$
 \log (a + b)
 =
@@ -437,7 +438,8 @@ $$
 The nested log of sum of exponentials is so common, it has its own
 name, "log-sum-exp",
 
-指数到求和再到对数的嵌套运算非常常见，它有着自己的名字，"log-sum-exp",
+指数到求和再到对数的嵌套运算非常常见，它有着自己的名字，“log-sum-exp”,
+
 $$
 \textrm{log-sum-exp}(u, v)
 =
@@ -446,6 +448,7 @@ $$
 so that
 
 由此有
+
 $$
 \log (a + b)
 =
@@ -472,6 +475,7 @@ Because the operation is symmetric, it may be assumed without loss of
 generality that $u \geq v$, so that
 
 因为指数中的项是 $u - \max(u, v)$ 和 $v - \max(u, v)$，所以其中一个为零，另一个为负数。由于操作是对称的，不失一般性可以假设 $u \geq v$，从而有
+
 $$
 \textrm{log-sum-exp}(u, v) = u + \log\big(1 + \exp(v - u)\big).
 $$
@@ -487,6 +491,7 @@ To conclude, when evaluating $\log (a + b)$ given $\log a$ and $\log
 b$, and assuming $\log a > \log b$, return
 
 总之，当给定 $\log a$ 和 $\log b$ 来求解 $\log (a + b)$ 时，假设$\log a > \log b$，则返回
+
 $$
 \log (a + b) =
 \log a + \textrm{log1p}\big(\exp(\log b - \log a)\big).
@@ -500,6 +505,7 @@ The log sum of exponentials function may be generalized to sequences
 in the obvious way, so that if $v = v_1, \ldots, v_N$, then
 
 Log-sum-exp 函数可以自然地推广到序列形式，即如果 $v = v_1, \ldots, v_N$，那么
+
 \begin{eqnarray*}
 \textrm{log-sum-exp}(v)
 & = & \log \sum_{n = 1}^N \exp(v_n)
@@ -520,6 +526,7 @@ An immediate application is to computing the mean of a vector $u$ entirely
 on the log scale.  That is, given $\log u$ and returning $\log \textrm{mean}(u)$.
 
 一个直接的应用是完全在对数尺度上计算向量 $u$ 的均值。也就是说，给定 $\log u$ 并返回 $\log \textrm{mean}(u)$。
+
 \begin{eqnarray*}
 \log \left( \frac{1}{N} \sum_{n = 1}^N u_n \right)
 & = & \log \frac{1}{N} + \log \sum_{n = 1}^N \exp(\log u_n)

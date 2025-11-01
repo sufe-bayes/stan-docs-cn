@@ -20,7 +20,7 @@ equivalently, minimizes expected loss).  This chapter shows how Stan
 can be used to simultaneously estimate the distribution of outcomes
 based on decisions and compute the required expected utilities.
 
-统计决策分析是在不确定性下做出决策的方法。为了做出决策，结果必须与某种"效用"概念相关联。所谓的"贝叶斯最优"决策是能够最大化期望效用（或等价地，最小化期望损失）的决策。本章展示了如何使用 Stan 同时估计基于决策的结果分布并计算所需的期望效用。
+统计决策分析是在不确定性下做出决策的方法。为了做出决策，结果必须与某种“效用”概念相关联。所谓的“贝叶斯最优”决策是能够最大化期望效用（或等价地，最小化期望损失）的决策。本章展示了如何使用 Stan 同时估计基于决策的结果分布并计算所需的期望效用。
 
 ## Outline of decision analysis
 

@@ -82,7 +82,7 @@ computing our model's log density. Note this is just an example of how to use th
 1D integrator. The more efficient way to perform the correct normalization in Stan
 is described in the chapter on Truncated or Censored Data of this guide.
 
-假设我们的模型需要计算左截断正态分布的 lpdf，但截断限需要作为参数进行估计。由于截断点是参数，在计算模型对数密度时必须包含截断 pdf 的标准化项。请注意，这只是一维积分器的使用示例。在 Stan 中执行正确标准化的更高效方法在本指南的"截断或删失数据"章节中描述。
+假设我们的模型需要计算左截断正态分布的 lpdf，但截断限需要作为参数进行估计。由于截断点是参数，在计算模型对数密度时必须包含截断 pdf 的标准化项。请注意，这只是一维积分器的使用示例。在 Stan 中执行正确标准化的更高效方法在本指南的“截断或删失数据”章节中描述。
 
 Such a model might look like (include the function defined at the beginning of this
 chapter to make this code compile):
@@ -178,7 +178,7 @@ of the current proposal in MCMC samplers and adjustment of search parameters in 
 If `integrate_1d` causes an exception in generated quantities block, the returned output from
 `integrate_1d` is NaN. In these cases, a bigger `relative_tolerance` value can be specified.
 
-`relative_tolerance` 参数可作为 `integrate_1d` 的最后一个参数可选指定。默认情况下，`integrate_1d` 遵循 Boost 库的建议，将 `relative_tolerance` 设为双精度浮点数机器精度的平方根（约 `1e-8`）。如果 Boost 积分器无法达到相对容差，将抛出异常，消息类似"Exception: integrate: error estimate of integral 4.25366e-13 exceeds the given relative tolerance times norm of integral"。如果 `integrate_1d` 在转换参数块或模型块中引发异常，结果等同于指定 $-\infty$ 对数概率，这会导致 MCMC 采样器拒绝当前提议并在优化中调整搜索参数。如果 `integrate_1d` 在生成量块中引发异常，`integrate_1d` 返回 NaN。在这些情况下，可以指定更大的 `relative_tolerance` 值。
+`relative_tolerance` 参数可作为 `integrate_1d` 的最后一个参数可选指定。默认情况下，`integrate_1d` 遵循 Boost 库的建议，将 `relative_tolerance` 设为双精度浮点数机器精度的平方根（约 `1e-8`）。如果 Boost 积分器无法达到相对容差，将抛出异常，消息类似于“Exception: integrate: error estimate of integral 4.25366e-13 exceeds the given relative tolerance times norm of integral”。如果 `integrate_1d` 在转换参数块或模型块中引发异常，结果等同于指定 $-\infty$ 对数概率，这会导致 MCMC 采样器拒绝当前提议并在优化中调整搜索参数。如果 `integrate_1d` 在生成量块中引发异常，`integrate_1d` 返回 NaN。在这些情况下，可以指定更大的 `relative_tolerance` 值。
 
 ### Zero-crossing integrals {- #zero-crossing}
 

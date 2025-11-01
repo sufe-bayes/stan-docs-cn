@@ -669,7 +669,7 @@ hazard function $h_0(t)$ is not modeled.  This is why it is called
 determines how individual $n$ varies by a proportion from the baseline
 hazard, is modeled.  This is why it's called "proportional hazards."
 
-在半参数比例风险模型中，基线风险函数 $h_0(t)$ 不被建模。这就是它被称为"半参数"的原因。只有因子 $\exp(x_n \cdot \gamma)$ 被建模，它决定了个体 $n$ 与基线风险的比例变化。这就是它被称为"比例风险"的原因。
+在半参数比例风险模型中，基线风险函数 $h_0(t)$ 不被建模。这就是它被称为“半参数”的原因。只有因子 $\exp(x_n \cdot \gamma)$ 被建模，它决定了个体 $n$ 与基线风险的比例变化。这就是它被称为“比例风险”的原因。
 
 Cox's proportional hazards model is not fully generative.  There is no
 way to generate the times of failure because the baseline hazard
@@ -936,7 +936,7 @@ while not being quite as good as considering all permutations.
 Efron's model averages the contributions as if they truly did occur
 simultaneously.  
 
-从技术上讲，对于连续生存时间，两个生存时间相同的概率为零。然而，真实数据集经常将生存时间四舍五入，例如在多年临床试验中四舍五入到最近的天或周。面对范围内未知生存时间，技术上"正确"的做法是将其顺序视为未知并进行推断。但是对于一组具有并列生存时间的 $N$ 个受试者考虑所有 $N!$ 种排列是不可行的。作为替代方案，@efron:1977 引入了一个近似部分似然，其性质比随机排列更好，同时不如考虑所有排列那么好。Efron 的模型将贡献平均化，就好像它们真的同时发生一样。
+从技术上讲，对于连续生存时间，两个生存时间相同的概率为零。然而，真实数据集经常将生存时间四舍五入，例如在多年临床试验中四舍五入到最近的天或周。面对范围内未知生存时间，技术上“正确”的做法是将其顺序视为未知并进行推断。但是对于一组具有并列生存时间的 $N$ 个受试者考虑所有 $N!$ 种排列是不可行的。作为替代方案，@efron:1977 引入了一个近似部分似然，其性质比随机排列更好，同时不如考虑所有排列那么好。Efron 的模型将贡献平均化，就好像它们真的同时发生一样。
 
 In the interest of completeness, here is the Stan code for an
 implementation of Efron's estimator.  It uses two user-defined

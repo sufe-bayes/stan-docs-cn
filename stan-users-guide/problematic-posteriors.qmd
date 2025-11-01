@@ -522,7 +522,7 @@ sampler gets stuck in one of the two "bowls" around the modes and
 cannot gather enough energy from random momentum assignment to move
 from one mode to another.
 
-在实践中能够进行这样的不变推断是一个完全不同的问题。寻找一个后验峰值，或者平衡对多个局部最大值邻域的探索，根据概率密度进行探索，几乎总是不可行的。在 Gibbs 采样中，当在当前的 $\mu_2$ 和 $\theta$ 的值给定的条件下对 $\mu_1$ 进行采样时，$\mu_1$ 移动到新峰值的概率是很低的。对于 HMC 和 NUTS，问题在于采样器陷入了围绕模式的两个"碗"之一，并且无法从随机动量分配中获得足够的能量来从一个峰值转移到另一个峰值。
+在实践中能够进行这样的不变推断是一个完全不同的问题。寻找一个后验峰值，或者平衡对多个局部最大值邻域的探索，根据概率密度进行探索，几乎总是不可行的。在 Gibbs 采样中，当在当前的 $\mu_2$ 和 $\theta$ 的值给定的条件下对 $\mu_1$ 进行采样时，$\mu_1$ 移动到新峰值的概率是很低的。对于 HMC 和 NUTS，问题在于采样器陷入了围绕模式的两个“碗”之一，并且无法从随机动量分配中获得足够的能量来从一个峰值转移到另一个峰值。
 
 Even with a proper posterior, all known sampling and inference
 techniques are notoriously ineffective when the number of modes grows
@@ -585,7 +585,7 @@ initial values can be found and the labels do not switch within a
 Markov chain.  The result is that all chains are glued to a
 neighborhood of a particular mode in the posterior.
 
-如果能够找到合理的初始值并且标签在马尔可夫链中不会交换，这种方法比硬约束方法更有效。其结果是,所有的马尔可夫链都被"粘住"在后验分布的特定峰值邻域内。
+如果能够找到合理的初始值并且标签在马尔可夫链中不会交换，这种方法比硬约束方法更有效。其结果是,所有的马尔可夫链都被“粘住”在后验分布的特定峰值邻域内。
 
 ## Component collapsing in mixture models
 
@@ -604,7 +604,7 @@ the parameters match for a given draw $(m)$, it can become hard to
 escape because there can be a trough of low-density mass between the
 current parameter values and the ones without collapsed components.
 
-这种情况通常会在采样的早期阶段发生,原因可能是 MCMC 或优化算法中的初始化,或者是 MCMC 过程中的随机移动导致的。一旦在某次抽样 $(m)$ 中,两个成分的参数变得相同,就可能变得难以摆脱这种状态,因为在当前参数值与未退化成分的参数值之间,可能存在一个低密度概率质量的"洼地"。
+这种情况通常会在采样的早期阶段发生，原因可能是 MCMC 或优化算法中的初始化，或者是 MCMC 过程中的随机移动导致的。一旦在某次抽样 $(m)$ 中，两个成分的参数变得相同，就可能变得难以摆脱这种状态，因为在当前参数值与未退化成分的参数值之间，可能存在一个低密度概率质量的洼地。
 
 It may help to use a smaller step size during warmup, a stronger prior
 on each mixture component's membership responsibility.  A more extreme
@@ -654,7 +654,7 @@ unbounded as $\phi \rightarrow 0$ and $\phi \rightarrow 1$. Similarly,
 a Bernoulli data model coupled with a "weak" beta prior, leads
 to a posterior
 
-另一个无界密度函数的例子是后验分布 $\textsf{beta}(\phi \mid 0.5, 0.5)$，当对没有数据的群体使用看似弱的贝塔先验时，可能会出现这种情况。当 $\phi \rightarrow 0$ 和 $\phi \rightarrow 1$ 时，该密度函数是无界的。同样，与"弱"贝塔先验结合的伯努利似然模型会导致后验分布为
+另一个无界密度函数的例子是后验分布 $\textsf{beta}(\phi \mid 0.5, 0.5)$，当对没有数据的群体使用看似弱的贝塔先验时，可能会出现这种情况。当 $\phi \rightarrow 0$ 和 $\phi \rightarrow 1$ 时，该密度函数是无界的。同样，与“弱”贝塔先验结合的伯努利似然模型会导致后验分布为
 
 \begin{align*}
 p(\phi \mid y)
@@ -861,7 +861,7 @@ in particular should be reassuring in that it will clearly fail in
 cases of improper posteriors, resulting in a clean diagnostic of
 sweeping out  large paths in the posterior.
 
-Stan 默认的 no-U-turn 抽样器（NUTS）在探索后验分布方面更加高效\[参见\@Hoffman-Gelman:2014\]。NUTS 模拟了代表参数值的虚拟粒子的运动，直到它产生一个 U-turn。然而，在大多数情况下，NUTS 会失败，因为它将无限期地沿着势能山谷向下移动，而不会产生 U-turn。实际情况是,在许多迭代中,会达到模拟的最大"跳跃步"数，导致大量的对数概率和梯度计算（默认情况下，如果将最大树深度设置为10，则有1000个计算）。因此，采样看起来会很慢。这表明后验分布是不适当的，而不是 NUTS 算法或其实现存在问题。从不适当的后验分布中进行采样是不可能的！因此，HMC 的行为一般而言，尤其是 NUTS，应该是令人放心的，因为在后验不合适的情况下，它们会明显失效,这能给出清晰的诊断,即后验分布中存在较大范围的异常区域。
+Stan 默认的 no-U-turn 抽样器（NUTS）在探索后验分布方面更加高效 [参见 @Hoffman-Gelman:2014]。NUTS 模拟了代表参数值的虚拟粒子的运动，直到它产生一个 U 型转弯。然而，在大多数情况下，NUTS 会失败，因为它将无限期地沿着势能山谷向下移动，而不会产生 U 型转弯。实际情况是，在许多迭代中，会达到模拟的最大跳跃步数，导致大量的对数概率和梯度计算（默认情况下，如果将最大树深度设置为10，则有1000个计算）。因此，采样看起来会很慢。这表明后验分布是不适当的，而不是 NUTS 算法或其实现存在问题。从不适当的后验分布中进行采样是不可能的！因此，HMC 的行为一般而言，尤其是 NUTS，应该是令人放心的，因为在后验不合适的情况下，它们会明显失效，这能给出清晰的诊断，即后验分布中存在较大范围的异常区域。
 
 Here are results of Stan runs with default parameters fit to
   $N=100$ data points generated from $y_n \sim \textsf{normal}(0,1)$:

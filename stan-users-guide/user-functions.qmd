@@ -681,7 +681,7 @@ separate promotions, first from `int` to `real`, then from `real` to `complex`. 
 means that integer arguments will "prefer" a signature with real types over
 complex types.
 
-从整数到复数的提升被认为是两个独立的提升，首先从 `int` 到 `real`，然后从 `real` 到 `complex`。这意味着整数参数将"偏好"具有实数类型而不是复数类型的签名。
+从整数到复数的提升被认为是两个独立的提升，首先从 `int` 到 `real`，然后从 `real` 到 `complex`。这意味着整数参数将“偏好”具有实数类型而不是复数类型的签名。
 
 For example, consider the function signatures
 

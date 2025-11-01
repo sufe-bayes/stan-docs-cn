@@ -736,7 +736,6 @@ generated quantities {
 }
 ```
 
-<a name="id:变点模型图"></a>
 
 
 #### Identifiability {-}
