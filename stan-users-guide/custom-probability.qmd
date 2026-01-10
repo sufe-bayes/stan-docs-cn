@@ -230,7 +230,11 @@ real binormal_cdf(tuple(real, real) z, real rho) {
 
 It is written using a tuple argument so that it may be called as `binormal_cdf((z1, z2) | rho)`. The two ternary operators defining `term1` and `term2` are derived by taking the limit of the `owens_t` function when the second argument goes to infinity.
 
+该函数使用元组（tuple）参数编写，以便可以以 `binormal_cdf((z1, z2) | rho)` 的形式调用。定义 `term1` 和 `term2` 的两个三元运算符是通过取 `owens_t` 函数在第二个参数趋于无穷大时的极限而得到的。
+
 One way to test a user-defined function is to have it operate on transformed data.  That way, when it's run, the output of the functions is printed before sampling begins.
+
+测试用户定义函数的一种方法是让它在转换数据上运行。这样，在运行时，函数的输出会在采样开始前打印出来。
 
 ```stan
 transformed data {
@@ -248,4 +252,6 @@ transformed data {
 ```
 
 In this case, we verified that the results match those of the `pbivnorm` package in R.
+
+在本例中，我们验证了结果与 R 语言软件包 `pbivnorm` 的结果相匹配。
 
