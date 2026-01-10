@@ -180,7 +180,7 @@ There are value functions `positive_infinity()` and
 Stan 中有 `positive_infinity()` 和 `negative_infinity()` 两个值函数，以及一个测试函数 `is_inf()`。
 
 Positive and negative infinity have the expected comparison behavior,
-so that `negative_infinty() < 0` evaluates to true (represented with 1
+so that `negative_infinity() < 0` evaluates to true (represented with 1
 in Stan).  Also, negating positive infinity leads to negative infinity
 and vice-versa.
 
@@ -454,7 +454,6 @@ $$
 =
 \textrm{log-sum-exp}(\log a, \log b).
 $$
-
 
 Although it appears this might overflow as soon as exponentiation is
 introduced, evaluation does not proceed by evaluating the terms as

@@ -1082,7 +1082,6 @@ p\left(\tilde{y} \mid \tilde{x},y,x\right)
 \textsf{normal}\left(K^{\top}\Sigma^{-1}y,\
                 \Omega - K^{\top}\Sigma^{-1}K\right),
 $$
-
 where $\Sigma = K(x \mid \alpha, \rho, \sigma)$ is the result of applying the covariance
 function to the inputs $x$ with observed outputs $y$, $\Omega =
 K(\tilde{x} \mid \alpha, \rho)$ is the result of applying the covariance function to the
@@ -1095,7 +1094,7 @@ would be
 K(\tilde{x} \mid \alpha, \rho)$ 是将协方差函数作用在待预测输入 $\tilde{x}$ 上的结果，$K$ 是输入变量 $x$ 和 $\tilde{x}$ 之间的协方差矩阵。如果考虑指数二次协方差函数，那么其具体形式为：
 
 $$
-K(x \mid \alpha, \rho)_{i, j} = \eta^2 \exp\left(-\dfrac{1}{2 \rho^2}
+K(x \mid \alpha, \rho)_{i, j} = \alpha^2 \exp\left(-\dfrac{1}{2 \rho^2}
 \sum_{d=1}^D \left(x_{i,d} - \tilde{x}_{j,d}\right)^2\right).
 $$
 
@@ -1201,7 +1200,6 @@ generated quantities {
 }
 ```
 
-
 ### Multiple-output Gaussian processes {-}
 
 ### 多输出高斯过程 {-}
@@ -1217,7 +1215,6 @@ f(x) &\sim \textsf{GP}\big(m(x), K(x \mid \theta, \phi)\big) \\
      & K(x \mid \theta) \in \mathbb{R}^{M \times M}, \quad
        f(x), m(x) \in \mathbb{R}^M
 \end{align*}
-
 where the $K(x, x^\prime \mid \theta, \phi)_{[m, m^\prime]}$ entry defines the
 covariance between $f_m(x)$ and $f_{m^\prime}(x^\prime)(x)$. This construction
 of Gaussian processes allows us to learn the covariance between the output
@@ -1239,7 +1236,6 @@ f        &\sim \textsf{matrixnormal}\big(m(x), K(x \mid \alpha, \rho), C(\phi)\b
 y_{i, m} &\sim \textsf{normal}(f_{i,m}, \sigma) \\
 f        &\in  \mathbb{R}^{N \times M}
 \end{align*}
-
 where $K(x \mid \alpha, \rho)$ is the exponentiated quadratic kernel we've used
 throughout this chapter, and $C(\phi)$ is a positive-definite matrix,
 parameterized by some vector $\phi$.
@@ -1258,7 +1254,6 @@ $$
 f_{[n,]} \sim \textsf{multivariate normal}\big(m(x)_{[n,]}, K(x \mid \alpha,
 \rho)_{[n,n]} C(\phi)\big)
 $$
-
 and that the columns of the matrix $f$ are
 distributed:
 
@@ -1268,7 +1263,6 @@ $$
 f_{[,m]} \sim \textsf{multivariate normal}\big(m(x)_{[,m]}, K(x
   \mid \alpha, \rho) C(\phi)_{[m,m]}\big)
 $$
-
 This also means means that $\mathbb{E}\left[f^T f\right]$ is equal to
 $\operatorname{trace}\!\big(K(x \mid \alpha, \rho)\big) \times C$, whereas $\mathbb{E}\left[ff^T\right]$
 is $\operatorname{trace}(C) \times K(x \mid \alpha, \rho)$. We can derive this using

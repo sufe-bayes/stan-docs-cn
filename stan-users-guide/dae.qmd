@@ -106,6 +106,7 @@ and $y'(t_0)$ so that residual function becomes zero at initial time $t_0$
 r(y'(t_0), y(t_0), t_0) = 0
 \end{equation*}
 
+
 ## Index of DAEs
 
 ## DAEs 的指数 {-}
@@ -158,14 +159,13 @@ more information on coding user-defined functions).
 上述反应可以使用 Stan 中的以下函数编写（有关编写用户定义函数的更多信息，请参见[用户定义函数章节](user-functions.qmd)）。
 
 ```stan
- vector chem(real t, vector yy, vector yp,
-                 real alpha, real beta, real gamma) {
-    vector[3] res;
-    res[1] = yp[1] + alpha * yy[1] - beta * yy[2] * yy[3];
-    res[2] = yp[2] - alpha * yy[1] + beta * yy[2] * yy[3] + gamma * yy[2] * yy[2];
-    res[3] = yy[1] + yy[2] + yy[3] - 1.0;
-    return res;
-  }
+vector chem(real t, vector yy, vector yp,
+            real alpha, real beta, real gamma) {
+  vector[3] res;
+  res[1] = yp[1] + alpha * yy[1] - beta * yy[2] * yy[3];
+  res[2] = yp[2] - alpha * yy[1] + beta * yy[2] * yy[3] + gamma * yy[2] * yy[2];
+  res[3] = yy[1] + yy[2] + yy[3] - 1.0;
+  return res;
 }
 ```
 
@@ -178,7 +178,7 @@ an argument.
 
 该函数接受时间 `t`（`real` 类型）、系统状态 `yy`（`vector` 类型）、状态导数 `yp`（`vector` 类型）以及参数 `alpha`（`real` 类型）、`beta`（`real` 类型）和 `gamma`（`real` 类型）。函数返回时间 `t` 处的残差向量。这里编写的 DAE 并不显式依赖于 `t`，但仍需要将 `t` 指定为参数。
 
-### Strict signature
+### Strict signature {-}
 
 ### 严格的函数签名 {-}
 
@@ -291,7 +291,7 @@ knowledge of the DAE system or the physics it models is available.
 
 相对和绝对容差的默认值为 $10^{-10}$，输出间的最大步数为一亿。我们建议用户根据具体问题选择控制参数，仅在对 DAE 系统或其建模的物理过程没有了解时才使用默认值。
 
-### Maximum number of steps
+### Maximum number of steps {-}
 
 ### 最大步数 {-}
 

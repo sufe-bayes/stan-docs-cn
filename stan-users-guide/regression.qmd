@@ -671,7 +671,7 @@ subtract from each $\beta_k$ and get exactly the same likelihood.
 当回归模型中存在变化效应时，除非采取进一步的措施，否则得到的似然函数是不可识别的。例如，我们可能有一个全局截距 $\alpha$，然后为每个年龄组 $k$ 设置一个变化效应 $\beta_k$，从而构建线性预测器 $\alpha + \beta_k$。使用这种预测器时，我们可以为 $\alpha$ 添加一个常数，并从每个 $\beta_k$ 中减去该常数，得到的似然函数完全相同。
 
 The traditional approach to identifying such a model is to pin the
-first varing effect to zero, i.e., $\beta_1 = 0$.  With one of the
+first varying effect to zero, i.e., $\beta_1 = 0$.  With one of the
 varying effects fixed, you can no longer add a constant to all of them
 and the model's likelihood is identified.  In addition to the
 difficulty in specifying such a model in Stan, it is awkward to

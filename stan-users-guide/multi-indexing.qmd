@@ -79,6 +79,7 @@ array[4] int d;
 d = c[idxs];    // result: d == (7, 7, 5, 9)
 ```
 
+
 In general, the multiple indexed expression `c[idxs]` is defined
 as follows, assuming `idxs` is of size `K`.
 
@@ -100,7 +101,7 @@ example, consider the following.
 
 ```stan
 array[2, 3] int c;
-// ... define: c = ((1, 3, 5), ((7, 11, 13))
+// ... define: c = ((1, 3, 5), (7, 11, 13))
 array[4] int idxs;
 // ... define: idxs = (2, 2, 1, 2)
 array[4, 3] int d
@@ -267,6 +268,7 @@ will set `b` to be equal to `{ a[5], a[6], a[7] }`, so that it starts
 at element 5 of `a` and includes a total of 3 elements.
 
 上式设 `b` 等于 `{ a[5], a[6], a[7] }`，因此它从 `a` 的第5个元素开始，总共包括了3个元素。
+
 
 
 ## Multiple indexing on the left of assignments
@@ -586,7 +588,7 @@ extends for a total of 5 columns.
 
 ## 具有参数和常数的矩阵 {-}
 
-Suppose you have a $3\times 3$ matrix and know that two entries are zero but the
+Suppose you have a $3 \times 3$ matrix and know that two entries are zero but the
 others are parameters.  Such a situation arises in missing data
 situations and in problems with fixed structural parameters.
 
